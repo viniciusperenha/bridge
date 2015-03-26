@@ -419,7 +419,7 @@ public class LoginActivity extends Activity {
         try {
 
             for (Object obj : l) {
-                System.out.println(obj.getClass().toString());
+                //System.out.println(obj.getClass().toString());
 
                 Class classe = obj.getClass();
                 ContentValues cv = new ContentValues();
