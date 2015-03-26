@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,8 +82,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         btLogin = (Button) findViewById(R.id.btLogin);
 
-
-        //Spinner sp = (Spinner) findViewById(R.id.spinner);
+        Spinner sp = (Spinner) findViewById(R.id.spinnerLogin);
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item,consultaUsuarios());
         //sp.setAdapter(adapter);
@@ -143,26 +142,27 @@ public class LoginActivity extends Activity {
     }
 
     public ArrayList consultaUsuarios() {
-        Cursor c = db.rawQuery("SELECT nome,id FROM sisfuncao ORDER BY nome", null);
+        Cursor c = db.rawQuery("SELECT nome FROM sisusuario ORDER BY nome", null);
         ArrayList<String> usuarios = new ArrayList<String>();
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (c.moveToNext()) {
                 usuarios.add(c.getString(0));
             }
-        }
 
+        }
         return usuarios;
+
     }
 
 
     public void login(View view) {
-        //consultar(Engobra.class);
-
-        EditText edtlogin = (EditText) findViewById(R.id.login);
+        consultar(Sisfuncao.class);
+        /*
+        Spinner edtlogin = (Spinner) findViewById(R.id.spinnerLogin);
         EditText edtsenha = (EditText) findViewById(R.id.senha);
-        if((!edtlogin.getText().toString().equals(""))&&(!edtsenha.getText().toString().equals(""))) {
-            String nome = loginUsuario((String) edtlogin.getText().toString(), (String) edtsenha.getText().toString());
+        if((!edtlogin.getSelectedItem().toString().equals(""))&&(!edtsenha.getText().toString().equals(""))) {
+            String nome = loginUsuario((String) edtlogin.getSelectedItem().toString(), (String) edtsenha.getText().toString());
 
             if(!"".equals(nome)) {
                 Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
@@ -174,7 +174,7 @@ public class LoginActivity extends Activity {
         } else {
             Toast.makeText(getApplicationContext(), "Preencha o login e senha", Toast.LENGTH_LONG).show();
         }
-
+*/
 
     }
 
