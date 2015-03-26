@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BridgeEngenharia</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_sincronizar">Sincronizar</string>
+    <string name="title_activity_producao">Producao</string>
+    <string name="title_activity_arquivos">Arquivos</string>
+    <string name="title_activity_principal">Principal</string>
+    <string name="title_activity_qualidade">Qualidade</string>
+</resources>

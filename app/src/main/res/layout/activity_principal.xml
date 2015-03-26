@@ -1,0 +1,116 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menuprincipal"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.example.impactit.bridgeengenharia.PrincipalActivity"
+
+    >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="79dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageView3"
+            android:src="@drawable/logo_bridge"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Usuário:"
+            android:id="@+id/textView" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vinicius"
+            android:id="@+id/nomeusuario" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/button_material_light"
+
+        >
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/documentos"
+            android:src="@drawable/documentos2"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:adjustViewBounds="false"
+            android:layout_weight="1"
+            android:onClick="documentos"
+            />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/producao"
+            android:src="@drawable/producao2"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:layout_weight="1"
+            android:onClick="producao"
+            />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/qualidade"
+            android:src="@drawable/qualidade2"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:layout_weight="1"
+            android:onClick="qualidade"
+            />
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/ocorrencia"
+            android:src="@drawable/ocorrencia2"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:layout_weight="1"
+            android:onClick="ocorrencia"
+            />
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/estatistica"
+            android:src="@drawable/estatistica2"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:layout_weight="1"
+            android:onClick="estatistica"
+            />
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/sistema"
+            android:src="@drawable/sistema2"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:layout_weight="1"
+            android:onClick="sistema"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>
