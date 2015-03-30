@@ -14,23 +14,18 @@ package com.example.impactit.bridgeengenharia;
 
 public class PrincipalActivity extends Activity {
 
+    public Intent it;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-       // TextView tv = (TextView) findViewById(R.id.nomeusuario);
-       // Intent intent = getIntent();
+        TextView tv = (TextView) findViewById(R.id.nomeusuario);
+        it = getIntent();
 
+        tv.setText(it.getStringExtra("usuario"));
 
-/*
-         if(params!=null){
-             Long id = params.getLong("usuario");
-             System.out.println(id.toString());
-             //tv.setText(mostraTexto);
-            //setContentView(tv);
-        }
-        */
     }
 
 
@@ -58,31 +53,31 @@ public class PrincipalActivity extends Activity {
 
     public void documentos(View view) {
         Intent intent = new Intent(getApplicationContext(), ArquivosActivity.class);
+        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void producao(View view) {
         Intent intent = new Intent(getApplicationContext(), ProducaoActivity.class);
+        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void qualidade(View view) {
         Intent intent = new Intent(getApplicationContext(), QualidadeActivity.class);
+        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void ocorrencia(View view) {
         Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
-        startActivity(intent);
-    }
-
-    public void estatistica(View view) {
-        Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void sistema(View view) {
         Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 

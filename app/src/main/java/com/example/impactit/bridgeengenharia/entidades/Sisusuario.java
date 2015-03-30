@@ -161,5 +161,7 @@ public class Sisusuario implements Serializable {
     public String toString() {
         return "teste.entidades.Sisusuario[ id=" + id + " ]";
     }
+
+
     
 }

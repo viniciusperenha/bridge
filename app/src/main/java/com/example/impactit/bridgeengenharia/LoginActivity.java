@@ -2,9 +2,10 @@ package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Intent;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -13,9 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.SimpleAdapter;
+
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,7 +38,7 @@ import com.example.impactit.bridgeengenharia.entidades.Rhcargo;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
+
 import com.google.gson.reflect.TypeToken;
 
 import com.example.impactit.bridgeengenharia.entidades.Sisfuncao;
@@ -53,28 +52,26 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
-import java.net.URL;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.net.URLClassLoader;
+
 import java.lang.Object;
+import java.util.TimeZone;
 
 
 public class LoginActivity extends Activity {
 
     private Button btLogin;
+    private Spinner spUsuarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +79,20 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         btLogin = (Button) findViewById(R.id.btLogin);
 
-        Spinner sp = (Spinner) findViewById(R.id.spinnerLogin);
+        SQLiteDatabase checkDB = null;
+        spUsuarios = (Spinner) findViewById(R.id.spinnerLogin);
 
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item,consultaUsuarios());
-        //sp.setAdapter(adapter);
+        try{
+            checkDB = SQLiteDatabase.openDatabase("bridge", null, SQLiteDatabase.OPEN_READONLY);
+        }
+        catch (SQLiteException e){
+            e.printStackTrace();
+        }
 
+        if(checkDB!=null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
+            spUsuarios.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -128,24 +134,14 @@ public class LoginActivity extends Activity {
         new Sincronizador().execute();
     }
 
-    public void consultar(Class classe) {
-        Cursor c = db.rawQuery("SELECT * " +
-                "FROM " + classe.getSimpleName().toLowerCase(), null);
-        String s = "";
-        while (c.moveToNext()) {
-            for(int i=0;i<c.getColumnCount();i++){
-                s+= c.getString(i)+" ";
-            }
-            //s += c.getString(0) + "-" + c.getString(1) + " "+ c.getString(5) + " ";
-        }
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-    }
+
 
     public ArrayList consultaUsuarios() {
-        Cursor c = db.rawQuery("SELECT nome FROM sisusuario ORDER BY nome", null);
+        Cursor c = db.rawQuery("SELECT login FROM sisusuario ORDER BY login", null);
         ArrayList<String> usuarios = new ArrayList<String>();
         if (c.getCount() > 0) {
             c.moveToFirst();
+            usuarios.add(c.getString(0));
             while (c.moveToNext()) {
                 usuarios.add(c.getString(0));
             }
@@ -157,16 +153,17 @@ public class LoginActivity extends Activity {
 
 
     public void login(View view) {
-        consultar(Sisfuncao.class);
-        /*
-        Spinner edtlogin = (Spinner) findViewById(R.id.spinnerLogin);
+        Sisusuario su = new Sisusuario();
+        su = (Sisusuario) consultar(su);
+        Toast.makeText(getApplicationContext(), su.getNome()+" "+su.getDataHoraCadastro(), Toast.LENGTH_LONG).show();
+       /*
         EditText edtsenha = (EditText) findViewById(R.id.senha);
-        if((!edtlogin.getSelectedItem().toString().equals(""))&&(!edtsenha.getText().toString().equals(""))) {
-            String nome = loginUsuario((String) edtlogin.getSelectedItem().toString(), (String) edtsenha.getText().toString());
+        if((!spUsuarios.getSelectedItem().toString().equals(""))&&(!edtsenha.getText().toString().equals(""))) {
+            String nome = loginUsuario((String) spUsuarios.getSelectedItem().toString(), (String) edtsenha.getText().toString());
 
             if(!"".equals(nome)) {
                 Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
-                //intent.putExtra("usuario", nome);
+                intent.putExtra("usuario", nome);
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "Login e/ou senha incorretos", Toast.LENGTH_LONG).show();
@@ -174,8 +171,8 @@ public class LoginActivity extends Activity {
         } else {
             Toast.makeText(getApplicationContext(), "Preencha o login e senha", Toast.LENGTH_LONG).show();
         }
-*/
 
+        */
     }
 
 
@@ -184,7 +181,6 @@ public class LoginActivity extends Activity {
     private void criaBanco() {
         try {
             db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
-            criaTabelasBanco();
 
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
@@ -199,7 +195,8 @@ public class LoginActivity extends Activity {
             try {
                 publishProgress("Criando banco de dados...");
                 criaBanco();
-
+                deletaTabelasBanco();
+                criaTabelasBanco();
 
                 publishProgress("Sincronizando...");
 
@@ -383,7 +380,11 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(String s) {
+
             btLogin.setEnabled(true);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
+
+            spUsuarios.setAdapter(adapter);
         }
 
         @Override
@@ -396,7 +397,7 @@ public class LoginActivity extends Activity {
 
             try {
                 DefaultHttpClient dhc = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet("http://192.168.1.8:8080/" + classe.getSimpleName().toLowerCase());
+                HttpGet httpGet = new HttpGet("http://192.168.25.2:8080/" + classe.getSimpleName().toLowerCase());
                 HttpResponse resposta = null;
                 resposta = dhc.execute(httpGet);
                 String res = EntityUtils.toString(resposta.getEntity());
@@ -438,6 +439,55 @@ public class LoginActivity extends Activity {
 
     }
 
+    public Object consultar(Object obj) {
+        Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" limit 2", null);
+       if(c.getCount()>0) {
+           c.moveToFirst();
+           String s = "";
+
+           while (c.moveToNext()) {
+               for (int i = 0; i < c.getColumnCount(); i++) {
+                   try{
+                       Field f= obj.getClass().getDeclaredField(c.getColumnName(i));
+                       f.setAccessible(true);
+                       if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
+                           if (f.getType().equals(Date.class)) {
+
+
+                               DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+                               df.setTimeZone(TimeZone.getTimeZone("BRT"));
+                               Date date = (Date) df.parse(c.getString(i));
+
+                               Calendar cal = Calendar.getInstance();
+                               cal.setTime(date);
+                               f.set(obj, cal.getTime());
+                           }
+                           if (f.getType().equals(Long.class)) {
+                               f.set(obj, Long.parseLong(c.getString(i)));
+                           }
+                           if (f.getType().equals(String.class)) {
+                               f.set(obj, c.getString(i));
+                           }
+                           if (f.getType().equals(Character.class)) {
+                               f.set(obj, c.getString(i).charAt(0));
+                           }
+                           if (f.getType().equals(BigInteger.class)) {
+                               f.set(obj, BigInteger.valueOf(Long.parseLong(c.getString(i))));
+                           }
+
+                       }
+                   } catch (Exception ex) {
+                       ex.printStackTrace();
+                   }
+                   s+= c.getColumnName(i)+" - "+c.getString(i)+"   ";
+               }
+           }
+           System.out.println(s);
+       }
+       return obj;
+        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+    }
+
     public String tipoSql(Class tipo){
 
         if (tipo.equals(String.class)) return "varchar(100)";
@@ -452,16 +502,25 @@ public class LoginActivity extends Activity {
         return "long";
     }
 
-    public void criaTabelasBanco()  {
+
+    public void deletaTabelasBanco(){
         try {
             for (String s : getClasses()) {
-                db.execSQL("delete from " + s);
+                db.execSQL("DROP TABLE IF EXISTS " + s.toLowerCase());
             }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void criaTabelasBanco()  {
+        try {
 
             for (String s : getClasses()) {
                 Class<?> aClass = Class.forName("com.example.impactit.bridgeengenharia.entidades." + s);
                 StringBuilder sb = new StringBuilder();
-                sb.append("CREATE TABLE if not exists " + s + "(");
+                sb.append("CREATE TABLE if not exists " + s.toLowerCase() + "(");
                 for (Field f : aClass.getDeclaredFields()) {
                     Class<?> type = f.getType();
                     sb.append(f.getName() + " " + tipoSql(type));
@@ -473,7 +532,7 @@ public class LoginActivity extends Activity {
                 sb.setLength(sb.length() - 1);
                 sb.append(")");
 
-                //System.out.println(sb.toString());
+                System.out.println(sb.toString());
 
                 db.execSQL(sb.toString());
 

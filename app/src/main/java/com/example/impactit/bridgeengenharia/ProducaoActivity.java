@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 public class ProducaoActivity extends PrincipalActivity {
@@ -15,6 +16,10 @@ public class ProducaoActivity extends PrincipalActivity {
         setContentView(R.layout.activity_producao);
         ImageButton ib = (ImageButton) findViewById(R.id.producao);
         ib.setImageResource(R.drawable.producaoselecionado);
+
+        TextView tv = (TextView) findViewById(R.id.nomeusuario);
+        it = getIntent();
+        tv.setText(it.getStringExtra("usuario"));
     }
 
 

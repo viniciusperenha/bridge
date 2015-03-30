@@ -36,7 +36,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spinnerLogin"
         android:layout_below="@+id/imageView2"
-        />
+
+        android:nestedScrollingEnabled="true" />
 
     <Button
         android:layout_width="fill_parent"

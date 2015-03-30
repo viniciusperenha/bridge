@@ -27,7 +27,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vinicius"
             android:id="@+id/nomeusuario" />
 
     </LinearLayout>
@@ -41,8 +40,8 @@
         >
 
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/documentos"
             android:src="@drawable/documentos2"
             android:padding="2dp"
@@ -54,8 +53,8 @@
             />
 
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/producao"
             android:src="@drawable/producao2"
             android:padding="2dp"
@@ -66,8 +65,8 @@
             />
 
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/qualidade"
             android:src="@drawable/qualidade2"
             android:padding="2dp"
@@ -77,8 +76,8 @@
             android:onClick="qualidade"
             />
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/ocorrencia"
             android:src="@drawable/ocorrencia2"
             android:padding="2dp"
@@ -87,20 +86,10 @@
             android:layout_weight="1"
             android:onClick="ocorrencia"
             />
+
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/estatistica"
-            android:src="@drawable/estatistica2"
-            android:padding="2dp"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:layout_weight="1"
-            android:onClick="estatistica"
-            />
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/sistema"
             android:src="@drawable/sistema2"
             android:padding="2dp"
