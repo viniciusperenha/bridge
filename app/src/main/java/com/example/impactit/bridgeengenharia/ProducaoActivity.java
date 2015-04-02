@@ -73,9 +73,7 @@ public class ProducaoActivity extends PrincipalActivity {
         ArrayAdapter<String> adapterSubprojeto = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos());
         subprojeto.setAdapter(adapterSubprojeto);
 
-        //lista pavimentos
-        ArrayAdapter<String> adapterPavimento = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
-        pavimento.setAdapter(adapterPavimento);
+
 
 
 
@@ -110,7 +108,9 @@ public class ProducaoActivity extends PrincipalActivity {
                 projeto = (Plaprojeto) consultarPorId(projeto , usuarioGlobal.getObraselecionada().getFkIdProjeto().toString());
                 usuarioGlobal.setProjetoselecionado(projeto);
 
-
+                //lista pavimentos
+                ArrayAdapter<String> adapterPavimento = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
+                pavimento.setAdapter(adapterPavimento);
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
