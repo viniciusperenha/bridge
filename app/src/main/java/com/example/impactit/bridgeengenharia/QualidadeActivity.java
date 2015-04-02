@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
 
 
 public class QualidadeActivity extends PrincipalActivity {
@@ -15,6 +20,20 @@ public class QualidadeActivity extends PrincipalActivity {
         setContentView(R.layout.activity_qualidade);
         ImageButton ib = (ImageButton) findViewById(R.id.qualidade);
         ib.setImageResource(R.drawable.qualidadeselecionado);
+
+        //usuario global
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        TextView tv = (TextView) findViewById(R.id.nomeusuario);
+        tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
+
+
+    }
+
+    public Engobra ObrasDisponiveisUsuario(Sisusuario usu){
+
+
+
+        return null;
     }
 
 

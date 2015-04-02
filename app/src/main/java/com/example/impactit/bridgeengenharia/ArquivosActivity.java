@@ -15,6 +15,9 @@ package com.example.impactit.bridgeengenharia;
         import android.widget.ArrayAdapter;
         import android.widget.ImageButton;
         import android.widget.ListView;
+        import android.widget.TextView;
+
+        import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 
         import java.io.File;
 
@@ -30,6 +33,10 @@ public class ArquivosActivity extends PrincipalActivity {
         ImageButton ib = (ImageButton) findViewById(R.id.documentos);
         ib.setImageResource(R.drawable.documentosselecionado);
 
+        //usuario global
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        TextView tv = (TextView) findViewById(R.id.nomeusuario);
+        tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 
         ListView lv = (ListView) findViewById(R.id.listView2);
         //colocar o caminho dos pdfs

@@ -3,6 +3,7 @@ package com.example.impactit.bridgeengenharia;
 import android.app.Activity;
 import android.content.ContentValues;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -15,9 +16,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.Empempresa;
 import com.example.impactit.bridgeengenharia.entidades.Engcolaboradorobra;
 import com.example.impactit.bridgeengenharia.entidades.Engcontratoempreiteira;
@@ -72,6 +75,8 @@ public class LoginActivity extends Activity {
 
     private Button btLogin;
     private Spinner spUsuarios;
+    public static SQLiteDatabase db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +84,17 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         btLogin = (Button) findViewById(R.id.btLogin);
 
-        SQLiteDatabase checkDB = null;
+
         spUsuarios = (Spinner) findViewById(R.id.spinnerLogin);
 
         try{
-            checkDB = SQLiteDatabase.openDatabase("bridge", null, SQLiteDatabase.OPEN_READONLY);
+            db = SQLiteDatabase.openDatabase("bridge", null, SQLiteDatabase.OPEN_READONLY);
         }
         catch (SQLiteException e){
             e.printStackTrace();
         }
 
-        if(checkDB!=null) {
+        if(db!=null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
             spUsuarios.setAdapter(adapter);
         }
@@ -122,7 +127,7 @@ public class LoginActivity extends Activity {
     }
 
     public String loginUsuario(String login, String senha) {
-        Cursor c = db.rawQuery("SELECT nome FROM sisusuario where login ='" + login + "' and senha='" + senha + "' ORDER BY nome", null);
+        Cursor c = db.rawQuery("SELECT id FROM sisusuario where login ='" + login + "' and senha='" + senha + "' ORDER BY nome", null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             return c.getString(0);
@@ -153,30 +158,38 @@ public class LoginActivity extends Activity {
 
 
     public void login(View view) {
-        Sisusuario su = new Sisusuario();
-        su = (Sisusuario) consultar(su);
-        Toast.makeText(getApplicationContext(), su.getNome()+" "+su.getDataHoraCadastro(), Toast.LENGTH_LONG).show();
-       /*
-        EditText edtsenha = (EditText) findViewById(R.id.senha);
-        if((!spUsuarios.getSelectedItem().toString().equals(""))&&(!edtsenha.getText().toString().equals(""))) {
-            String nome = loginUsuario((String) spUsuarios.getSelectedItem().toString(), (String) edtsenha.getText().toString());
 
-            if(!"".equals(nome)) {
-                Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
-                intent.putExtra("usuario", nome);
-                startActivity(intent);
+        if(spUsuarios.getCount()>0) {
+
+            EditText edtsenha = (EditText) findViewById(R.id.senha);
+            if ((!spUsuarios.getSelectedItem().toString().equals("")) && (!edtsenha.getText().toString().equals(""))) {
+                String id = loginUsuario((String) spUsuarios.getSelectedItem().toString(), (String) edtsenha.getText().toString());
+
+                if (!"".equals(id)) {
+                    final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+                    Sisusuario usu = new Sisusuario();
+                    usu = (Sisusuario) consultarPorId(usu, id);
+
+                    Toast.makeText(getApplicationContext(), usu.getNome(), Toast.LENGTH_LONG).show();
+
+                    usuarioGlobal.setUsuarioLogado((Sisusuario) consultarPorId(usu, id));
+                    Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+                    //intent.putExtra("usuario", id);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Login e/ou senha incorretos", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(getApplicationContext(), "Login e/ou senha incorretos", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Preencha o login e senha", Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "Preencha o login e senha", Toast.LENGTH_LONG).show();
-        }
 
-        */
+        } else {
+            Toast.makeText(getApplicationContext(), "Banco de dados vazio, por favor sincronize.", Toast.LENGTH_LONG).show();
+        }
     }
 
 
-    public static SQLiteDatabase db;
+
 
     private void criaBanco() {
         try {
@@ -439,28 +452,23 @@ public class LoginActivity extends Activity {
 
     }
 
-    public Object consultar(Object obj) {
-        Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" limit 2", null);
-       if(c.getCount()>0) {
+    public Object consultarPorId(Object obj, String id) {
+        Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" where id = "+id, null);
+
+        if(c.getCount()>0) {
            c.moveToFirst();
            String s = "";
 
-           while (c.moveToNext()) {
+
                for (int i = 0; i < c.getColumnCount(); i++) {
                    try{
                        Field f= obj.getClass().getDeclaredField(c.getColumnName(i));
                        f.setAccessible(true);
                        if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                            if (f.getType().equals(Date.class)) {
+                               System.out.println(c.getLong(i));
+                               //TODO: criar conversao para data
 
-
-                               DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-                               df.setTimeZone(TimeZone.getTimeZone("BRT"));
-                               Date date = (Date) df.parse(c.getString(i));
-
-                               Calendar cal = Calendar.getInstance();
-                               cal.setTime(date);
-                               f.set(obj, cal.getTime());
                            }
                            if (f.getType().equals(Long.class)) {
                                f.set(obj, Long.parseLong(c.getString(i)));
@@ -481,7 +489,7 @@ public class LoginActivity extends Activity {
                    }
                    s+= c.getColumnName(i)+" - "+c.getString(i)+"   ";
                }
-           }
+
            System.out.println(s);
        }
        return obj;
@@ -544,7 +552,6 @@ public class LoginActivity extends Activity {
         }
 
     }
-
 
 
     public String[] getClasses() {

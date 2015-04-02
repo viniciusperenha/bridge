@@ -12,19 +12,24 @@ package com.example.impactit.bridgeengenharia;
         import android.widget.TextView;
 
 
+        import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+        import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
+
+
 public class PrincipalActivity extends Activity {
 
     public Intent it;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
+        //usuario global
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
-        it = getIntent();
-
-        tv.setText(it.getStringExtra("usuario"));
+        tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 
     }
 
@@ -53,31 +58,26 @@ public class PrincipalActivity extends Activity {
 
     public void documentos(View view) {
         Intent intent = new Intent(getApplicationContext(), ArquivosActivity.class);
-        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void producao(View view) {
         Intent intent = new Intent(getApplicationContext(), ProducaoActivity.class);
-        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void qualidade(View view) {
         Intent intent = new Intent(getApplicationContext(), QualidadeActivity.class);
-        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void ocorrencia(View view) {
         Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
-        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
     public void sistema(View view) {
         Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
-        intent.putExtra("usuario",it.getStringExtra("usuario"));
         startActivity(intent);
     }
 
