@@ -39,6 +39,7 @@ import com.example.impactit.bridgeengenharia.entidades.Platarefa;
 import com.example.impactit.bridgeengenharia.entidades.Platipopavimento;
 import com.example.impactit.bridgeengenharia.entidades.Rhcargo;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
+import com.example.impactit.bridgeengenharia.entidades.Sisparametro;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -375,6 +376,14 @@ public class LoginActivity extends Activity {
                 }.getType();
                 inserir((List<Plasubprojeto>) gson.fromJson(lista.toString(), listType));
 
+                //insere Sisparametro
+                lista = new JSONArray();
+                lista = consultaGenerica(Sisparametro.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<Sisparametro>>() {
+                }.getType();
+                inserir((List<Sisparametro>) gson.fromJson(lista.toString(), listType));
+
 
 
                 publishProgress("Sincronizado com sucesso!");
@@ -466,7 +475,7 @@ public class LoginActivity extends Activity {
                        f.setAccessible(true);
                        if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                            if (f.getType().equals(Date.class)) {
-                               System.out.println(c.getLong(i));
+                               System.out.println(c.getString(i));
                                //TODO: criar conversao para data
 
                            }
@@ -555,7 +564,7 @@ public class LoginActivity extends Activity {
 
 
     public String[] getClasses() {
-        return new String[]{"Empempresa", "Orcpavimentoelementoproducao", "Platarefa", "Engcolaboradorobra", "Orcservico", "Platipopavimento", "Engcontratoempreiteira", "Orcunidademedida", "Rhcargo", "Engcontratoservicoempreiteira", "Plaatividade", "Rhcolaborador", "Engempreiteira", "Plapavimentoprojeto", "Sisfuncao", "Engobra", "Plaprojeto", "Sisusuario", "Orcelementoproducao", "Plasubprojeto"};
+        return new String[]{"Empempresa", "Orcpavimentoelementoproducao", "Platarefa", "Engcolaboradorobra", "Orcservico", "Platipopavimento", "Engcontratoempreiteira", "Orcunidademedida", "Rhcargo", "Engcontratoservicoempreiteira", "Plaatividade", "Rhcolaborador", "Engempreiteira", "Plapavimentoprojeto", "Sisfuncao", "Engobra", "Plaprojeto", "Sisusuario", "Orcelementoproducao", "Plasubprojeto", "Sisparametro"};
     }
 
 }

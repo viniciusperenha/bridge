@@ -156,7 +156,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Empresa"
+                android:text="Empreiteira"
                 />
 
             <EditText

@@ -76,8 +76,6 @@ public class ProducaoActivity extends PrincipalActivity {
 
 
 
-
-
         subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ArrayAdapter<String> adapterSubprojetoAtividade = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto(subprojeto.getSelectedItem().toString()));
@@ -151,12 +149,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 "inner join Engobra as o on eco.fkIdObra = o.id " +
                 "where eco.fkIdColaborador = "+usu.getFkIdColaborador(),null);
         if(c.getCount()>0){
-            c.moveToFirst();
-            for (int i = 0; i < c.getCount(); i++) {
-                lista.add(c.getString(0));
-                c.moveToNext();
-            }
-            return lista;
+            return populaSpinnerResultado(c);
         }
         lista.add("Obra nao encontrada");
 
@@ -166,10 +159,67 @@ public class ProducaoActivity extends PrincipalActivity {
     public Object consultarPorId(Object obj, String id) {
         Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" where id = "+id, null);
 
+        return recuperarObjeto(obj,c);
+
+    }
+
+    public Engobra recuperaObraSelecionada(String obra){
+        Engobra engobra = new Engobra();
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+
+        Cursor c = db.rawQuery("Select o.* from Engcolaboradorobra eco " +
+                "inner join Engobra as o on eco.fkIdObra = o.id " +
+                "where eco.fkIdColaborador = " + usuarioGlobal.getUsuarioLogado().getFkIdColaborador() + " " +
+                " and o.nome = '" + obra+"'", null);
+
+        return (Engobra) recuperarObjeto(engobra,c);
+
+    }
+
+    public ArrayList<String> listaSubProjetos(){
+        Cursor c = db.rawQuery("SELECT descricao FROM Plasubprojeto ", null);
+        return populaSpinnerResultado(c);
+    }
+
+    public ArrayList<String> listaAtividadesSubProjeto(String subprojeto){
+        Cursor c = db.rawQuery("SELECT at.nome FROM Plaatividade as at inner join " +
+                " Plasubprojeto as sp on at.fkIdSubprojeto = sp.id " +
+                " where sp.descricao =  '"+subprojeto+"'", null);
+        return populaSpinnerResultado(c);
+    }
+
+    public ArrayList<String> listaPavimentoProjeto(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        Cursor c = db.rawQuery("SELECT nome FROM Plapavimentoprojeto " +
+                "where fkIdProjeto = "+usuarioGlobal.getProjetoselecionado().getId().toString(), null);
+        return populaSpinnerResultado(c);
+    }
+
+    public ArrayList<String> listaEmpreiteirasContrato(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        Cursor c = db.rawQuery("Select e.nomeFantasia FROM Engempreiteira as e " +
+                " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
+                " WHERE ce.fkIdObra = "+usuarioGlobal.getObraselecionada().getId().toString(), null);
+
+        return populaSpinnerResultado(c);
+    }
+
+    public ArrayList<String> populaSpinnerResultado(Cursor c){
+        ArrayList<String> s = new ArrayList<>();
+        c.moveToFirst();
+        for(int i=0; i<c.getCount();i++){
+            s.add(c.getString(0));
+            c.moveToNext();
+        }
+
+        return s;
+    }
+
+    public Object recuperarObjeto(Object obj, Cursor c) {
+
         if(c.getCount()>0) {
             c.moveToFirst();
             String s = "";
-
 
             for (int i = 0; i < c.getColumnCount(); i++) {
                 try{
@@ -177,7 +227,7 @@ public class ProducaoActivity extends PrincipalActivity {
                     f.setAccessible(true);
                     if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                         if (f.getType().equals(Date.class)) {
-                            System.out.println(c.getLong(i));
+                            System.out.println(c.getString(i));
                             //TODO: criar conversao para data
 
                         }
@@ -205,88 +255,5 @@ public class ProducaoActivity extends PrincipalActivity {
         }
         return obj;
 
-    }
-
-    public Engobra recuperaObraSelecionada(String obra){
-        Engobra engobra = new Engobra();
-        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-
-        Cursor c = db.rawQuery("Select o.* from Engcolaboradorobra eco " +
-                "inner join Engobra as o on eco.fkIdObra = o.id " +
-                "where eco.fkIdColaborador = " + usuarioGlobal.getUsuarioLogado().getFkIdColaborador() + " " +
-                " and o.nome = '" + obra+"'", null);
-
-        c.moveToFirst();
-        for (int i = 0; i < c.getColumnCount(); i++) {
-            try{
-                Field f= engobra.getClass().getDeclaredField(c.getColumnName(i));
-                f.setAccessible(true);
-                if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
-                    if (f.getType().equals(Date.class)) {
-                        System.out.println(c.getLong(i));
-                        //TODO: criar conversao para data
-
-                    }
-                    if (f.getType().equals(Long.class)) {
-                        f.set(engobra, Long.parseLong(c.getString(i)));
-                    }
-                    if (f.getType().equals(String.class)) {
-                        f.set(engobra, c.getString(i));
-                    }
-                    if (f.getType().equals(Character.class)) {
-                        f.set(engobra, c.getString(i).charAt(0));
-                    }
-                    if (f.getType().equals(BigInteger.class)) {
-                        f.set(engobra, BigInteger.valueOf(Long.parseLong(c.getString(i))));
-                    }
-
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-        }
-        return engobra;
-
-    }
-
-    public ArrayList<String> listaSubProjetos(){
-        Cursor c = db.rawQuery("SELECT descricao FROM Plasubprojeto ", null);
-        ArrayList<String> s = new ArrayList<>();
-        c.moveToFirst();
-        for(int i=0; i<c.getCount();i++){
-            s.add(c.getString(0));
-            c.moveToNext();
-        }
-
-        return s;
-    }
-
-    public ArrayList<String> listaAtividadesSubProjeto(String subprojeto){
-        Cursor c = db.rawQuery("SELECT at.nome FROM Plaatividade as at inner join " +
-                " Plasubprojeto as sp on at.fkIdSubprojeto = sp.id " +
-                " where sp.descricao =  '"+subprojeto+"'", null);
-        ArrayList<String> s = new ArrayList<>();
-        c.moveToFirst();
-        for(int i=0; i<c.getCount();i++){
-            s.add(c.getString(0));
-            c.moveToNext();
-        }
-
-        return s;
-    }
-
-    public ArrayList<String> listaPavimentoProjeto(){
-        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        Cursor c = db.rawQuery("SELECT nome FROM Plapavimentoprojeto " +
-                "where fkIdProjeto = "+usuarioGlobal.getProjetoselecionado().getId().toString(), null);
-        ArrayList<String> s = new ArrayList<>();
-        c.moveToFirst();
-        for(int i=0; i<c.getCount();i++){
-            s.add(c.getString(0));
-            c.moveToNext();
-        }
-
-        return s;
     }
 }
