@@ -159,21 +159,11 @@
                 android:text="Empreiteira"
                 />
 
-            <EditText
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText9" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Data"
-                />
+                android:id="@+id/empreiteiracontrato" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:id="@+id/editText10" />
 
 
         </TableRow>
@@ -190,20 +180,10 @@
                 android:text="Colaborador"
                 />
 
-            <EditText
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText11" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Função"
-                />
-
-            <EditText
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText12" />
+                android:id="@+id/colaboradorempreiteira" />
 
         </TableRow>
 

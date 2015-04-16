@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentoprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
@@ -42,6 +43,9 @@ public class ProducaoActivity extends PrincipalActivity {
     public Spinner atividade;
     public Spinner pavimento;
     public Plapavimentoprojeto pavimentoprojeto;
+    public Spinner empreiteira;
+    public Spinner colaboradorempreiteira;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,8 @@ public class ProducaoActivity extends PrincipalActivity {
         atividade = (Spinner) findViewById(R.id.producaoatividade);
         spinnerObra = (Spinner) findViewById(R.id.spinnerObra);
         pavimento = (Spinner) findViewById(R.id.producaopavimento);
+        empreiteira = (Spinner)  findViewById(R.id.empreiteiracontrato);
+        colaboradorempreiteira = (Spinner)  findViewById(R.id.colaboradorempreiteira);
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
@@ -72,8 +78,6 @@ public class ProducaoActivity extends PrincipalActivity {
         //lista subprojetos
         ArrayAdapter<String> adapterSubprojeto = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos());
         subprojeto.setAdapter(adapterSubprojeto);
-
-
 
 
         subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -109,6 +113,31 @@ public class ProducaoActivity extends PrincipalActivity {
                 //lista pavimentos
                 ArrayAdapter<String> adapterPavimento = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
                 pavimento.setAdapter(adapterPavimento);
+
+
+                //verifica a(s) empreiterias da obra pelo contrato e parametro
+                ArrayAdapter<String> adapterEmpreiteria = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaEmpreiteirasContrato());
+                empreiteira.setAdapter(adapterEmpreiteria);
+
+                //busca colaboradores da obra
+                ArrayAdapter<String> adapteColaboradorEmpreiteira = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaColaboradorObra());
+                colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+
+        empreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Engempreiteira emp = new Engempreiteira();
+                emp = (Engempreiteira) recuperaEmpreiteiraSelecionada(empreiteira.getSelectedItem().toString());
+                usuarioGlobal.setEmpreiteiraselecionada(emp);
+
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -156,12 +185,7 @@ public class ProducaoActivity extends PrincipalActivity {
         return lista;
     }
 
-    public Object consultarPorId(Object obj, String id) {
-        Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" where id = "+id, null);
 
-        return recuperarObjeto(obj,c);
-
-    }
 
     public Engobra recuperaObraSelecionada(String obra){
         Engobra engobra = new Engobra();
@@ -175,6 +199,16 @@ public class ProducaoActivity extends PrincipalActivity {
         return (Engobra) recuperarObjeto(engobra,c);
 
     }
+
+    public Engempreiteira recuperaEmpreiteiraSelecionada(String empreiteira){
+        Engempreiteira emp = new Engempreiteira();
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        Cursor c = db.rawQuery("Select * from Engempreiteira as e " +
+                " where e.nomeFantasia = '" + empreiteira+"'", null);
+        return (Engempreiteira) recuperarObjeto(emp,c);
+    }
+
+
 
     public ArrayList<String> listaSubProjetos(){
         Cursor c = db.rawQuery("SELECT descricao FROM Plasubprojeto ", null);
@@ -195,13 +229,52 @@ public class ProducaoActivity extends PrincipalActivity {
         return populaSpinnerResultado(c);
     }
 
-    public ArrayList<String> listaEmpreiteirasContrato(){
+    public ArrayList<String> listaColaboradorObra(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        Cursor c = db.rawQuery("Select e.nomeFantasia FROM Engempreiteira as e " +
-                " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
-                " WHERE ce.fkIdObra = "+usuarioGlobal.getObraselecionada().getId().toString(), null);
+        Cursor c = db.rawQuery("Select c.nome, col.nome FROM Engcolaboradorobra as eco " +
+                " inner join Rhcargo as c on eco.fkIdCargo = c.id " +
+                " inner join Rhcolaborador as col on eco.fkIdColaborador = col.id " +
+                " WHERE eco.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString()
+                , null);
+
+        ArrayList<String> s = new ArrayList<>();
+        c.moveToFirst();
+        for(int i=0; i<c.getCount();i++){
+            s.add(c.getString(0)+" - ");
+            c.moveToNext();
+        }
 
         return populaSpinnerResultado(c);
+    }
+
+    public ArrayList<String> listaEmpreiteirasContrato(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        Cursor c = null;
+        //busca parametro pra tipo de contrato
+        Cursor param = db.rawQuery("select * from Sisparametro where grupo='PARAMETROS' and nome='vincularEmpreiteiraPorContrato' ",null);
+        if(param.getCount()>0) {
+
+            c = db.rawQuery("Select e.nomeFantasia FROM Engempreiteira as e " +
+                    " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
+                    " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString(), null);
+        }
+
+        if(param.getCount()==0) {
+
+            c = db.rawQuery("Select e.nomeFantasia FROM Engempreiteira as e " +
+                    " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
+                    " inner join Engcontratoservicoempreiteira as cse on ce.id = cse.fkIdContratoEmpreiteira " +
+                    " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString(), null);
+        }
+
+
+        return populaSpinnerResultado(c);
+    }
+
+    public Object consultarPorId(Object obj, String id) {
+        Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" where id = "+id, null);
+        return recuperarObjeto(obj,c);
+
     }
 
     public ArrayList<String> populaSpinnerResultado(Cursor c){
