@@ -87,4 +87,9 @@ public class Orcservico implements Serializable {
     public void setFkIdTarefa(Long fkIdTarefa) {
         this.fkIdTarefa = fkIdTarefa;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

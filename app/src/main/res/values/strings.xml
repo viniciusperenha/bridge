@@ -8,4 +8,5 @@
     <string name="title_activity_arquivos">Arquivos</string>
     <string name="title_activity_principal">Principal</string>
     <string name="title_activity_qualidade">Qualidade</string>
+    <string name="title_activity_detalhes_producao">Detalhes Produção</string>
 </resources>

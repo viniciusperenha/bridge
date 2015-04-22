@@ -1,6 +1,7 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
@@ -13,10 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentoprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
@@ -84,6 +87,21 @@ public class ProducaoActivity extends PrincipalActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ArrayAdapter<String> adapterSubprojetoAtividade = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto(subprojeto.getSelectedItem().toString()));
                 atividade.setAdapter(adapterSubprojetoAtividade);
+
+                //armazena subprojeto na camada global
+                usuarioGlobal.setSubprojetoselecionado(recuperaSubprojetoSelecionado(subprojeto.getSelectedItem().toString()));
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+        atividade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //armazena na global a atividade
+                usuarioGlobal.setAtividadeselecionada(recuperaAtividadeSelecionada(atividade.getSelectedItem().toString()));
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -130,14 +148,39 @@ public class ProducaoActivity extends PrincipalActivity {
             }
         });
 
-
+        //selecionou empreiteira guarda como global
         empreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Engempreiteira emp = new Engempreiteira();
-                emp = (Engempreiteira) recuperaEmpreiteiraSelecionada(empreiteira.getSelectedItem().toString());
-                usuarioGlobal.setEmpreiteiraselecionada(emp);
+                //armazena empreiteira
+                usuarioGlobal.setEmpreiteiraselecionada(recuperaEmpreiteiraSelecionada(empreiteira.getSelectedItem().toString()));
 
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+        //selecionou colaborador guarda como global
+        colaboradorempreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                //armazena colaborador da empreiteira
+                usuarioGlobal.setColaboradorselecionado(recuperaColaboradorSelecionada(colaboradorempreiteira.getSelectedItem().toString()));
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+        //selecionou pavimento guarda como global
+        pavimento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                //armazena o pavimento
+                usuarioGlobal.setPavimentoprojetoselecionado(recuperaPavimentoSelecionado(pavimento.getSelectedItem().toString()));
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -185,6 +228,32 @@ public class ProducaoActivity extends PrincipalActivity {
         return lista;
     }
 
+    public Plaatividade recuperaAtividadeSelecionada(String atividade){
+        Plaatividade atividadeaux = new Plaatividade();
+
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+
+        Cursor c = db.rawQuery("Select ati.* from Plaatividade ati " +
+                "where fkIdSubprojeto = " + usuarioGlobal.getSubprojetoselecionado().getId() + " " +
+                " and nome = '" + atividade+"'", null);
+
+        return (Plaatividade) recuperarObjeto(atividadeaux,c);
+
+    }
+
+    public Plapavimentoprojeto recuperaPavimentoSelecionado(String pavi){
+        Plapavimentoprojeto pavimentoaux = new Plapavimentoprojeto();
+
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+
+        Cursor c = db.rawQuery("Select * from Plapavimentoprojeto p " +
+                "where fkIdProjeto = " + usuarioGlobal.getProjetoselecionado().getId() + " " +
+                " and nome = '" + pavi+"'", null);
+
+        return (Plapavimentoprojeto) recuperarObjeto(pavimentoaux,c);
+
+    }
+
 
 
     public Engobra recuperaObraSelecionada(String obra){
@@ -198,6 +267,29 @@ public class ProducaoActivity extends PrincipalActivity {
 
         return (Engobra) recuperarObjeto(engobra,c);
 
+    }
+
+    public Plasubprojeto recuperaSubprojetoSelecionado(String subprojeto){
+        Plasubprojeto subprojetoaux = new Plasubprojeto();
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+
+        Cursor c = db.rawQuery("Select * from Plasubprojeto as sub " +
+                " where sub.descricao = '" +subprojeto+"'", null);
+        return (Plasubprojeto) recuperarObjeto(subprojetoaux,c);
+
+    }
+
+    public Rhcolaborador recuperaColaboradorSelecionada(String colaborador){
+        Rhcolaborador col = new Rhcolaborador();
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        Cursor c = db.rawQuery("Select c.nome, col.nome FROM Engcolaboradorobra as eco " +
+                " inner join Rhcargo as c on eco.fkIdCargo = c.id " +
+                " inner join Rhcolaborador as col on eco.fkIdColaborador = col.id " +
+                " WHERE c.nome = '" +colaborador+"'"+
+                " and eco.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString()
+
+                , null);
+        return (Rhcolaborador) recuperarObjeto(col,c);
     }
 
     public Engempreiteira recuperaEmpreiteiraSelecionada(String empreiteira){
@@ -240,11 +332,11 @@ public class ProducaoActivity extends PrincipalActivity {
         ArrayList<String> s = new ArrayList<>();
         c.moveToFirst();
         for(int i=0; i<c.getCount();i++){
-            s.add(c.getString(0)+" - ");
+            s.add(c.getString(0)+" - "+c.getString(1));
             c.moveToNext();
         }
 
-        return populaSpinnerResultado(c);
+        return s;
     }
 
     public ArrayList<String> listaEmpreiteirasContrato(){
@@ -328,5 +420,32 @@ public class ProducaoActivity extends PrincipalActivity {
         }
         return obj;
 
+    }
+
+    public void novaMedicao(View view) {
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        //verifica campos obrigatorios
+        if(usuarioGlobal.getObraselecionada()==null){
+            Toast.makeText(getApplicationContext(), "Selecione a Obra", Toast.LENGTH_LONG).show();
+        }
+        if(usuarioGlobal.getSubprojetoselecionado()==null){
+            Toast.makeText(getApplicationContext(), "Selecione o subprojeto", Toast.LENGTH_LONG).show();
+        }
+        if(usuarioGlobal.getAtividadeselecionada()==null){
+            Toast.makeText(getApplicationContext(), "Selecione a atividade", Toast.LENGTH_LONG).show();
+        }
+        if(usuarioGlobal.getPavimentoprojetoselecionado()==null){
+            Toast.makeText(getApplicationContext(), "Selecione o pavimento", Toast.LENGTH_LONG).show();
+        }
+        if(usuarioGlobal.getEmpreiteiraselecionada()==null){
+            Toast.makeText(getApplicationContext(), "Selecione a empreiteira", Toast.LENGTH_LONG).show();
+        }
+        if(usuarioGlobal.getColaboradorselecionado()==null){
+            Toast.makeText(getApplicationContext(), "Selecione o colaborador", Toast.LENGTH_LONG).show();
+        }
+
+
+        Intent intent = new Intent(getApplicationContext(), DetalhesProducao.class);
+        startActivity(intent);
     }
 }
