@@ -92,7 +92,7 @@ public class DetalhesProducao extends ActionBarActivity {
         spinnerServicos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //busca unidade de medida do servico
-                buscaUnidadeMedida();
+                unidademedida.setText(buscaUnidadeMedida());
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -217,9 +217,13 @@ public class DetalhesProducao extends ActionBarActivity {
     public String buscaUnidadeMedida(){
         Orcservico servicoaux = (Orcservico) spinnerServicos.getSelectedItem();
         Cursor c = db.rawQuery("SELECT um.nome FROM Orcunidademedida um " +
-                " inner join Orcservico ser on ser.id = um.fkIdUnidadeMedida " +
+                " inner join Orcservico ser on um.id = ser.fkIdUnidadeMedida " +
                 " where ser.id = "+servicoaux.getId(), null);
-        c.moveToFirst();
-        return c.getString(0);
+
+        if(c.moveToNext()){
+            c.moveToFirst();
+            return c.getString(0);
+        }
+        return "";
     }
 }

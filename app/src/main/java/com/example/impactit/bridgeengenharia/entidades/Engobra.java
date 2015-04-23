@@ -69,4 +69,9 @@ public class Engobra implements Serializable {
     public void setFkIdProjeto(Long fkIdProjeto) {
         this.fkIdProjeto = fkIdProjeto;
     }
+
+    @Override
+    public String toString() {
+        return  nome;
+    }
 }

@@ -105,4 +105,9 @@ public class Engempreiteira implements Serializable {
     public void setFkIdCidade(Integer fkIdCidade) {
         this.fkIdCidade = fkIdCidade;
     }
+
+    @Override
+    public String toString() {
+        return nomeFantasia;
+    }
 }

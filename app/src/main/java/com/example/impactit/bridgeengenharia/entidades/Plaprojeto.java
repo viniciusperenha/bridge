@@ -69,4 +69,9 @@ public class Plaprojeto implements Serializable {
     public void setFkIdRegional(Long fkIdRegional) {
         this.fkIdRegional = fkIdRegional;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

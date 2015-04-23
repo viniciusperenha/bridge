@@ -51,4 +51,9 @@ public class Plaatividade implements Serializable {
     public void setFkIdSubprojeto(Long fkIdSubprojeto) {
         this.fkIdSubprojeto = fkIdSubprojeto;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
