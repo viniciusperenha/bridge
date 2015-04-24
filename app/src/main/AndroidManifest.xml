@@ -16,14 +16,13 @@
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ProducaoActivity"
             android:label="@string/title_activity_producao"
-            android:noHistory="true" >
+             >
         </activity>
         <activity
             android:name=".ArquivosActivity"
@@ -38,12 +37,11 @@
         <activity
             android:name=".QualidadeActivity"
             android:label="@string/title_activity_qualidade"
-            android:noHistory="true" >
+             >
         </activity>
         <activity
             android:name=".DetalhesProducao"
             android:label="@string/title_activity_detalhes_producao"
-            android:noHistory="false" >
             >
 
         </activity>

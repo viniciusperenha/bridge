@@ -1,12 +1,18 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.Settings;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +22,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcservico;
 
 import java.lang.reflect.Field;
@@ -36,6 +44,7 @@ public class DetalhesProducao extends ActionBarActivity {
     public Spinner spinnerServicos;
     public EditText codigoservico;
     public EditText unidademedida;
+    public Spinner spinnerelementoproducao;
 
 
     @Override
@@ -69,6 +78,8 @@ public class DetalhesProducao extends ActionBarActivity {
 
         unidademedida = (EditText) findViewById(R.id.unidademedida);
 
+        spinnerelementoproducao = (Spinner) findViewById(R.id.elementoproducao);
+
         codigoservico.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -93,6 +104,10 @@ public class DetalhesProducao extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //busca unidade de medida do servico
                 unidademedida.setText(buscaUnidadeMedida());
+
+                ArrayAdapter<Orcelementoproducao> adapterElementoProducao = new ArrayAdapter<Orcelementoproducao>(getApplicationContext(), android.R.layout.simple_spinner_item, listaElementoProdutao());
+                spinnerelementoproducao.setAdapter(adapterElementoProducao);
+
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -125,6 +140,31 @@ public class DetalhesProducao extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+            AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+            alertbox.setTitle("Deseja cancelar o apontamento?");
+            alertbox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // finish used for destroyed activity
+                    DetalhesProducao.this.finish();
+                }
+
+            });
+
+            alertbox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // Nothing will be happened when clicked on no button
+                    // of Dialog
+                }
+            });
+
+            alertbox.show();
+
+        return;
+    }
+
 
     public ArrayList<String> populaSpinnerResultado(Cursor c){
         ArrayList<String> s = new ArrayList<>();
@@ -226,4 +266,38 @@ public class DetalhesProducao extends ActionBarActivity {
         }
         return "";
     }
+
+    public List<Orcelementoproducao> listaElementoProdutao(){
+        GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
+        Orcservico ser = (Orcservico) spinnerServicos.getSelectedItem();
+        Cursor c = db.rawQuery("Select id from Orcelementoproducao eco " +
+                "where fkIdAtividade = "+usuarioglobal.getAtividadeselecionada().getId()+" " +
+                " and fkIdProjeto = "+usuarioglobal.getProjetoselecionado().getId()+" " +
+                " and fkIdSubprojeto = "+usuarioglobal.getSubprojetoselecionado().getId()+" " +
+                " and fkIdServico = "+ser.getId(),null);
+        ArrayList<Orcelementoproducao> lista = new ArrayList<Orcelementoproducao>();
+        if(c.getCount()>0){
+            c.moveToFirst();
+            for(int i=0; i<c.getCount();i++){
+                Orcelementoproducao aux = new Orcelementoproducao();
+                lista.add((Orcelementoproducao) consultarPorId(aux, c.getString(0)));
+                c.moveToNext();
+            }
+        }
+        return lista;
+    }
+
+    public void gravaApontamento(){
+
+    }
+
+    public void cancelaApontamento(View view){
+        onBackPressed();
+    }
+
+    public void gravaNovoApontamento(){
+
+    }
+
+
 }

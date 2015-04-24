@@ -88,4 +88,8 @@ public class Orcelementoproducao implements Serializable {
         this.fkIdTarefa = fkIdTarefa;
     }
 
+    @Override
+    public String toString() {
+        return codigo;
+    }
 }

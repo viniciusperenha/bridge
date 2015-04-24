@@ -154,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/codigoservico"
-
+                android:background="#ffffff"
                 />
 
         </TableRow>
@@ -205,12 +205,11 @@
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dadosobra"
+        android:layout_below="@+id/tabelaprojeto"
         android:stretchColumns="1"
         android:layout_marginTop="2dp"
-        android:id="@+id/tabelabotoes"
+        android:id="@+id/tabelamedicoes"
         >
-
 
         <TableRow
             android:layout_width="fill_parent"
@@ -219,7 +218,37 @@
             android:background="@color/button_material_light"
             >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elemento"
+                android:id="@+id/textView10" />
 
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/elementoproducao" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:background="@color/button_material_light"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Produzido"
+                android:id="@+id/textView11" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/totalproduzido"
+                android:enabled="false"
+                android:editable="false" />
 
         </TableRow>
 
@@ -230,21 +259,104 @@
             android:background="@color/button_material_light"
             >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Produção"
+                android:id="@+id/textView12" />
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:background="@color/button_material_light"
-            >
-
-
-
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/producao"
+                android:enabled="false"
+                android:editable="false"/>
 
         </TableRow>
 
     </TableLayout>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabelamedicoes"
+        android:layout_marginTop="2dp"
+        android:stretchColumns="0"
+        android:id="@+id/tabelaobservacoes">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="10dp"
+                android:background="@color/button_material_light"
+                >
+
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Observações"
+                    android:id="@+id/textView13" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="10dp"
+                android:background="@color/button_material_light"
+                >
+
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/observacoes"
+                    android:background="#ffffff"/>
+            </TableRow>
+        </TableLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabelaobservacoes"
+        android:layout_marginTop="2dp"
+        android:id="@+id/tabelabotoes">
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salvar e Novo"
+            android:id="@+id/btnsalvarenovo"
+            android:layout_weight="1"
+            android:background="#1F74B5"
+            android:layout_margin="5dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salvar"
+            android:id="@+id/btnsalvar"
+            android:layout_weight="1"
+            android:background="#1F74B5"
+            android:layout_margin="5dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:id="@+id/btncancelar"
+            android:layout_weight="1"
+            android:background="#1F74B5"
+            android:layout_margin="5dp"
+            android:onClick="cancelaApontamento"
+            />
+
+        </LinearLayout>
+
 
 </RelativeLayout>
