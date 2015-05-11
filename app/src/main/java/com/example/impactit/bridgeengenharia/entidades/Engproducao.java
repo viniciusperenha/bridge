@@ -1,6 +1,7 @@
 package com.example.impactit.bridgeengenharia.entidades;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -11,9 +12,9 @@ public class Engproducao implements Serializable {
 
     private long fkIdSubprojetoSetorProjeto;
 
-    private Date data;
+    private Timestamp data;
 
-    private Date dataRegistro;
+    private Timestamp dataRegistro;
 
     private double quantidade;
 
@@ -51,20 +52,20 @@ public class Engproducao implements Serializable {
         this.fkIdSubprojetoSetorProjeto = fkIdSubprojetoSetorProjeto;
     }
 
-    public Date getData() {
-        return data;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
-    public Date getDataRegistro() {
+    public Timestamp getDataRegistro() {
         return dataRegistro;
     }
 
-    public void setDataRegistro(Date dataRegistro) {
+    public void setDataRegistro(Timestamp dataRegistro) {
         this.dataRegistro = dataRegistro;
+    }
+
+    public Timestamp getData() {
+        return data;
+    }
+
+    public void setData(Timestamp data) {
+        this.data = data;
     }
 
     public double getQuantidade() {

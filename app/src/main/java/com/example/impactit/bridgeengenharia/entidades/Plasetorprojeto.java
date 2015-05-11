@@ -43,4 +43,9 @@ public class Plasetorprojeto implements Serializable{
     public void setFkIdProjeto(Long fkIdProjeto) {
         this.fkIdProjeto = fkIdProjeto;
     }
+
+    @Override
+    public String toString() {
+        return  nome;
+    }
 }

@@ -62,7 +62,7 @@ public class DetalhesProducao extends ActionBarActivity {
         atividade.setText(usuarioGlobal.getAtividadeselecionada().getNome());
 
         pavimento = (EditText) findViewById(R.id.pavimento);
-        pavimento.setText(usuarioGlobal.getPavimentoprojetoselecionado().getNome());
+        pavimento.setText(usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getNome());
 
         empreiteira = (EditText) findViewById(R.id.empreiteira);
         empreiteira.setText(usuarioGlobal.getEmpreiteiraselecionada().getNomeFantasia());

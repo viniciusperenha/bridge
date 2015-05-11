@@ -33,7 +33,6 @@ import com.example.impactit.bridgeengenharia.entidades.Orcpavimentoelementoprodu
 import com.example.impactit.bridgeengenharia.entidades.Orcservico;
 import com.example.impactit.bridgeengenharia.entidades.Orcunidademedida;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
-import com.example.impactit.bridgeengenharia.entidades.Plapavimentoprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
@@ -341,13 +340,7 @@ public class LoginActivity extends Activity {
                 }.getType();
                 inserir((List<Engempreiteira>) gson.fromJson(lista.toString(), listType));
 
-                //insere Plapavimentoprojeto
-                lista = new JSONArray();
-                lista = consultaGenerica(Plapavimentoprojeto.class);
-                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
-                listType = new TypeToken<List<Plapavimentoprojeto>>() {
-                }.getType();
-                inserir((List<Plapavimentoprojeto>) gson.fromJson(lista.toString(), listType));
+
 
                 //insere Engobra
                 lista = new JSONArray();
@@ -604,7 +597,7 @@ public class LoginActivity extends Activity {
                 "Engcolaboradorobra", "Orcservico", "Platipopavimento",
                 "Engcontratoempreiteira", "Orcunidademedida", "Rhcargo",
                 "Engcontratoservicoempreiteira", "Plaatividade", "Rhcolaborador",
-                "Engempreiteira", "Plapavimentoprojeto", "Sisfuncao",
+                "Engempreiteira", "Sisfuncao",
                 "Engobra", "Plaprojeto", "Sisusuario", "Orcelementoproducao",
                 "Plasubprojeto", "Sisparametro", "Engproducao", "Plapavimentosubprojeto",
                 "Plasetorprojeto", "Plasubprojetosetorprojeto"

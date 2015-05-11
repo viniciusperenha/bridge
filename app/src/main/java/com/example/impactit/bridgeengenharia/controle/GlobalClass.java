@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
-import com.example.impactit.bridgeengenharia.entidades.Plapavimentoprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
@@ -30,7 +31,8 @@ public class GlobalClass extends Application {
     public Rhcolaborador colaboradorselecionado;
     public Plaatividade atividadeselecionada;
     public Plasubprojeto subprojetoselecionado;
-    public Plapavimentoprojeto pavimentoprojetoselecionado;
+    public Plapavimentosubprojeto pavimentosubprojetoprojetoselecionado;
+    public Plasetorprojeto setorprojetoselecionado;
 
 
     public Sisusuario getUsuarioLogado() {
@@ -73,13 +75,6 @@ public class GlobalClass extends Application {
         this.colaboradorselecionado = colaboradorselecionado;
     }
 
-    public Plapavimentoprojeto getPavimentoprojetoselecionado() {
-        return pavimentoprojetoselecionado;
-    }
-
-    public void setPavimentoprojetoselecionado(Plapavimentoprojeto pavimentoprojetoselecionado) {
-        this.pavimentoprojetoselecionado = pavimentoprojetoselecionado;
-    }
 
     public Plaatividade getAtividadeselecionada() {
         return atividadeselecionada;
@@ -95,6 +90,22 @@ public class GlobalClass extends Application {
 
     public void setSubprojetoselecionado(Plasubprojeto subprojetoselecionado) {
         this.subprojetoselecionado = subprojetoselecionado;
+    }
+
+    public Plasetorprojeto getSetorprojetoselecionado() {
+        return setorprojetoselecionado;
+    }
+
+    public void setSetorprojetoselecionado(Plasetorprojeto setorprojetoselecionado) {
+        this.setorprojetoselecionado = setorprojetoselecionado;
+    }
+
+    public Plapavimentosubprojeto getPavimentosubprojetoprojetoselecionado() {
+        return pavimentosubprojetoprojetoselecionado;
+    }
+
+    public void setPavimentosubprojetoprojetoselecionado(Plapavimentosubprojeto pavimentosubprojetoprojetoselecionado) {
+        this.pavimentosubprojetoprojetoselecionado = pavimentosubprojetoprojetoselecionado;
     }
 }
 

@@ -20,8 +20,9 @@ import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
-import com.example.impactit.bridgeengenharia.entidades.Plapavimentoprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
@@ -45,9 +46,9 @@ public class ProducaoActivity extends PrincipalActivity {
     public Spinner subprojeto;
     public Spinner atividade;
     public Spinner pavimento;
-    public Plapavimentoprojeto pavimentoprojeto;
     public Spinner empreiteira;
     public Spinner colaboradorempreiteira;
+    public Spinner setor;
 
 
     @Override
@@ -65,6 +66,7 @@ public class ProducaoActivity extends PrincipalActivity {
         pavimento = (Spinner) findViewById(R.id.producaopavimento);
         empreiteira = (Spinner)  findViewById(R.id.empreiteiracontrato);
         colaboradorempreiteira = (Spinner)  findViewById(R.id.colaboradorempreiteira);
+        setor = (Spinner) findViewById(R.id.spinnerSetor);
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
@@ -79,39 +81,6 @@ public class ProducaoActivity extends PrincipalActivity {
         adapter.setDropDownViewResource(R.layout.item_lista);
         spinnerObra.setAdapter(adapter);
 
-        //lista subprojetos
-        ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos());
-        adapterSubprojeto.setDropDownViewResource(R.layout.item_lista);
-        subprojeto.setAdapter(adapterSubprojeto);
-
-        //subprojeto
-        subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
-                adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
-                atividade.setAdapter(adapterSubprojetoAtividade);
-                //armazena subprojeto na camada global
-                usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
-
-            }
-
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-        //atividade
-        atividade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //armazena na global a atividade
-                usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
-            }
-
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-
-
         spinnerObra.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -119,21 +88,20 @@ public class ProducaoActivity extends PrincipalActivity {
                 usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
                 responsavelobra = new Rhcolaborador();
                 responsavelobra = (Rhcolaborador) consultarPorId(responsavelobra , usuarioGlobal.getObraselecionada().getFkIdEngenheiroResidente().toString());
-
                 engenheiroresidente = new Rhcolaborador();
                 engenheiroresidente = (Rhcolaborador) consultarPorId(engenheiroresidente , usuarioGlobal.getObraselecionada().getFkIdGerenteEngenharia().toString());
 
                 responsavel.setText(responsavelobra.getNome());
                 engenheiro.setText(engenheiroresidente.getNome());
-
+                //armazena o projeto
                 projeto = new Plaprojeto();
                 projeto = (Plaprojeto) consultarPorId(projeto , usuarioGlobal.getObraselecionada().getFkIdProjeto().toString());
                 usuarioGlobal.setProjetoselecionado(projeto);
 
-                //lista pavimentos
-                ArrayAdapter<Plapavimentoprojeto> adapterPavimento = new ArrayAdapter<Plapavimentoprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
-                adapterPavimento.setDropDownViewResource(R.layout.item_lista);
-                pavimento.setAdapter(adapterPavimento);
+                //busca setores da obra
+                ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, setoresDisponiveisObra(projeto));
+                adapterSetor.setDropDownViewResource(R.layout.item_lista);
+                setor.setAdapter(adapterSetor);
 
 
                 //verifica a(s) empreiterias da obra pelo contrato e parametro
@@ -152,6 +120,67 @@ public class ProducaoActivity extends PrincipalActivity {
                 return;
             }
         });
+
+
+        //onchange spinner setor
+        setor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
+                //lista subprojetos
+                ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos((Plasetorprojeto) setor.getSelectedItem()));
+                adapterSubprojeto.setDropDownViewResource(R.layout.item_lista);
+                subprojeto.setAdapter(adapterSubprojeto);
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+
+        //onchange spinner subprojeto
+        subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
+
+                //lista spinner pavimentos
+                ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
+                adapterPavimento.setDropDownViewResource(R.layout.item_lista);
+                pavimento.setAdapter(adapterPavimento);
+
+
+                ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
+                adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
+                atividade.setAdapter(adapterSubprojetoAtividade);
+                //armazena subprojeto na camada global
+
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+        //atividade
+        atividade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //armazena na global a atividade
+                usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
+
+                //verifica a(s) empreiterias da obra pelo contrato e parametro
+                ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, listaEmpreiteirasContrato());
+                adapterEmpreiteria.setDropDownViewResource(R.layout.item_lista);
+                empreiteira.setAdapter(adapterEmpreiteria);
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
 
         //selecionou empreiteira guarda como global
         empreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -190,7 +219,7 @@ public class ProducaoActivity extends PrincipalActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 //armazena o pavimento
-                usuarioGlobal.setPavimentoprojetoselecionado((Plapavimentoprojeto) pavimento.getSelectedItem());
+                usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -228,8 +257,8 @@ public class ProducaoActivity extends PrincipalActivity {
 
         //busca pelo obra colaborador
         Cursor c = db.rawQuery("Select o.id from Engcolaboradorobra eco " +
-                "inner join Engobra as o on eco.fkIdObra = o.id " +
-                "where eco.fkIdColaborador = "+usu.getFkIdColaborador(),null);
+                " inner join Engobra as o on eco.fkIdObra = o.id " +
+                " where eco.fkIdColaborador = "+usu.getFkIdColaborador(),null);
         ArrayList<Engobra> lista = new ArrayList<Engobra>();
         if(c.getCount()>0){
 
@@ -247,8 +276,10 @@ public class ProducaoActivity extends PrincipalActivity {
     }
 
 
-    public List<Plasubprojeto> listaSubProjetos(){
-        Cursor c = db.rawQuery("SELECT id FROM Plasubprojeto ", null);
+    public List<Plasubprojeto> listaSubProjetos(Plasetorprojeto set){
+        Cursor c = db.rawQuery("SELECT id FROM Plasubprojeto as psp" +
+                " Inner Join Plasubprojetosetorprojeto as pspp on psp.id = pspp.fkIdSubprojeto " +
+                " where pspp.fkIdSetorProjeto = "+set.getId(), null);
         ArrayList<Plasubprojeto> lista = new ArrayList<Plasubprojeto>();
         if(c.getCount()>0){
             c.moveToFirst();
@@ -280,16 +311,17 @@ public class ProducaoActivity extends PrincipalActivity {
 
     }
 
-    public ArrayList<Plapavimentoprojeto> listaPavimentoProjeto(){
+    public ArrayList<Plapavimentosubprojeto> listaPavimentoProjeto(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        Cursor c = db.rawQuery("SELECT id FROM Plapavimentoprojeto " +
-                "where fkIdProjeto = "+usuarioGlobal.getProjetoselecionado().getId().toString(), null);
-        ArrayList<Plapavimentoprojeto> lista = new ArrayList<Plapavimentoprojeto>();
+        Cursor c = db.rawQuery("SELECT id FROM Plapavimentosubprojeto as psp " +
+                " where fkIdSubprojetoSetorProjeto = "+usuarioGlobal.getSubprojetoselecionado().getId()+" " +
+                " and fkIdSetorProjeto = "+usuarioGlobal.getSetorprojetoselecionado().getId(), null);
+        ArrayList<Plapavimentosubprojeto> lista = new ArrayList<Plapavimentosubprojeto>();
         if(c.getCount()>0){
             c.moveToFirst();
             for(int i=0; i<c.getCount();i++){
-                Plapavimentoprojeto aux = new Plapavimentoprojeto();
-                lista.add((Plapavimentoprojeto) consultarPorId(aux,c.getString(0)));
+                Plapavimentosubprojeto aux = new Plapavimentosubprojeto();
+                lista.add((Plapavimentosubprojeto) consultarPorId(aux,c.getString(0)));
                 c.moveToNext();
             }
         }
@@ -333,7 +365,9 @@ public class ProducaoActivity extends PrincipalActivity {
             c = db.rawQuery("Select distinct(e.id) FROM Engempreiteira as e " +
                     " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
                     " inner join Engcontratoservicoempreiteira as cse on ce.id = cse.fkIdContratoEmpreiteira " +
-                    " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId(), null);
+                    " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId()+" " +
+                    " and cse.fkIdAtividade = "+usuarioGlobal.getAtividadeselecionada().getId()+" " +
+                    " and cse.fkIdSubprojeto = "+usuarioGlobal.getSubprojetoselecionado().getId(), null);
         }
 
         ArrayList<Engempreiteira> lista = new ArrayList<Engempreiteira>();
@@ -348,23 +382,34 @@ public class ProducaoActivity extends PrincipalActivity {
         return lista;
     }
 
+
+    public List<Plasetorprojeto> setoresDisponiveisObra(Plaprojeto pro){
+
+        //busca setor pelo projeto da obra
+        Cursor c = db.rawQuery("Select setor.id from Plasetorprojeto setor " +
+                "where setor.fkIdProjeto = "+pro.getId(),null);
+        ArrayList<Plasetorprojeto> lista = new ArrayList<Plasetorprojeto>();
+        if(c.getCount()>0){
+
+            c.moveToFirst();
+
+            for(int i=0; i<c.getCount();i++){
+                Plasetorprojeto aux = new Plasetorprojeto();
+                lista.add((Plasetorprojeto) consultarPorId(aux, c.getString(0)));
+                c.moveToNext();
+            }
+
+        }
+        return lista;
+
+    }
+
     public Object consultarPorId(Object obj, String id) {
         Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" where id = "+id, null);
         return recuperarObjeto(obj,c);
 
     }
-/*
-    public ArrayList<String> populaSpinnerResultado(Cursor c){
-        ArrayList<String> s = new ArrayList<>();
-        c.moveToFirst();
-        for(int i=0; i<c.getCount();i++){
-            s.add(c.getString(0));
-            c.moveToNext();
-        }
 
-        return s;
-    }
-*/
     public Object recuperarObjeto(Object obj, Cursor c) {
 
         if(c.getCount()>0) {
@@ -419,7 +464,7 @@ public class ProducaoActivity extends PrincipalActivity {
         if(usuarioGlobal.getAtividadeselecionada()==null){
             Toast.makeText(getApplicationContext(), "Selecione a atividade", Toast.LENGTH_LONG).show();
         }
-        if(usuarioGlobal.getPavimentoprojetoselecionado()==null){
+        if(usuarioGlobal.getPavimentosubprojetoprojetoselecionado()==null){
             Toast.makeText(getApplicationContext(), "Selecione o pavimento", Toast.LENGTH_LONG).show();
         }
         if(usuarioGlobal.getEmpreiteiraselecionada()==null){

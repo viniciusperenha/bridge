@@ -80,6 +80,28 @@
                 android:editable="false" />
         </TableRow>
 
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="15dp"
+            android:background="@color/button_material_light"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Obra"
+                android:id="@+id/textView12" />
+
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerSetor" />
+
+        </TableRow>
+
     </TableLayout>
 
     <TableLayout
