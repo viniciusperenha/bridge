@@ -76,16 +76,19 @@ public class ProducaoActivity extends PrincipalActivity {
 
         //carrega spinner de obras do usuario
         ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), android.R.layout.simple_spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
+        adapter.setDropDownViewResource(R.layout.item_lista);
         spinnerObra.setAdapter(adapter);
 
         //lista subprojetos
         ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos());
+        adapterSubprojeto.setDropDownViewResource(R.layout.item_lista);
         subprojeto.setAdapter(adapterSubprojeto);
 
         //subprojeto
         subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
+                adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
                 atividade.setAdapter(adapterSubprojetoAtividade);
                 //armazena subprojeto na camada global
                 usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
@@ -129,15 +132,18 @@ public class ProducaoActivity extends PrincipalActivity {
 
                 //lista pavimentos
                 ArrayAdapter<Plapavimentoprojeto> adapterPavimento = new ArrayAdapter<Plapavimentoprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
+                adapterPavimento.setDropDownViewResource(R.layout.item_lista);
                 pavimento.setAdapter(adapterPavimento);
 
 
                 //verifica a(s) empreiterias da obra pelo contrato e parametro
                 ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, listaEmpreiteirasContrato());
+                adapterEmpreiteria.setDropDownViewResource(R.layout.item_lista);
                 empreiteira.setAdapter(adapterEmpreiteria);
 
                 //busca colaboradores da obra
                 ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, listaColaboradorObra());
+                adapteColaboradorEmpreiteira.setDropDownViewResource(R.layout.item_lista);
                 colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
 
             }
@@ -156,6 +162,7 @@ public class ProducaoActivity extends PrincipalActivity {
 
                 //busca colaboradores da obra
                 ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, listaColaboradorObra());
+                adapteColaboradorEmpreiteira.setDropDownViewResource(R.layout.item_lista);
                 colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
 
             }
@@ -240,7 +247,6 @@ public class ProducaoActivity extends PrincipalActivity {
     }
 
 
-
     public List<Plasubprojeto> listaSubProjetos(){
         Cursor c = db.rawQuery("SELECT id FROM Plasubprojeto ", null);
         ArrayList<Plasubprojeto> lista = new ArrayList<Plasubprojeto>();
@@ -316,21 +322,15 @@ public class ProducaoActivity extends PrincipalActivity {
         //busca parametro pra tipo de contrato
         Cursor param = db.rawQuery("select * from Sisparametro where grupo='PARAMETROS' and nome='vincularEmpreiteiraPorContrato' and valor='S' ",null);
         if(param.getCount()==0) {
-            System.out.println("Select e.id FROM Engempreiteira as e " +
-                    " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
-                    " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString());
 
-            c = db.rawQuery("Select e.id FROM Engempreiteira as e " +
+            c = db.rawQuery("Select distinct(e.id) FROM Engempreiteira as e " +
                     " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
                     " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId(), null);
         }
 
         if(param.getCount()>0) {
-            System.out.println("Select e.id FROM Engempreiteira as e " +
-                    " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
-                    " inner join Engcontratoservicoempreiteira as cse on ce.id = cse.fkIdContratoEmpreiteira " +
-                    " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString());
-            c = db.rawQuery("Select e.id FROM Engempreiteira as e " +
+            //de acordo com a atividade selecionada no subprojeto
+            c = db.rawQuery("Select distinct(e.id) FROM Engempreiteira as e " +
                     " inner join Engcontratoempreiteira as ce on e.id = ce.fkIdEmpreiteira " +
                     " inner join Engcontratoservicoempreiteira as cse on ce.id = cse.fkIdContratoEmpreiteira " +
                     " WHERE ce.fkIdObra = " + usuarioGlobal.getObraselecionada().getId(), null);

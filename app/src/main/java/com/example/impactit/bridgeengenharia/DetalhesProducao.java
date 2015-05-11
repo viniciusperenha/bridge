@@ -3,11 +3,10 @@ package com.example.impactit.bridgeengenharia;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.Settings;
-import android.support.v4.app.NavUtils;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,7 +21,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
-import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcservico;
 
@@ -50,7 +48,7 @@ public class DetalhesProducao extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_producao);
+        setContentView(com.example.impactit.bridgeengenharia.R.layout.activity_detalhes_producao);
 
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
@@ -106,6 +104,7 @@ public class DetalhesProducao extends ActionBarActivity {
                 unidademedida.setText(buscaUnidadeMedida());
 
                 ArrayAdapter<Orcelementoproducao> adapterElementoProducao = new ArrayAdapter<Orcelementoproducao>(getApplicationContext(), android.R.layout.simple_spinner_item, listaElementoProdutao());
+                adapterElementoProducao.setDropDownViewResource(R.layout.item_lista);
                 spinnerelementoproducao.setAdapter(adapterElementoProducao);
 
             }
@@ -251,6 +250,7 @@ public class DetalhesProducao extends ActionBarActivity {
     public void buscarServicos(){
         //carrega spinner de servicos
         ArrayAdapter<Orcservico> adapter = new ArrayAdapter<Orcservico>(getApplicationContext(), android.R.layout.simple_spinner_item, listaServicosBusca());
+        adapter.setDropDownViewResource(R.layout.item_lista);
         spinnerServicos.setAdapter(adapter);
     }
 

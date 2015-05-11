@@ -265,12 +265,14 @@
                 android:text="Produção"
                 android:id="@+id/textView12" />
 
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/producao"
-                android:enabled="false"
-                android:editable="false"/>
+                android:inputType="numberDecimal"
+                android:background="#ffffff"
+                />
 
         </TableRow>
 

@@ -6,14 +6,24 @@ import java.io.Serializable;
  * Created by root on 20/03/15.
  */
 public class Orcelementoproducao implements Serializable {
+
     private Long id;
+
     private String codigo;
+
     private double quantidade;
+
+
     private Long fkIdAtividade;
-    private Long fkIdLocal;
+
     private Long fkIdProjeto;
+
     private Long fkIdServico;
-    private Long fkIdSubprojeto;
+
+    private Long fkIdSetorProjeto;
+
+    private Long fkIdSubprojetoSetorProjeto;
+
     private Long fkIdTarefa;
 
     public Long getId() {
@@ -48,14 +58,6 @@ public class Orcelementoproducao implements Serializable {
         this.fkIdAtividade = fkIdAtividade;
     }
 
-    public Long getFkIdLocal() {
-        return fkIdLocal;
-    }
-
-    public void setFkIdLocal(Long fkIdLocal) {
-        this.fkIdLocal = fkIdLocal;
-    }
-
     public Long getFkIdProjeto() {
         return fkIdProjeto;
     }
@@ -72,12 +74,20 @@ public class Orcelementoproducao implements Serializable {
         this.fkIdServico = fkIdServico;
     }
 
-    public Long getFkIdSubprojeto() {
-        return fkIdSubprojeto;
+    public Long getFkIdSetorProjeto() {
+        return fkIdSetorProjeto;
     }
 
-    public void setFkIdSubprojeto(Long fkIdSubprojeto) {
-        this.fkIdSubprojeto = fkIdSubprojeto;
+    public void setFkIdSetorProjeto(Long fkIdSetorProjeto) {
+        this.fkIdSetorProjeto = fkIdSetorProjeto;
+    }
+
+    public Long getFkIdSubprojetoSetorProjeto() {
+        return fkIdSubprojetoSetorProjeto;
+    }
+
+    public void setFkIdSubprojetoSetorProjeto(Long fkIdSubprojetoSetorProjeto) {
+        this.fkIdSubprojetoSetorProjeto = fkIdSubprojetoSetorProjeto;
     }
 
     public Long getFkIdTarefa() {

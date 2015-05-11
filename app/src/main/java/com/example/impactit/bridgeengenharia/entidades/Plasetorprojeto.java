@@ -3,17 +3,14 @@ package com.example.impactit.bridgeengenharia.entidades;
 import java.io.Serializable;
 
 /**
- * Created by root on 20/03/15.
+ * Created by root on 08/05/15.
  */
-public class Platipopavimento implements Serializable {
+public class Plasetorprojeto implements Serializable{
 
     private Long id;
-
-    private int codigo;
-
+    private String codigo;
     private String nome;
-
-    private Long fkIdSubprojeto;
+    private Long fkIdProjeto;
 
     public Long getId() {
         return id;
@@ -23,11 +20,11 @@ public class Platipopavimento implements Serializable {
         this.id = id;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
@@ -39,16 +36,11 @@ public class Platipopavimento implements Serializable {
         this.nome = nome;
     }
 
-    public Long getFkIdSubprojeto() {
-        return fkIdSubprojeto;
+    public Long getFkIdProjeto() {
+        return fkIdProjeto;
     }
 
-    public void setFkIdSubprojeto(Long fkIdSubprojeto) {
-        this.fkIdSubprojeto = fkIdSubprojeto;
-    }
-
-    @Override
-    public String toString() {
-        return nome;
+    public void setFkIdProjeto(Long fkIdProjeto) {
+        this.fkIdProjeto = fkIdProjeto;
     }
 }

@@ -7,8 +7,10 @@ import java.io.Serializable;
  */
 public class Orcpavimentoelementoproducao implements Serializable {
     private Long id;
+
+    private Long fkIdPavimentoSubprojeto;
+
     private Long fkIdElementoProducao;
-    private Long fkIdPavimentoProjeto;
 
     public Long getId() {
         return id;
@@ -26,11 +28,11 @@ public class Orcpavimentoelementoproducao implements Serializable {
         this.fkIdElementoProducao = fkIdElementoProducao;
     }
 
-    public Long getFkIdPavimentoProjeto() {
-        return fkIdPavimentoProjeto;
+    public Long getFkIdPavimentoSubprojeto() {
+        return fkIdPavimentoSubprojeto;
     }
 
-    public void setFkIdPavimentoProjeto(Long fkIdPavimentoProjeto) {
-        this.fkIdPavimentoProjeto = fkIdPavimentoProjeto;
+    public void setFkIdPavimentoSubprojeto(Long fkIdPavimentoSubprojeto) {
+        this.fkIdPavimentoSubprojeto = fkIdPavimentoSubprojeto;
     }
 }

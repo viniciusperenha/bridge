@@ -9,9 +9,12 @@ public class Engcolaboradorobra implements Serializable {
     private Long id;
 
     private Long fkIdCargo;
+
     private Long fkIdColaborador;
-    private Long fkIdLocal;
+
     private Long fkIdObra;
+
+    private Long fkIdSetorProjeto;
 
     public Long getId() {
         return id;
@@ -29,14 +32,6 @@ public class Engcolaboradorobra implements Serializable {
         this.fkIdCargo = fkIdCargo;
     }
 
-    public Long getFkIdLocal() {
-        return fkIdLocal;
-    }
-
-    public void setFkIdLocal(Long fkIdLocal) {
-        this.fkIdLocal = fkIdLocal;
-    }
-
     public Long getFkIdColaborador() {
         return fkIdColaborador;
     }
@@ -51,5 +46,13 @@ public class Engcolaboradorobra implements Serializable {
 
     public void setFkIdObra(Long fkIdObra) {
         this.fkIdObra = fkIdObra;
+    }
+
+    public Long getFkIdSetorProjeto() {
+        return fkIdSetorProjeto;
+    }
+
+    public void setFkIdSetorProjeto(Long fkIdSetorProjeto) {
+        this.fkIdSetorProjeto = fkIdSetorProjeto;
     }
 }

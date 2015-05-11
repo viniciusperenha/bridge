@@ -27,14 +27,18 @@ import com.example.impactit.bridgeengenharia.entidades.Engcontratoempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engcontratoservicoempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Engproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcpavimentoelementoproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcservico;
 import com.example.impactit.bridgeengenharia.entidades.Orcunidademedida;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentoprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plasubprojetosetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Platarefa;
 import com.example.impactit.bridgeengenharia.entidades.Platipopavimento;
 import com.example.impactit.bridgeengenharia.entidades.Rhcargo;
@@ -97,6 +101,7 @@ public class LoginActivity extends Activity {
 
         if(db!=null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
+            adapter.setDropDownViewResource(R.layout.item_lista);
             spUsuarios.setAdapter(adapter);
         }
     }
@@ -384,6 +389,37 @@ public class LoginActivity extends Activity {
                 }.getType();
                 inserir((List<Sisparametro>) gson.fromJson(lista.toString(), listType));
 
+                //insere engproducao
+                lista = new JSONArray();
+                lista = consultaGenerica(Engproducao.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<Engproducao>>() {
+                }.getType();
+                inserir((List<Engproducao>) gson.fromJson(lista.toString(), listType));
+
+                //insere plapavimentosubprojeto
+                lista = new JSONArray();
+                lista = consultaGenerica(Plapavimentosubprojeto.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<Plapavimentosubprojeto>>() {
+                }.getType();
+                inserir((List<Plapavimentosubprojeto>) gson.fromJson(lista.toString(), listType));
+
+                //insere plasetorprojeto
+                lista = new JSONArray();
+                lista = consultaGenerica(Plasetorprojeto.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<Plasetorprojeto>>() {
+                }.getType();
+                inserir((List<Plasetorprojeto>) gson.fromJson(lista.toString(), listType));
+
+                //insere plasubprojetosetorprojeto
+                lista = new JSONArray();
+                lista = consultaGenerica(Plasubprojetosetorprojeto.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<Plasubprojetosetorprojeto>>() {
+                }.getType();
+                inserir((List<Plasubprojetosetorprojeto>) gson.fromJson(lista.toString(), listType));
 
 
                 publishProgress("Sincronizado com sucesso!");
@@ -405,7 +441,7 @@ public class LoginActivity extends Activity {
 
             btLogin.setEnabled(true);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
-
+            adapter.setDropDownViewResource(R.layout.item_lista);
             spUsuarios.setAdapter(adapter);
         }
 
@@ -564,7 +600,15 @@ public class LoginActivity extends Activity {
 
 
     public String[] getClasses() {
-        return new String[]{"Empempresa", "Orcpavimentoelementoproducao", "Platarefa", "Engcolaboradorobra", "Orcservico", "Platipopavimento", "Engcontratoempreiteira", "Orcunidademedida", "Rhcargo", "Engcontratoservicoempreiteira", "Plaatividade", "Rhcolaborador", "Engempreiteira", "Plapavimentoprojeto", "Sisfuncao", "Engobra", "Plaprojeto", "Sisusuario", "Orcelementoproducao", "Plasubprojeto", "Sisparametro"};
+        return new String[]{"Empempresa", "Orcpavimentoelementoproducao", "Platarefa",
+                "Engcolaboradorobra", "Orcservico", "Platipopavimento",
+                "Engcontratoempreiteira", "Orcunidademedida", "Rhcargo",
+                "Engcontratoservicoempreiteira", "Plaatividade", "Rhcolaborador",
+                "Engempreiteira", "Plapavimentoprojeto", "Sisfuncao",
+                "Engobra", "Plaprojeto", "Sisusuario", "Orcelementoproducao",
+                "Plasubprojeto", "Sisparametro", "Engproducao", "Plapavimentosubprojeto",
+                "Plasetorprojeto", "Plasubprojetosetorprojeto"
+                };
     }
 
 }
