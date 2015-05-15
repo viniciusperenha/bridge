@@ -85,4 +85,9 @@ public class Plapavimentosubprojeto implements Serializable {
     public void setFkIdTipoPavimento(Long fkIdTipoPavimento) {
         this.fkIdTipoPavimento = fkIdTipoPavimento;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

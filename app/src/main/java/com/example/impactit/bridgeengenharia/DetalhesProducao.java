@@ -114,6 +114,17 @@ public class DetalhesProducao extends ActionBarActivity {
             }
         });
 
+        spinnerelementoproducao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
 
     }
 
@@ -270,11 +281,12 @@ public class DetalhesProducao extends ActionBarActivity {
     public List<Orcelementoproducao> listaElementoProdutao(){
         GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
         Orcservico ser = (Orcservico) spinnerServicos.getSelectedItem();
-        Cursor c = db.rawQuery("Select id from Orcelementoproducao eco " +
-                "where fkIdAtividade = "+usuarioglobal.getAtividadeselecionada().getId()+" " +
-                " and fkIdProjeto = "+usuarioglobal.getProjetoselecionado().getId()+" " +
-                " and fkIdSubprojeto = "+usuarioglobal.getSubprojetoselecionado().getId()+" " +
-                " and fkIdServico = "+ser.getId(),null);
+        Cursor c = db.rawQuery("Select eco.id from Orcelementoproducao eco " +
+                " inner join Plasubprojetosetorprojeto ssp on ssp.id = eco.fkIdSubprojetoSetorProjeto" +
+                " where eco.fkIdAtividade = "+usuarioglobal.getAtividadeselecionada().getId()+" " +
+                " and eco.fkIdProjeto = "+usuarioglobal.getProjetoselecionado().getId()+" " +
+                " and ssp.fkIdSubprojeto = "+usuarioglobal.getSubprojetoselecionado().getId()+" " +
+                " and eco.fkIdServico = "+ser.getId(),null);
         ArrayList<Orcelementoproducao> lista = new ArrayList<Orcelementoproducao>();
         if(c.getCount()>0){
             c.moveToFirst();
