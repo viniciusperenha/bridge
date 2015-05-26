@@ -7,11 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
+import com.example.impactit.bridgeengenharia.entidades.Orcservico;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Platarefa;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
 
@@ -33,7 +36,9 @@ public class GlobalClass extends Application {
     public Plasubprojeto subprojetoselecionado;
     public Plapavimentosubprojeto pavimentosubprojetoprojetoselecionado;
     public Plasetorprojeto setorprojetoselecionado;
-
+    public Orcelementoproducao elementoproducaoselecionado;
+    public Orcservico servicoselecionado;
+    public Platarefa tarefaselecionada;
 
     public Sisusuario getUsuarioLogado() {
         return usuarioLogado;
@@ -106,6 +111,30 @@ public class GlobalClass extends Application {
 
     public void setPavimentosubprojetoprojetoselecionado(Plapavimentosubprojeto pavimentosubprojetoprojetoselecionado) {
         this.pavimentosubprojetoprojetoselecionado = pavimentosubprojetoprojetoselecionado;
+    }
+
+    public Orcelementoproducao getElementoproducaoselecionado() {
+        return elementoproducaoselecionado;
+    }
+
+    public void setElementoproducaoselecionado(Orcelementoproducao elementoproducaoselecionado) {
+        this.elementoproducaoselecionado = elementoproducaoselecionado;
+    }
+
+    public Orcservico getServicoselecionado() {
+        return servicoselecionado;
+    }
+
+    public void setServicoselecionado(Orcservico servicoselecionado) {
+        this.servicoselecionado = servicoselecionado;
+    }
+
+    public Platarefa getTarefaselecionada() {
+        return tarefaselecionada;
+    }
+
+    public void setTarefaselecionada(Platarefa tarefaselecionada) {
+        this.tarefaselecionada = tarefaselecionada;
     }
 }
 

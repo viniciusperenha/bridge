@@ -582,7 +582,6 @@ public class LoginActivity extends Activity {
 
                 db.execSQL(sb.toString());
 
-
             }
         }
         catch (Exception ex){

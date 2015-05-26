@@ -268,6 +268,9 @@ public class ProducaoActivity extends PrincipalActivity {
     }
 
 
+
+
+
     public List<Plasubprojeto> listaSubProjetos(Plasetorprojeto set){
         Cursor c = db.rawQuery("SELECT psp.id FROM Plasubprojeto as psp" +
                 " Inner Join Plasubprojetosetorprojeto as pspp on psp.id = pspp.fkIdSubprojeto " +
@@ -326,7 +329,7 @@ public class ProducaoActivity extends PrincipalActivity {
 
     public ArrayList<Rhcolaborador> listaColaboradorObra(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        Cursor c = db.rawQuery("Select col.id FROM Engcolaboradorobra as eco " +
+        Cursor c = db.rawQuery("Select Distinct(col.id) FROM Engcolaboradorobra as eco " +
                 " inner join Rhcargo as c on eco.fkIdCargo = c.id " +
                 " inner join Rhcolaborador as col on eco.fkIdColaborador = col.id " +
                 " WHERE eco.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString()

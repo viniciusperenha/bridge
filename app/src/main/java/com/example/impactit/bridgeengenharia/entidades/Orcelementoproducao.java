@@ -13,7 +13,6 @@ public class Orcelementoproducao implements Serializable {
 
     private double quantidade;
 
-
     private Long fkIdAtividade;
 
     private Long fkIdProjeto;

@@ -69,4 +69,9 @@ public class Platarefa implements Serializable {
     public void setFkIdAtividade(Long fkIdAtividade) {
         this.fkIdAtividade = fkIdAtividade;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
