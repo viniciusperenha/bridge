@@ -243,6 +243,7 @@ public class DetalhesProducao extends ActionBarActivity {
             }
 
         }
+        c.close();
         return lista;
     }
 
@@ -280,6 +281,7 @@ public class DetalhesProducao extends ActionBarActivity {
             }
 
         }
+        c.close();
         return lista;
     }
 
@@ -295,6 +297,7 @@ public class DetalhesProducao extends ActionBarActivity {
             c.moveToFirst();
             return c.getString(0);
         }
+        c.close();
         return "";
     }
 
@@ -319,6 +322,7 @@ public class DetalhesProducao extends ActionBarActivity {
                 c.moveToNext();
             }
         }
+        c.close();
         return lista;
     }
 
@@ -341,6 +345,7 @@ public class DetalhesProducao extends ActionBarActivity {
             c.moveToFirst();
             return c.getDouble(0);
         }
+        c.close();
         return 0.00;
     }
 
@@ -370,8 +375,9 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setId(buscaUltimoId(pro.getClass()));
 
             inserir(pro);
-
+            Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
             DetalhesProducao.this.finish();
+
         }
     }
 
@@ -389,6 +395,37 @@ public class DetalhesProducao extends ActionBarActivity {
     }
 
     public void gravaNovoApontamento(View view){
+        if("".equals(producao.getText().toString())){
+            Toast.makeText(getApplicationContext(), "Preencha a produção", Toast.LENGTH_LONG).show();
+        } else {
+            GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
+            //grava o apontamento
+            Engproducao pro = new Engproducao();
+            pro.setFkIdObra(usuarioglobal.getObraselecionada().getId());
+            pro.setFkIdSetorProjeto(usuarioglobal.getSetorprojetoselecionado().getId());
+            pro.setFkIdSubprojetoSetorProjeto(buscaSubprojetoSetorProjetoRetornaId(usuarioglobal.getSetorprojetoselecionado(), usuarioglobal.getSubprojetoselecionado()));
+            pro.setFkIdAtividade(usuarioglobal.getAtividadeselecionada().getId());
+            pro.setFkIdPavimentoSubprojeto(usuarioglobal.getPavimentosubprojetoprojetoselecionado().getId());
+            pro.setFkIdServico(usuarioglobal.getServicoselecionado().getId());
+            pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
+            pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
+            pro.setFkIdColaborador(usuarioglobal.getColaboradorselecionado().getId());
+            pro.setData(new Timestamp(System.currentTimeMillis()));
+            pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
+            pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
+            pro.setFkIdTarefa(usuarioglobal.getServicoselecionado().getFkIdTarefa());
+
+            //busca id
+            pro.setId(buscaUltimoId(pro.getClass()));
+
+            inserir(pro);
+            Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
+            producao.setText("");
+            producao.requestFocus();
+            //busca o total produzido
+            totalproduzido.setText(String.valueOf(buscaTotalProduzido((Orcelementoproducao) spinnerelementoproducao.getSelectedItem())));
+
+        }
 
     }
 
@@ -400,6 +437,7 @@ public class DetalhesProducao extends ActionBarActivity {
         if(c.moveToNext()){
             return c.getLong(0);
         }
+        c.close();
         return null;
 
     }

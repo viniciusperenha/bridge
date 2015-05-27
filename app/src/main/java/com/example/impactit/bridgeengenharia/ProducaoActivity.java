@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Engproducao;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
@@ -49,6 +52,7 @@ public class ProducaoActivity extends PrincipalActivity {
     public Spinner empreiteira;
     public Spinner colaboradorempreiteira;
     public Spinner setor;
+    public ListView listaApontamentosProducao;
 
 
     @Override
@@ -67,6 +71,7 @@ public class ProducaoActivity extends PrincipalActivity {
         empreiteira = (Spinner)  findViewById(R.id.empreiteiracontrato);
         colaboradorempreiteira = (Spinner)  findViewById(R.id.colaboradorempreiteira);
         setor = (Spinner) findViewById(R.id.spinnerSetor);
+        listaApontamentosProducao = (ListView) findViewById(R.id.listaApontamentosProducao);
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
@@ -102,6 +107,9 @@ public class ProducaoActivity extends PrincipalActivity {
                 ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, setoresDisponiveisObra(projeto));
                 adapterSetor.setDropDownViewResource(R.layout.item_lista);
                 setor.setAdapter(adapterSetor);
+
+
+                carregaApontamentos();
 
 
             }
@@ -263,6 +271,7 @@ public class ProducaoActivity extends PrincipalActivity {
             }
 
         }
+        c.close();
         return lista;
 
     }
@@ -284,6 +293,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 c.moveToNext();
             }
         }
+        c.close();
         return lista;
 
 
@@ -302,6 +312,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 c.moveToNext();
             }
         }
+        c.close();
         return lista;
 
     }
@@ -323,6 +334,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 c.moveToNext();
             }
         }
+        c.close();
         return lista;
 
     }
@@ -343,6 +355,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 c.moveToNext();
             }
         }
+        c.close();
         return lista;
     }
 
@@ -377,6 +390,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 c.moveToNext();
             }
         }
+        c.close();
         return lista;
     }
 
@@ -398,8 +412,65 @@ public class ProducaoActivity extends PrincipalActivity {
             }
 
         }
+        c.close();
         return lista;
 
+    }
+
+    public List<Engproducao> apontamentosProducao(){
+
+
+        Cursor c = db.rawQuery("Select pro.id from Engproducao pro " ,null);
+        ArrayList<Engproducao> lista = new ArrayList<Engproducao>();
+        if(c.getCount()>0){
+
+            c.moveToFirst();
+
+            for(int i=0; i<c.getCount();i++){
+                Engproducao aux = new Engproducao();
+                lista.add((Engproducao) consultarPorId(aux, c.getString(0)));
+                c.moveToNext();
+            }
+
+        }
+        c.close();
+        return lista;
+    }
+
+    public void carregaApontamentos(){
+        Cursor c = db.rawQuery("Select s.codigo as _id, s.nome as nomeservico, ep.codigo, um.nome as nomeunidade,pro.quantidade " +
+                " from Engproducao pro " +
+                " inner join Orcservico as s on s.id=pro.fkIdServico " +
+                " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
+                " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida", null);
+
+        // The desired columns to be bound
+        if(c.moveToFirst()) {
+            String[] columns = new String[]{
+                    c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4)
+            };
+
+            // the XML defined views which the data will be bound to
+            int[] to = new int[]{
+                    R.id.idservico,
+                    R.id.servico,
+                    R.id.elementoproducao,
+                    R.id.unidademedida,
+                    R.id.quantidade
+            };
+
+            // create the adapter using the cursor pointing to the desired data
+            //as well as the layout information
+            SimpleCursorAdapter dataAdapter = new SimpleCursorAdapter(
+                    this, R.layout.listaapontamentos,
+                    c,
+                    columns,
+                    to,
+                    0);
+
+            // Assign adapter to ListView
+            listaApontamentosProducao.setAdapter(dataAdapter);
+        }
     }
 
     public Object consultarPorId(Object obj, String id) {

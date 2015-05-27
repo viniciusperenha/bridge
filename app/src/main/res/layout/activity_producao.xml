@@ -219,9 +219,10 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tabelacolaborador"
         android:id="@+id/layoutbotaonovo"
+
         >
 
         <Button
@@ -237,23 +238,92 @@
         </LinearLayout>
 
     <TableLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layoutbotaonovo"
-        android:layout_marginTop="2dp"
-        >
+        android:id="@+id/cabecalholista"
+        android:layout_below="@+id/layoutbotaonovo"
 
+        >
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-
-            <ListView
-                android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:paddingLeft="15dp"
+            android:background="@color/accent_material_dark"
+            >
+            <TextView
+                android:id="@+id/tituloidservico"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/listView" />
+                android:layout_weight="0.15"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:text="ID"
+                android:textStyle="bold"
+
+                />
+            <TextView
+                android:id="@+id/tituloservico"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="0.40"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:text="SERVIÇO"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/tituloelementoproducao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:text="ELEMENTO"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/titulounidademedida"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="0.20"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:text="UNID. MED."
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/tituloquantidade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="0.10"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:textDirection="rtl"
+                android:text="QTDE"
+
+                />
+
         </TableRow>
     </TableLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/cabecalholista"
+        >
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/listaApontamentosProducao" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>
