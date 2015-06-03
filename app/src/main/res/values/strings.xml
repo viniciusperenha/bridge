@@ -9,4 +9,5 @@
     <string name="title_activity_principal">Principal</string>
     <string name="title_activity_qualidade">Qualidade</string>
     <string name="title_activity_detalhes_producao">Detalhes Produção</string>
+    <string name="title_activity_detalhes_producao_gravada">Detalhes</string>
 </resources>

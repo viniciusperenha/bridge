@@ -1,0 +1,365 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.example.impactit.bridgeengenharia.detalhes_producao_gravada">>
+
+
+<TableLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="1"
+    android:layout_marginTop="2dp"
+    android:id="@+id/dadosobra"
+    >
+
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="15dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SubProjeto"
+            android:id="@+id/textView5" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/subprojeto"
+            android:editable="false"
+            android:enabled="false" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Atividade"
+            android:id="@+id/textView6"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/atividade"
+
+            android:editable="false"
+            android:enabled="false" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pavimento"
+            android:id="@+id/textView7" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pavimento"
+            android:enabled="false"
+            android:editable="false" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Empreiteira"
+            android:id="@+id/textView8"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/empreiteira"
+            android:enabled="false"
+            android:editable="false" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Colaborador"
+            android:id="@+id/textView9" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/colaborador"
+            android:enabled="false"
+            android:editable="false" />
+    </TableRow>
+
+</TableLayout>
+
+
+<TableLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/dadosobra"
+    android:stretchColumns="1"
+    android:layout_marginTop="2dp"
+    android:id="@+id/tabelaprojeto"
+    >
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tarefa"
+            android:id="@+id/textView23"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tarefa"
+            android:editable="false"
+            android:enabled="false"
+            />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Serviço"
+            android:id="@+id/textView3"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servico"
+            android:editable="false"
+            android:enabled="false"
+            />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unidade"
+            android:id="@+id/textView4" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/unidademedida"
+            android:enabled="false"
+            android:editable="false" />
+    </TableRow>
+
+</TableLayout>
+
+<TableLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tabelaprojeto"
+    android:stretchColumns="1"
+    android:layout_marginTop="2dp"
+    android:id="@+id/tabelamedicoes"
+    >
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="15dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Elemento"
+            android:id="@+id/textView10" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/elementoproducao"
+            android:enabled="false"
+            android:editable="false"
+            />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Produzido"
+            android:id="@+id/textView11" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/totalproduzido"
+            android:enabled="false"
+            android:editable="false" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Produção"
+            android:id="@+id/textView12" />
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/producao"
+            android:enabled="false"
+            android:editable="false"
+            />
+
+    </TableRow>
+
+</TableLayout>
+
+<TableLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tabelamedicoes"
+    android:layout_marginTop="2dp"
+    android:stretchColumns="0"
+    android:id="@+id/tabelaobservacoes">
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+        <TextView
+            android:textAlignment="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Observações"
+            android:id="@+id/textView13"
+
+            />
+
+    </TableRow>
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/observacoes"
+            android:enabled="false"
+            android:editable="false"/>
+    </TableRow>
+</TableLayout>
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tabelaobservacoes"
+    android:layout_marginTop="2dp"
+    android:id="@+id/tabelabotoes">
+    >
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fechar"
+        android:id="@+id/btnfechar"
+        android:layout_weight="1"
+        android:background="#1F74B5"
+        android:layout_margin="5dp"
+        android:onClick="fechar"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exckuir"
+        android:id="@+id/btnexcluir"
+        android:layout_weight="1"
+        android:background="#1F74B5"
+        android:layout_margin="5dp"
+        android:onClick="excluirapontamento"
+        />
+
+
+
+</LinearLayout>
+
+
+</RelativeLayout>

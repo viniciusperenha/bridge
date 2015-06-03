@@ -355,6 +355,7 @@ public class DetalhesProducao extends ActionBarActivity {
             Toast.makeText(getApplicationContext(), "Preencha a produção", Toast.LENGTH_LONG).show();
         } else {
             GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
+            EditText observacao = (EditText) findViewById(R.id.observacoes);
             //grava o apontamento
             Engproducao pro = new Engproducao();
             pro.setFkIdObra(usuarioglobal.getObraselecionada().getId());
@@ -370,7 +371,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setFkIdTarefa(usuarioglobal.getServicoselecionado().getFkIdTarefa());
-
+            pro.setObservacao(observacao.getText().toString());
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
 
@@ -399,6 +400,7 @@ public class DetalhesProducao extends ActionBarActivity {
             Toast.makeText(getApplicationContext(), "Preencha a produção", Toast.LENGTH_LONG).show();
         } else {
             GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
+            EditText observacao = (EditText) findViewById(R.id.observacoes);
             //grava o apontamento
             Engproducao pro = new Engproducao();
             pro.setFkIdObra(usuarioglobal.getObraselecionada().getId());
@@ -414,7 +416,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setFkIdTarefa(usuarioglobal.getServicoselecionado().getFkIdTarefa());
-
+            pro.setObservacao(observacao.getText().toString());
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
 

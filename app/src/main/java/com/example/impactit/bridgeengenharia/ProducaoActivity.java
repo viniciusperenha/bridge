@@ -108,10 +108,6 @@ public class ProducaoActivity extends PrincipalActivity {
                 adapterSetor.setDropDownViewResource(R.layout.item_lista);
                 setor.setAdapter(adapterSetor);
 
-
-                carregaApontamentos();
-
-
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -149,12 +145,10 @@ public class ProducaoActivity extends PrincipalActivity {
                 adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
                 atividade.setAdapter(adapterSubprojetoAtividade);
 
-
                 //lista spinner pavimentos
                 ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
                 adapterPavimento.setDropDownViewResource(R.layout.item_lista);
                 pavimento.setAdapter(adapterPavimento);
-
 
             }
 
@@ -182,6 +176,20 @@ public class ProducaoActivity extends PrincipalActivity {
         });
 
 
+        //selecionou pavimento guarda como global
+        pavimento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                //armazena o pavimento
+                usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
         //selecionou empreiteira guarda como global
         empreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -207,6 +215,8 @@ public class ProducaoActivity extends PrincipalActivity {
 
                 //armazena colaborador da empreiteira
                 usuarioGlobal.setColaboradorselecionado( (Rhcolaborador) colaboradorempreiteira.getSelectedItem());
+
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -214,21 +224,27 @@ public class ProducaoActivity extends PrincipalActivity {
             }
         });
 
-        //selecionou pavimento guarda como global
-        pavimento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                //armazena o pavimento
-                usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
-            }
 
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
+        listaApontamentosProducao.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor c = (Cursor) parent.getItemAtPosition(position);
+                //armazena o servico na sessao
+                Engproducao producaoselecionada = new Engproducao();
+                producaoselecionada = (Engproducao) consultarPorId(producaoselecionada , String.valueOf(c.getLong(2)));
+                usuarioGlobal.setProducaoselecionadamostrar(producaoselecionada);
+
+                Intent intent = new Intent(getApplicationContext(), detalhes_producao_gravada.class);
+                startActivity(intent);
+
             }
         });
 
 
     }
+
 
 
     @Override
@@ -341,10 +357,8 @@ public class ProducaoActivity extends PrincipalActivity {
 
     public ArrayList<Rhcolaborador> listaColaboradorObra(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        Cursor c = db.rawQuery("Select Distinct(col.id) FROM Engcolaboradorobra as eco " +
-                " inner join Rhcargo as c on eco.fkIdCargo = c.id " +
-                " inner join Rhcolaborador as col on eco.fkIdColaborador = col.id " +
-                " WHERE eco.fkIdObra = " + usuarioGlobal.getObraselecionada().getId().toString()
+        Cursor c = db.rawQuery("Select Distinct(col.id) FROM Rhcolaborador as col " +
+                " WHERE col.fkIdEmpresaEmpreiteira = " + usuarioGlobal.getEmpreiteiraselecionada().getId()
                 , null);
         ArrayList<Rhcolaborador> lista = new ArrayList<Rhcolaborador>();
         if(c.getCount()>0){
@@ -437,23 +451,46 @@ public class ProducaoActivity extends PrincipalActivity {
         return lista;
     }
 
-    public void carregaApontamentos(){
-        Cursor c = db.rawQuery("Select s.codigo as _id, s.nome as nomeservico, ep.codigo, um.nome as nomeunidade,pro.quantidade " +
+    public SimpleCursorAdapter carregaApontamentos(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.nome as nomeunidade,pro.quantidade " +
                 " from Engproducao pro " +
                 " inner join Orcservico as s on s.id=pro.fkIdServico " +
                 " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
-                " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida", null);
+                " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida " +
+                " where  "+
+                "  pro.fkIdObra='"+usuarioGlobal.getObraselecionada().getId()+"'";
 
+        if(usuarioGlobal.getSetorprojetoselecionado()!=null){
+            s+= " and pro.fkIdSetorProjeto="+usuarioGlobal.getSetorprojetoselecionado().getId();
+        }
+        if(usuarioGlobal.getPavimentosubprojetoprojetoselecionado()!=null){
+            s+= " and pro.fkIdPavimentoSubprojeto="+usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId();
+        }
+        if(usuarioGlobal.getAtividadeselecionada()!=null){
+            s+= " and pro.fkIdAtividade="+usuarioGlobal.getAtividadeselecionada().getId();
+        }
+        if(usuarioGlobal.getEmpreiteiraselecionada()!=null){
+            s+= " and pro.fkIdEmpreiteira="+usuarioGlobal.getEmpreiteiraselecionada().getId();
+        }
+        if(usuarioGlobal.getColaboradorselecionado()!=null){
+            s+= " and pro.fkIdColaborador="+usuarioGlobal.getColaboradorselecionado().getId();
+        }
+        System.out.println(s);
+
+        Cursor c = db.rawQuery(s, null);
+        System.out.println("quantidade cursor "+c.getCount());
         // The desired columns to be bound
         if(c.moveToFirst()) {
             String[] columns = new String[]{
-                    c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4)
+                    c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
             };
 
             // the XML defined views which the data will be bound to
             int[] to = new int[]{
                     R.id.idservico,
                     R.id.servico,
+                    R.id.idproducao,
                     R.id.elementoproducao,
                     R.id.unidademedida,
                     R.id.quantidade
@@ -469,8 +506,9 @@ public class ProducaoActivity extends PrincipalActivity {
                     0);
 
             // Assign adapter to ListView
-            listaApontamentosProducao.setAdapter(dataAdapter);
+           return dataAdapter;
         }
+        return null;
     }
 
     public Object consultarPorId(Object obj, String id) {

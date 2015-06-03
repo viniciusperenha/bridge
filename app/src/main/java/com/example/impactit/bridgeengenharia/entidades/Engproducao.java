@@ -1,5 +1,7 @@
 package com.example.impactit.bridgeengenharia.entidades;
 
+import org.w3c.dom.Text;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -35,6 +37,10 @@ public class Engproducao implements Serializable {
     private Long fkIdSetorProjeto;
 
     private Long fkIdTarefa;
+
+    private boolean status;
+
+    private String observacao;
 
     public Long getId() {
         return id;
@@ -146,5 +152,21 @@ public class Engproducao implements Serializable {
 
     public void setFkIdTarefa(Long fkIdTarefa) {
         this.fkIdTarefa = fkIdTarefa;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.Engproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcservico;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
@@ -39,6 +40,7 @@ public class GlobalClass extends Application {
     public Orcelementoproducao elementoproducaoselecionado;
     public Orcservico servicoselecionado;
     public Platarefa tarefaselecionada;
+    public Engproducao producaoselecionadamostrar;
 
     public Sisusuario getUsuarioLogado() {
         return usuarioLogado;
@@ -135,6 +137,14 @@ public class GlobalClass extends Application {
 
     public void setTarefaselecionada(Platarefa tarefaselecionada) {
         this.tarefaselecionada = tarefaselecionada;
+    }
+
+    public Engproducao getProducaoselecionadamostrar() {
+        return producaoselecionadamostrar;
+    }
+
+    public void setProducaoselecionadamostrar(Engproducao producaoselecionadamostrar) {
+        this.producaoselecionadamostrar = producaoselecionadamostrar;
     }
 }
 

@@ -28,6 +28,15 @@
             android:adjustViewBounds="false"
             />
         <TextView
+            android:id="@+id/idproducao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="false"
+            />
+        <TextView
             android:id="@+id/elementoproducao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
