@@ -406,7 +406,7 @@ public class LoginActivity extends Activity {
                 }.getType();
                 inserir((List<Plasetorprojeto>) gson.fromJson(lista.toString(), listType));
 
-                //insere plasubprojetosetorprojeto
+                //insere Plasubprojetosetorprojeto
                 lista = new JSONArray();
                 lista = consultaGenerica(Plasubprojetosetorprojeto.class);
                 gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
@@ -520,6 +520,12 @@ public class LoginActivity extends Activity {
                            if (f.getType().equals(BigInteger.class)) {
                                f.set(obj, BigInteger.valueOf(Long.parseLong(c.getString(i))));
                            }
+                           if (f.getType().equals(Integer.class)) {
+                               f.set(obj, Integer.parseInt(c.getString(i)));
+                           }
+                           if (f.getType().equals(int.class)) {
+                               f.set(obj, Integer.parseInt(c.getString(i)));
+                           }
 
                        }
                    } catch (Exception ex) {
@@ -528,7 +534,7 @@ public class LoginActivity extends Activity {
                    s+= c.getColumnName(i)+" - "+c.getString(i)+"   ";
                }
 
-           System.out.println(s);
+
        }
        return obj;
         //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -578,7 +584,7 @@ public class LoginActivity extends Activity {
                 sb.setLength(sb.length() - 1);
                 sb.append(")");
 
-                System.out.println(sb.toString());
+
 
                 db.execSQL(sb.toString());
 

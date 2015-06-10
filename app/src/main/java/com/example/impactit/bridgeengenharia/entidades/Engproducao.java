@@ -12,7 +12,7 @@ import java.util.Date;
 public class Engproducao implements Serializable {
     private Long id;
 
-    private long fkIdSubprojetoSetorProjeto;
+    private Long fkIdSubprojetoSetorProjeto;
 
     private Timestamp data;
 
@@ -38,7 +38,7 @@ public class Engproducao implements Serializable {
 
     private Long fkIdTarefa;
 
-    private boolean status;
+    private Boolean status;
 
     private String observacao;
 
@@ -50,11 +50,11 @@ public class Engproducao implements Serializable {
         this.id = id;
     }
 
-    public long getFkIdSubprojetoSetorProjeto() {
+    public Long getFkIdSubprojetoSetorProjeto() {
         return fkIdSubprojetoSetorProjeto;
     }
 
-    public void setFkIdSubprojetoSetorProjeto(long fkIdSubprojetoSetorProjeto) {
+    public void setFkIdSubprojetoSetorProjeto(Long fkIdSubprojetoSetorProjeto) {
         this.fkIdSubprojetoSetorProjeto = fkIdSubprojetoSetorProjeto;
     }
 
@@ -154,11 +154,11 @@ public class Engproducao implements Serializable {
         this.fkIdTarefa = fkIdTarefa;
     }
 
-    public boolean isStatus() {
+    public Boolean isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

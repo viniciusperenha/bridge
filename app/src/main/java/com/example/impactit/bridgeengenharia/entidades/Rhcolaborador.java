@@ -8,12 +8,12 @@ import java.math.BigInteger;
  */
 public class Rhcolaborador implements Serializable {
     private Long id;
-    private long cpf;
+    private Long cpf;
     private String rg;
     private String nome;
     private Character status;
     private Character tipoMaoDeObra;
-    private long fkIdEmpresaEmpreiteira;
+    private Long fkIdEmpresaEmpreiteira;
     private BigInteger fkIdFoto;
     private String cep;
     private String endereco;
@@ -33,11 +33,11 @@ public class Rhcolaborador implements Serializable {
         this.id = id;
     }
 
-    public long getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public void setCpf(long cpf) {
+    public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 
@@ -73,11 +73,11 @@ public class Rhcolaborador implements Serializable {
         this.tipoMaoDeObra = tipoMaoDeObra;
     }
 
-    public long getFkIdEmpresaEmpreiteira() {
+    public Long getFkIdEmpresaEmpreiteira() {
         return fkIdEmpresaEmpreiteira;
     }
 
-    public void setFkIdEmpresaEmpreiteira(long fkIdEmpresaEmpreiteira) {
+    public void setFkIdEmpresaEmpreiteira(Long fkIdEmpresaEmpreiteira) {
         this.fkIdEmpresaEmpreiteira = fkIdEmpresaEmpreiteira;
     }
 

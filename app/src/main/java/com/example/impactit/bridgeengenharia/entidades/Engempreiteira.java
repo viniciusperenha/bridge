@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class Engempreiteira implements Serializable {
     private Long id;
-    private long cnpj;
+    private Long cnpj;
     private String razaoSocial;
     private String nomeFantasia;
     private Character status;
@@ -26,11 +26,11 @@ public class Engempreiteira implements Serializable {
         this.id = id;
     }
 
-    public long getCnpj() {
+    public Long getCnpj() {
         return cnpj;
     }
 
-    public void setCnpj(long cnpj) {
+    public void setCnpj(Long cnpj) {
         this.cnpj = cnpj;
     }
 

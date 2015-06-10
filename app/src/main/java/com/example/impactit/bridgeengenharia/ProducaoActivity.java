@@ -246,6 +246,16 @@ public class ProducaoActivity extends PrincipalActivity {
     }
 
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        try {
+            listaApontamentosProducao.setAdapter(carregaApontamentos());
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -454,12 +464,12 @@ public class ProducaoActivity extends PrincipalActivity {
     public SimpleCursorAdapter carregaApontamentos(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.nome as nomeunidade,pro.quantidade " +
-                " from Engproducao pro " +
+                " from Engproducao as pro " +
                 " inner join Orcservico as s on s.id=pro.fkIdServico " +
                 " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
                 " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida " +
-                " where  "+
-                "  pro.fkIdObra='"+usuarioGlobal.getObraselecionada().getId()+"'";
+                " where pro.status is null "+
+                " and pro.fkIdObra='"+usuarioGlobal.getObraselecionada().getId()+"'";
 
         if(usuarioGlobal.getSetorprojetoselecionado()!=null){
             s+= " and pro.fkIdSetorProjeto="+usuarioGlobal.getSetorprojetoselecionado().getId();
@@ -476,10 +486,10 @@ public class ProducaoActivity extends PrincipalActivity {
         if(usuarioGlobal.getColaboradorselecionado()!=null){
             s+= " and pro.fkIdColaborador="+usuarioGlobal.getColaboradorselecionado().getId();
         }
-        System.out.println(s);
+
 
         Cursor c = db.rawQuery(s, null);
-        System.out.println("quantidade cursor "+c.getCount());
+
         // The desired columns to be bound
         if(c.moveToFirst()) {
             String[] columns = new String[]{
@@ -545,6 +555,9 @@ public class ProducaoActivity extends PrincipalActivity {
                         if (f.getType().equals(BigInteger.class)) {
                             f.set(obj, BigInteger.valueOf(Long.parseLong(c.getString(i))));
                         }
+                        if (f.getType().equals(double.class)) {
+                            f.set(obj, Double.parseDouble(c.getString(i)));
+                        }
 
                     }
                 } catch (Exception ex) {
@@ -553,7 +566,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 s+= c.getColumnName(i)+" - "+c.getString(i)+"   ";
             }
 
-            //System.out.println(s);
+
         }
         return obj;
 
@@ -581,8 +594,9 @@ public class ProducaoActivity extends PrincipalActivity {
             Toast.makeText(getApplicationContext(), "Selecione o colaborador", Toast.LENGTH_LONG).show();
         }
 
-
         Intent intent = new Intent(getApplicationContext(), DetalhesProducao.class);
         startActivity(intent);
     }
+
+
 }

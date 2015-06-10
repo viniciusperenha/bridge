@@ -331,7 +331,8 @@ public class DetalhesProducao extends ActionBarActivity {
 
         Cursor c = db.rawQuery("SELECT SUM(pro.quantidade) FROM Engproducao as pro  " +
                 " inner join Plasubprojetosetorprojeto pssp on pssp.id = pro.fkIdSubprojetoSetorProjeto " +
-                " where pro.fkIdObra = " + usuarioglobal.getObraselecionada().getId() + " " +
+                " where pro.status is null " +
+                " and pro.fkIdObra = " + usuarioglobal.getObraselecionada().getId() + " " +
                 " and pssp.fkIdSetorProjeto = " + usuarioglobal.getSetorprojetoselecionado().getId() + " " +
                 " and pssp.fkIdSubprojeto = " + usuarioglobal.getSubprojetoselecionado().getId() + " " +
                 " and pro.fkIdAtividade = " + usuarioglobal.getAtividadeselecionada().getId() + " " +

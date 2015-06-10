@@ -349,7 +349,7 @@ tools:context="com.example.impactit.bridgeengenharia.detalhes_producao_gravada">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exckuir"
+        android:text="Excluir"
         android:id="@+id/btnexcluir"
         android:layout_weight="1"
         android:background="#1F74B5"
