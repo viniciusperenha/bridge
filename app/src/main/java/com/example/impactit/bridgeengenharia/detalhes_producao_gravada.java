@@ -47,6 +47,7 @@ public class detalhes_producao_gravada extends ActionBarActivity {
     public EditText totalproduzido;
     public EditText producao;
     public EditText observacao;
+    public EditText setor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,13 @@ public class detalhes_producao_gravada extends ActionBarActivity {
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
         //global que armazena na sessao
         GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
+
+        //busca setor
+        Plasetorprojeto setorprojetoobj = new Plasetorprojeto();
+        setorprojetoobj = (Plasetorprojeto) consultarPorId(setorprojetoobj, usuarioglobal.getProducaoselecionadamostrar().getFkIdSetorProjeto());
+        setor = (EditText) findViewById(R.id.setor);
+        setor.setText(setorprojetoobj.getNome());
+
 
         //busca subprojetosetorprojeto
         Plasubprojetosetorprojeto subprojetosetorprojetoobj = new Plasubprojetosetorprojeto();
@@ -173,7 +181,7 @@ public class detalhes_producao_gravada extends ActionBarActivity {
             public void onClick(DialogInterface arg0, int arg1) {
 
                 ContentValues values = new ContentValues();
-                values.put("status","s");
+                values.put("status","E");
 
                 GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
                 db.update("Engproducao", values, "id=?", new String[] {String.valueOf(usuarioglobal.getProducaoselecionadamostrar().getId())});

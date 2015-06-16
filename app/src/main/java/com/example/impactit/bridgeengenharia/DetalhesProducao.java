@@ -55,6 +55,7 @@ public class DetalhesProducao extends ActionBarActivity {
     public Spinner spinnerelementoproducao;
     public EditText totalproduzido;
     public EditText producao;
+    public EditText setor;
 
 
 
@@ -68,6 +69,9 @@ public class DetalhesProducao extends ActionBarActivity {
 
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         //carrega campos
+        setor = (EditText) findViewById(R.id.setor);
+        setor.setText(usuarioGlobal.getSetorprojetoselecionado().getNome());
+
         subprojeto = (EditText) findViewById(R.id.subprojeto);
         subprojeto.setText(usuarioGlobal.getSubprojetoselecionado().getDescricao());
 
@@ -96,6 +100,7 @@ public class DetalhesProducao extends ActionBarActivity {
         totalproduzido = (EditText) findViewById(R.id.totalproduzido);
 
         producao = (EditText) findViewById(R.id.producao);
+
 
         ArrayAdapter<Platarefa> adapterTarefa = new ArrayAdapter<Platarefa>(getApplicationContext(), android.R.layout.simple_spinner_item, listaTarefa());
         adapterTarefa.setDropDownViewResource(R.layout.item_lista);
@@ -209,6 +214,7 @@ public class DetalhesProducao extends ActionBarActivity {
             alertbox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                     // finish used for destroyed activity
+                    db.close();
                     DetalhesProducao.this.finish();
                 }
 
@@ -364,6 +370,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdSubprojetoSetorProjeto(buscaSubprojetoSetorProjetoRetornaId(usuarioglobal.getSetorprojetoselecionado(), usuarioglobal.getSubprojetoselecionado()));
             pro.setFkIdAtividade(usuarioglobal.getAtividadeselecionada().getId());
             pro.setFkIdPavimentoSubprojeto(usuarioglobal.getPavimentosubprojetoprojetoselecionado().getId());
+            pro.setFkIdTarefa(usuarioglobal.getTarefaselecionada().getId());
             pro.setFkIdServico(usuarioglobal.getServicoselecionado().getId());
             pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
             pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
@@ -371,12 +378,15 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setData(new Timestamp(System.currentTimeMillis()));
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
-            pro.setFkIdTarefa(usuarioglobal.getServicoselecionado().getFkIdTarefa());
+            pro.setStatus("N");
             pro.setObservacao(observacao.getText().toString());
+            pro.setFkidColaboradorApontou(usuarioglobal.getUsuarioLogado().getId());
+
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
 
             inserir(pro);
+            db.close();
             Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
             DetalhesProducao.this.finish();
 
@@ -409,6 +419,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdSubprojetoSetorProjeto(buscaSubprojetoSetorProjetoRetornaId(usuarioglobal.getSetorprojetoselecionado(), usuarioglobal.getSubprojetoselecionado()));
             pro.setFkIdAtividade(usuarioglobal.getAtividadeselecionada().getId());
             pro.setFkIdPavimentoSubprojeto(usuarioglobal.getPavimentosubprojetoprojetoselecionado().getId());
+            pro.setFkIdTarefa(usuarioglobal.getTarefaselecionada().getId());
             pro.setFkIdServico(usuarioglobal.getServicoselecionado().getId());
             pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
             pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
@@ -416,8 +427,9 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setData(new Timestamp(System.currentTimeMillis()));
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
-            pro.setFkIdTarefa(usuarioglobal.getServicoselecionado().getFkIdTarefa());
+            pro.setStatus("N");
             pro.setObservacao(observacao.getText().toString());
+            pro.setFkidColaboradorApontou(usuarioglobal.getUsuarioLogado().getId());
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
 
@@ -458,6 +470,7 @@ public class DetalhesProducao extends ActionBarActivity {
                 if (valor != null) {
                     cv.put(f.getName(), valor.toString());
                 }
+                System.out.println(f.getName()+" "+valor.toString());
             }
 
             db.insert(classe.getSimpleName().toLowerCase(), null, cv);

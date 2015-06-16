@@ -12,12 +12,33 @@ tools:context="com.example.impactit.bridgeengenharia.detalhes_producao_gravada">
     android:layout_marginTop="2dp"
     android:id="@+id/dadosobra"
     >
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:background="@color/button_material_light"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Setor"
+            android:id="@+id/textsetor" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/setor"
+            android:editable="false"
+            android:enabled="false" />
+
+
+    </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:background="@color/button_material_light"
         >
 
@@ -216,7 +237,7 @@ tools:context="com.example.impactit.bridgeengenharia.detalhes_producao_gravada">
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:background="@color/button_material_light"
         >
 

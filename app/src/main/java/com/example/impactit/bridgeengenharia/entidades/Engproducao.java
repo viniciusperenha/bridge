@@ -38,15 +38,12 @@ public class Engproducao implements Serializable {
 
     private Long fkIdTarefa;
 
-    private Boolean status;
+    private String status;
 
     private String observacao;
 
     private Long fkidColaboradorApontou;
 
-    public Boolean getStatus() {
-        return status;
-    }
 
     public Long getFkidColaboradorApontou() {
         return fkidColaboradorApontou;
@@ -168,19 +165,19 @@ public class Engproducao implements Serializable {
         this.fkIdTarefa = fkIdTarefa;
     }
 
-    public Boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
     public String getObservacao() {
         return observacao;
     }
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

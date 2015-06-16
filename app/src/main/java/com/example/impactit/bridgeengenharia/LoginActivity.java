@@ -179,6 +179,8 @@ public class LoginActivity extends Activity {
 
                     usuarioGlobal.setUsuarioLogado((Sisusuario) consultarPorId(usu, id));
                     Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+                    //fecha o banco
+                    db.close();
                     //intent.putExtra("usuario", id);
                     startActivity(intent);
                 } else {

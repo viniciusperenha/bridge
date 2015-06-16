@@ -125,7 +125,6 @@ public class ProducaoActivity extends PrincipalActivity {
                 }
                 //carrega os apontamentos
                 listaApontamentosProducao.setAdapter(carregaApontamentos());
-
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -168,7 +167,6 @@ public class ProducaoActivity extends PrincipalActivity {
                 if(subprojeto.getSelectedItemPosition()>0) {
 
                     usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
-
                     //lista spinner atividades
                     ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
                     adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
@@ -302,31 +300,43 @@ public class ProducaoActivity extends PrincipalActivity {
 
 
     public void limpaSetor(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setSetorprojetoselecionado(null);
         ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plasetorprojeto>());
         setor.setAdapter(adapterSetor);
     }
 
     public void limpaSubprojeto(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setSubprojetoselecionado(null);
         ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plasubprojeto>());
         subprojeto.setAdapter(adapterSubprojeto);
     }
 
     public void limpaAtividade(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setAtividadeselecionada(null);
         ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plaatividade>());
         atividade.setAdapter(adapterSubprojetoAtividade);
     }
 
     public void limpaPavimento(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setPavimentosubprojetoprojetoselecionado(null);
         ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plapavimentosubprojeto>());
         pavimento.setAdapter(adapterPavimento);
     }
 
     public void limpaEmpreiteira(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setEmpreiteiraselecionada(null);
         ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Engempreiteira>());
         empreiteira.setAdapter(adapterEmpreiteria);
     }
 
     public void limpaColaboradores(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setColaboradorselecionado(null);
         ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Rhcolaborador>());
         colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
     }
@@ -587,23 +597,23 @@ public class ProducaoActivity extends PrincipalActivity {
                     " inner join Orcservico as s on s.id=pro.fkIdServico " +
                     " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
                     " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida " +
-                    " where pro.status is null " +
-                    " and pro.fkIdObra='" + usuarioGlobal.getObraselecionada().getId() + "'";
+                    " where (pro.status is null OR pro.status = 'N') " +
+                    " and (pro.fkIdObra='" + usuarioGlobal.getObraselecionada().getId() + "')";
 
             if (usuarioGlobal.getSetorprojetoselecionado() != null) {
-                s += " and pro.fkIdSetorProjeto=" + usuarioGlobal.getSetorprojetoselecionado().getId();
+                s += " and (pro.fkIdSetorProjeto=" + usuarioGlobal.getSetorprojetoselecionado().getId()+")";
             }
             if (usuarioGlobal.getPavimentosubprojetoprojetoselecionado() != null) {
-                s += " and pro.fkIdPavimentoSubprojeto=" + usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId();
+                s += " and (pro.fkIdPavimentoSubprojeto=" + usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId()+")";
             }
             if (usuarioGlobal.getAtividadeselecionada() != null) {
-                s += " and pro.fkIdAtividade=" + usuarioGlobal.getAtividadeselecionada().getId();
+                s += " and (pro.fkIdAtividade=" + usuarioGlobal.getAtividadeselecionada().getId()+")";
             }
             if (usuarioGlobal.getEmpreiteiraselecionada() != null) {
-                s += " and pro.fkIdEmpreiteira=" + usuarioGlobal.getEmpreiteiraselecionada().getId();
+                s += " and (pro.fkIdEmpreiteira=" + usuarioGlobal.getEmpreiteiraselecionada().getId()+")";
             }
             if (usuarioGlobal.getColaboradorselecionado() != null) {
-                s += " and pro.fkIdColaborador=" + usuarioGlobal.getColaboradorselecionado().getId();
+                s += " and (pro.fkIdColaborador=" + usuarioGlobal.getColaboradorselecionado().getId()+")";
             }
 
 
@@ -694,28 +704,42 @@ public class ProducaoActivity extends PrincipalActivity {
 
     public void novaMedicao(View view) {
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        String validacoes = "";
         //verifica campos obrigatorios
         if(usuarioGlobal.getObraselecionada()==null){
-            Toast.makeText(getApplicationContext(), "Selecione a Obra", Toast.LENGTH_LONG).show();
+            validacoes = "Obra";
+
+        }
+        if(usuarioGlobal.getSetorprojetoselecionado()==null){
+            validacoes += " Setor";
         }
         if(usuarioGlobal.getSubprojetoselecionado()==null){
-            Toast.makeText(getApplicationContext(), "Selecione o subprojeto", Toast.LENGTH_LONG).show();
+            validacoes += " Subprojeto";
+
         }
         if(usuarioGlobal.getAtividadeselecionada()==null){
-            Toast.makeText(getApplicationContext(), "Selecione a atividade", Toast.LENGTH_LONG).show();
+            validacoes += " Atividade";
+
         }
         if(usuarioGlobal.getPavimentosubprojetoprojetoselecionado()==null){
-            Toast.makeText(getApplicationContext(), "Selecione o pavimento", Toast.LENGTH_LONG).show();
+            validacoes += " Pavimento";
+
         }
         if(usuarioGlobal.getEmpreiteiraselecionada()==null){
-            Toast.makeText(getApplicationContext(), "Selecione a empreiteira", Toast.LENGTH_LONG).show();
+            validacoes += " Empreiteira";
+
         }
         if(usuarioGlobal.getColaboradorselecionado()==null){
-            Toast.makeText(getApplicationContext(), "Selecione o colaborador", Toast.LENGTH_LONG).show();
+            validacoes += " Colaborador";
+
         }
 
-        Intent intent = new Intent(getApplicationContext(), DetalhesProducao.class);
-        startActivity(intent);
+        if("".equals(validacoes)) {
+            Intent intent = new Intent(getApplicationContext(), DetalhesProducao.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "Selecione: "+validacoes+" para novo apontamento", Toast.LENGTH_LONG).show();
+        }
     }
 
 
