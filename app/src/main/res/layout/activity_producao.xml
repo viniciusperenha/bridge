@@ -18,7 +18,7 @@
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingLeft="15dp"
+            android:paddingLeft="10dp"
             android:background="@color/button_material_light"
             >
 
@@ -32,7 +32,8 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerObra" />
+                android:id="@+id/spinnerObra"
+                />
 
         </TableRow>
 
@@ -81,10 +82,22 @@
         </TableRow>
 
 
+
+
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabelaprojeto"
+        android:layout_marginTop="2dp"
+        android:stretchColumns="1"
+        android:id="@+id/tabelapavimento"
+        >
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingLeft="15dp"
+            android:paddingLeft="10dp"
             android:background="@color/button_material_light"
             >
 
@@ -98,20 +111,11 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerSetor" />
+                android:id="@+id/spinnerSetor"
+                />
 
         </TableRow>
 
-    </TableLayout>
-
-    <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tabelaprojeto"
-        android:layout_marginTop="2dp"
-        android:stretchColumns="1"
-        android:id="@+id/tabelapavimento"
-        >
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

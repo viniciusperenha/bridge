@@ -42,6 +42,20 @@ public class Engproducao implements Serializable {
 
     private String observacao;
 
+    private Long fkidColaboradorApontou;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public Long getFkidColaboradorApontou() {
+        return fkidColaboradorApontou;
+    }
+
+    public void setFkidColaboradorApontou(Long fkidColaboradorApontou) {
+        this.fkidColaboradorApontou = fkidColaboradorApontou;
+    }
+
     public Long getId() {
         return id;
     }

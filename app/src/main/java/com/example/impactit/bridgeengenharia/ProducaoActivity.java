@@ -53,6 +53,7 @@ public class ProducaoActivity extends PrincipalActivity {
     public Spinner colaboradorempreiteira;
     public Spinner setor;
     public ListView listaApontamentosProducao;
+    public static Integer posicaoobra;
 
 
     @Override
@@ -84,29 +85,46 @@ public class ProducaoActivity extends PrincipalActivity {
         //carrega spinner de obras do usuario
         ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), android.R.layout.simple_spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
         adapter.setDropDownViewResource(R.layout.item_lista);
+
         spinnerObra.setAdapter(adapter);
+
+        spinnerObra.setSelection(posicaoobra);
 
         spinnerObra.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(spinnerObra.getSelectedItemPosition()>0) {
+                    usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
+                    //busca os dados da obra
+                    responsavelobra = new Rhcolaborador();
+                    responsavelobra = (Rhcolaborador) consultarPorId(responsavelobra, usuarioGlobal.getObraselecionada().getFkIdEngenheiroResidente().toString());
+                    engenheiroresidente = new Rhcolaborador();
+                    engenheiroresidente = (Rhcolaborador) consultarPorId(engenheiroresidente, usuarioGlobal.getObraselecionada().getFkIdGerenteEngenharia().toString());
 
-                //busca os dados da obra
-                usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
-                responsavelobra = new Rhcolaborador();
-                responsavelobra = (Rhcolaborador) consultarPorId(responsavelobra , usuarioGlobal.getObraselecionada().getFkIdEngenheiroResidente().toString());
-                engenheiroresidente = new Rhcolaborador();
-                engenheiroresidente = (Rhcolaborador) consultarPorId(engenheiroresidente , usuarioGlobal.getObraselecionada().getFkIdGerenteEngenharia().toString());
-
-                responsavel.setText(responsavelobra.getNome());
-                engenheiro.setText(engenheiroresidente.getNome());
-                //armazena o projeto
-                projeto = new Plaprojeto();
-                projeto = (Plaprojeto) consultarPorId(projeto , usuarioGlobal.getObraselecionada().getFkIdProjeto().toString());
-                usuarioGlobal.setProjetoselecionado(projeto);
-
-                //busca setores da obra
-                ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, setoresDisponiveisObra(projeto));
-                adapterSetor.setDropDownViewResource(R.layout.item_lista);
-                setor.setAdapter(adapterSetor);
+                    responsavel.setText(responsavelobra.getNome());
+                    engenheiro.setText(engenheiroresidente.getNome());
+                    //armazena o projeto
+                    projeto = new Plaprojeto();
+                    projeto = (Plaprojeto) consultarPorId(projeto, usuarioGlobal.getObraselecionada().getFkIdProjeto().toString());
+                    usuarioGlobal.setProjetoselecionado(projeto);
+                    //carrega spinner de setores da obra
+                    ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, setoresDisponiveisObra(projeto));
+                    adapterSetor.setDropDownViewResource(R.layout.item_lista);
+                    setor.setAdapter(adapterSetor);
+                } else {
+                    responsavel.setText("");
+                    engenheiro.setText("");
+                    usuarioGlobal.setObraselecionada(null);
+                    GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+                    usuarioGlobal.setProjetoselecionado(null);
+                    limpaSetor();
+                    limpaSubprojeto();
+                    limpaAtividade();
+                    limpaPavimento();
+                    limpaEmpreiteira();
+                    limpaColaboradores();
+                }
+                //carrega os apontamentos
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
 
             }
 
@@ -119,13 +137,22 @@ public class ProducaoActivity extends PrincipalActivity {
         //onchange spinner setor
         setor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
-                //lista subprojetos
-                ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos((Plasetorprojeto) setor.getSelectedItem()));
-                adapterSubprojeto.setDropDownViewResource(R.layout.item_lista);
-                subprojeto.setAdapter(adapterSubprojeto);
-
+                if(setor.getSelectedItemPosition()>0) {
+                    usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
+                    //lista subprojetos
+                    ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos((Plasetorprojeto) setor.getSelectedItem()));
+                    adapterSubprojeto.setDropDownViewResource(R.layout.item_lista);
+                    subprojeto.setAdapter(adapterSubprojeto);
+                } else {
+                    usuarioGlobal.setSetorprojetoselecionado(null);
+                    limpaSubprojeto();
+                    limpaAtividade();
+                    limpaPavimento();
+                    limpaEmpreiteira();
+                    limpaColaboradores();
+                }
+                //carrega os apontamentos
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -138,17 +165,27 @@ public class ProducaoActivity extends PrincipalActivity {
         subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
+                if(subprojeto.getSelectedItemPosition()>0) {
 
-                //lista spinner atividades
-                ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
-                adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
-                atividade.setAdapter(adapterSubprojetoAtividade);
+                    usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
 
-                //lista spinner pavimentos
-                ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
-                adapterPavimento.setDropDownViewResource(R.layout.item_lista);
-                pavimento.setAdapter(adapterPavimento);
+                    //lista spinner atividades
+                    ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
+                    adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
+                    atividade.setAdapter(adapterSubprojetoAtividade);
+
+                    //lista spinner pavimentos
+                    ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
+                    adapterPavimento.setDropDownViewResource(R.layout.item_lista);
+                    pavimento.setAdapter(adapterPavimento);
+                } else {
+                    usuarioGlobal.setSubprojetoselecionado(null);
+                    limpaAtividade();
+                    limpaPavimento();
+                    limpaEmpreiteira();
+                    limpaColaboradores();
+                }
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
 
             }
 
@@ -160,13 +197,21 @@ public class ProducaoActivity extends PrincipalActivity {
         //onchange spinner atividade
         atividade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //armazena na global a atividade
-                usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
 
-                //verifica a(s) empreiterias da obra pelo contrato e parametro
-                ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, listaEmpreiteirasContrato());
-                adapterEmpreiteria.setDropDownViewResource(R.layout.item_lista);
-                empreiteira.setAdapter(adapterEmpreiteria);
+                if(atividade.getSelectedItemPosition()>0) {
+                    //armazena na global a atividade
+                    usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
+
+                    //verifica a(s) empreiterias da obra pelo contrato e parametro
+                    ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, listaEmpreiteirasContrato());
+                    adapterEmpreiteria.setDropDownViewResource(R.layout.item_lista);
+                    empreiteira.setAdapter(adapterEmpreiteria);
+                } else {
+                    usuarioGlobal.setAtividadeselecionada(null);
+                    limpaEmpreiteira();
+                    limpaColaboradores();
+                }
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
 
             }
 
@@ -179,9 +224,12 @@ public class ProducaoActivity extends PrincipalActivity {
         //selecionou pavimento guarda como global
         pavimento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                //armazena o pavimento
-                usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
+                if(pavimento.getSelectedItemPosition()>0) {
+                    //armazena o pavimento
+                    usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
+                } else {
+                    usuarioGlobal.setPavimentosubprojetoprojetoselecionado(null);
+                }
                 listaApontamentosProducao.setAdapter(carregaApontamentos());
             }
 
@@ -193,14 +241,19 @@ public class ProducaoActivity extends PrincipalActivity {
         //selecionou empreiteira guarda como global
         empreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(empreiteira.getSelectedItemPosition()>0) {
+                    //armazena empreiteira
+                    usuarioGlobal.setEmpreiteiraselecionada((Engempreiteira) empreiteira.getSelectedItem());
 
-                //armazena empreiteira
-                usuarioGlobal.setEmpreiteiraselecionada((Engempreiteira) empreiteira.getSelectedItem());
-
-                //busca colaboradores da obra
-                ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, listaColaboradorObra());
-                adapteColaboradorEmpreiteira.setDropDownViewResource(R.layout.item_lista);
-                colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
+                    //busca colaboradores da obra
+                    ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, listaColaboradorObra());
+                    adapteColaboradorEmpreiteira.setDropDownViewResource(R.layout.item_lista);
+                    colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
+                } else {
+                    usuarioGlobal.setEmpreiteiraselecionada(null);
+                    limpaColaboradores();
+                }
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
 
             }
 
@@ -212,10 +265,12 @@ public class ProducaoActivity extends PrincipalActivity {
         //selecionou colaborador guarda como global
         colaboradorempreiteira.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                //armazena colaborador da empreiteira
-                usuarioGlobal.setColaboradorselecionado( (Rhcolaborador) colaboradorempreiteira.getSelectedItem());
-
+                if(colaboradorempreiteira.getSelectedItemPosition()>0) {
+                    //armazena colaborador da empreiteira
+                    usuarioGlobal.setColaboradorselecionado((Rhcolaborador) colaboradorempreiteira.getSelectedItem());
+                } else {
+                    usuarioGlobal.setColaboradorselecionado(null);
+                }
                 listaApontamentosProducao.setAdapter(carregaApontamentos());
             }
 
@@ -243,6 +298,37 @@ public class ProducaoActivity extends PrincipalActivity {
         });
 
 
+    }
+
+
+    public void limpaSetor(){
+        ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plasetorprojeto>());
+        setor.setAdapter(adapterSetor);
+    }
+
+    public void limpaSubprojeto(){
+        ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plasubprojeto>());
+        subprojeto.setAdapter(adapterSubprojeto);
+    }
+
+    public void limpaAtividade(){
+        ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plaatividade>());
+        atividade.setAdapter(adapterSubprojetoAtividade);
+    }
+
+    public void limpaPavimento(){
+        ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plapavimentosubprojeto>());
+        pavimento.setAdapter(adapterPavimento);
+    }
+
+    public void limpaEmpreiteira(){
+        ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Engempreiteira>());
+        empreiteira.setAdapter(adapterEmpreiteria);
+    }
+
+    public void limpaColaboradores(){
+        ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Rhcolaborador>());
+        colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
     }
 
 
@@ -280,31 +366,44 @@ public class ProducaoActivity extends PrincipalActivity {
     }
 
     public List<Engobra> obrasDisponiveisUsuario(Sisusuario usu){
+        posicaoobra = 0;
+        Engobra obraclienteselcionar = new Engobra();
+
 
         //busca pelo obra colaborador
         Cursor c = db.rawQuery("Select Distinct(o.id) from Engcolaboradorobra eco " +
                 " inner join Engobra as o on eco.fkIdObra = o.id " +
                 " where eco.fkIdColaborador = "+usu.getFkIdColaborador(),null);
-        ArrayList<Engobra> lista = new ArrayList<Engobra>();
+        Engobra aux = new Engobra();
         if(c.getCount()>0){
-
             c.moveToFirst();
-
-            for(int i=0; i<c.getCount();i++){
-                Engobra aux = new Engobra();
-                lista.add((Engobra) consultarPorId(aux, c.getString(0)));
-                c.moveToNext();
-            }
-
+           obraclienteselcionar = (Engobra) consultarPorId(aux, c.getString(0));
         }
         c.close();
-        return lista;
+
+        //lista todas as obras
+        Cursor ob = db.rawQuery("Select * from Engobra order by nome",null);
+        ArrayList<Engobra> listaObras = new ArrayList<Engobra>();
+        if(ob.getCount()>0){
+            ob.moveToFirst();
+            aux = new Engobra();
+            aux.setNome("Selecione...");
+            listaObras.add(aux);
+            for(int i=0; i<ob.getCount();i++){
+                aux = new Engobra();
+                aux = (Engobra) consultarPorId(aux, ob.getString(0));
+                if(aux.equals(obraclienteselcionar)){
+                    posicaoobra = i+1;
+                }
+                listaObras.add(aux);
+                ob.moveToNext();
+            }
+        }
+        ob.close();
+
+        return listaObras;
 
     }
-
-
-
-
 
     public List<Plasubprojeto> listaSubProjetos(Plasetorprojeto set){
         Cursor c = db.rawQuery("SELECT psp.id FROM Plasubprojeto as psp" +
@@ -313,8 +412,11 @@ public class ProducaoActivity extends PrincipalActivity {
         ArrayList<Plasubprojeto> lista = new ArrayList<Plasubprojeto>();
         if(c.getCount()>0){
             c.moveToFirst();
+            Plasubprojeto aux = new Plasubprojeto();
+            aux.setDescricao("Selecione...");
+            lista.add(aux);
             for(int i=0; i<c.getCount();i++){
-                Plasubprojeto aux = new Plasubprojeto();
+                aux = new Plasubprojeto();
                 lista.add((Plasubprojeto) consultarPorId(aux,c.getString(0)));
                 c.moveToNext();
             }
@@ -331,9 +433,12 @@ public class ProducaoActivity extends PrincipalActivity {
                 " where sp.id =  '"+subprojeto.getId()+"'", null);
         ArrayList<Plaatividade> lista = new ArrayList<Plaatividade>();
         if(c.getCount()>0){
+            Plaatividade aux = new Plaatividade();
+            aux.setNome("Selecione...");
+            lista.add(aux);
             c.moveToFirst();
             for(int i=0; i<c.getCount();i++){
-                Plaatividade aux = new Plaatividade();
+                aux = new Plaatividade();
                 lista.add((Plaatividade) consultarPorId(aux,c.getString(0)));
                 c.moveToNext();
             }
@@ -353,9 +458,12 @@ public class ProducaoActivity extends PrincipalActivity {
 
         ArrayList<Plapavimentosubprojeto> lista = new ArrayList<Plapavimentosubprojeto>();
         if(c.getCount()>0){
+            Plapavimentosubprojeto aux = new Plapavimentosubprojeto();
+            aux.setNome("Selecione...");
+            lista.add(aux);
             c.moveToFirst();
             for(int i=0; i<c.getCount();i++){
-                Plapavimentosubprojeto aux = new Plapavimentosubprojeto();
+                aux = new Plapavimentosubprojeto();
                 lista.add((Plapavimentosubprojeto) consultarPorId(aux,c.getString(0)));
                 c.moveToNext();
             }
@@ -372,9 +480,12 @@ public class ProducaoActivity extends PrincipalActivity {
                 , null);
         ArrayList<Rhcolaborador> lista = new ArrayList<Rhcolaborador>();
         if(c.getCount()>0){
+            Rhcolaborador aux = new Rhcolaborador();
+            aux.setNome("Selecione...");
+            lista.add(aux);
             c.moveToFirst();
             for(int i=0; i<c.getCount();i++){
-                Rhcolaborador aux = new Rhcolaborador();
+                aux = new Rhcolaborador();
                 lista.add((Rhcolaborador) consultarPorId(aux,c.getString(0)));
                 c.moveToNext();
             }
@@ -407,9 +518,12 @@ public class ProducaoActivity extends PrincipalActivity {
 
         ArrayList<Engempreiteira> lista = new ArrayList<Engempreiteira>();
         if(c.getCount()>0){
+            Engempreiteira aux = new Engempreiteira();
+            aux.setNomeFantasia("Selecione...");
+            lista.add(aux);
             c.moveToFirst();
             for(int i=0; i<c.getCount();i++){
-                Engempreiteira aux = new Engempreiteira();
+                aux = new Engempreiteira();
                 lista.add((Engempreiteira) consultarPorId(aux,c.getString(0)));
                 c.moveToNext();
             }
@@ -428,9 +542,12 @@ public class ProducaoActivity extends PrincipalActivity {
         if(c.getCount()>0){
 
             c.moveToFirst();
+            Plasetorprojeto aux = new Plasetorprojeto();
+            aux.setNome("Selecione...");
+            lista.add(aux);
 
             for(int i=0; i<c.getCount();i++){
-                Plasetorprojeto aux = new Plasetorprojeto();
+                aux = new Plasetorprojeto();
                 lista.add((Plasetorprojeto) consultarPorId(aux, c.getString(0)));
                 c.moveToNext();
             }
@@ -463,60 +580,63 @@ public class ProducaoActivity extends PrincipalActivity {
 
     public SimpleCursorAdapter carregaApontamentos(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.nome as nomeunidade,pro.quantidade " +
-                " from Engproducao as pro " +
-                " inner join Orcservico as s on s.id=pro.fkIdServico " +
-                " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
-                " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida " +
-                " where pro.status is null "+
-                " and pro.fkIdObra='"+usuarioGlobal.getObraselecionada().getId()+"'";
 
-        if(usuarioGlobal.getSetorprojetoselecionado()!=null){
-            s+= " and pro.fkIdSetorProjeto="+usuarioGlobal.getSetorprojetoselecionado().getId();
-        }
-        if(usuarioGlobal.getPavimentosubprojetoprojetoselecionado()!=null){
-            s+= " and pro.fkIdPavimentoSubprojeto="+usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId();
-        }
-        if(usuarioGlobal.getAtividadeselecionada()!=null){
-            s+= " and pro.fkIdAtividade="+usuarioGlobal.getAtividadeselecionada().getId();
-        }
-        if(usuarioGlobal.getEmpreiteiraselecionada()!=null){
-            s+= " and pro.fkIdEmpreiteira="+usuarioGlobal.getEmpreiteiraselecionada().getId();
-        }
-        if(usuarioGlobal.getColaboradorselecionado()!=null){
-            s+= " and pro.fkIdColaborador="+usuarioGlobal.getColaboradorselecionado().getId();
-        }
+        if(usuarioGlobal.getObraselecionada()!=null){
+            String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.nome as nomeunidade,pro.quantidade " +
+                    " from Engproducao as pro " +
+                    " inner join Orcservico as s on s.id=pro.fkIdServico " +
+                    " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
+                    " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida " +
+                    " where pro.status is null " +
+                    " and pro.fkIdObra='" + usuarioGlobal.getObraselecionada().getId() + "'";
+
+            if (usuarioGlobal.getSetorprojetoselecionado() != null) {
+                s += " and pro.fkIdSetorProjeto=" + usuarioGlobal.getSetorprojetoselecionado().getId();
+            }
+            if (usuarioGlobal.getPavimentosubprojetoprojetoselecionado() != null) {
+                s += " and pro.fkIdPavimentoSubprojeto=" + usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId();
+            }
+            if (usuarioGlobal.getAtividadeselecionada() != null) {
+                s += " and pro.fkIdAtividade=" + usuarioGlobal.getAtividadeselecionada().getId();
+            }
+            if (usuarioGlobal.getEmpreiteiraselecionada() != null) {
+                s += " and pro.fkIdEmpreiteira=" + usuarioGlobal.getEmpreiteiraselecionada().getId();
+            }
+            if (usuarioGlobal.getColaboradorselecionado() != null) {
+                s += " and pro.fkIdColaborador=" + usuarioGlobal.getColaboradorselecionado().getId();
+            }
 
 
-        Cursor c = db.rawQuery(s, null);
+            Cursor c = db.rawQuery(s, null);
 
-        // The desired columns to be bound
-        if(c.moveToFirst()) {
-            String[] columns = new String[]{
-                    c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
-            };
+            // The desired columns to be bound
+            if (c.moveToFirst()) {
+                String[] columns = new String[]{
+                        c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
+                };
 
-            // the XML defined views which the data will be bound to
-            int[] to = new int[]{
-                    R.id.idservico,
-                    R.id.servico,
-                    R.id.idproducao,
-                    R.id.elementoproducao,
-                    R.id.unidademedida,
-                    R.id.quantidade
-            };
+                // the XML defined views which the data will be bound to
+                int[] to = new int[]{
+                        R.id.idservico,
+                        R.id.servico,
+                        R.id.idproducao,
+                        R.id.elementoproducao,
+                        R.id.unidademedida,
+                        R.id.quantidade
+                };
 
-            // create the adapter using the cursor pointing to the desired data
-            //as well as the layout information
-            SimpleCursorAdapter dataAdapter = new SimpleCursorAdapter(
-                    this, R.layout.listaapontamentos,
-                    c,
-                    columns,
-                    to,
-                    0);
+                // create the adapter using the cursor pointing to the desired data
+                //as well as the layout information
+                SimpleCursorAdapter dataAdapter = new SimpleCursorAdapter(
+                        this, R.layout.listaapontamentos,
+                        c,
+                        columns,
+                        to,
+                        0);
 
-            // Assign adapter to ListView
-           return dataAdapter;
+                // Assign adapter to ListView
+                return dataAdapter;
+            }
         }
         return null;
     }
