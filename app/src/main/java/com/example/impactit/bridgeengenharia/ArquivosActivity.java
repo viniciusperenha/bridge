@@ -43,7 +43,7 @@ public class ArquivosActivity extends PrincipalActivity {
         File f = new File("/sdcard/Pictures");
 
         File[] filelist = f.listFiles();
-        ArrayList<String> lista = new ArrayList<>() ;
+        ArrayList<String> lista = new ArrayList<>();
         for(int i=0;i<filelist.length;i++){
             if(filelist[i].getName().contains(".pdf")) {
                 lista.add(filelist[i].getName());

@@ -7,4 +7,5 @@
     android:ellipsize="marquee"
     android:textColor="@color/abc_primary_text_disable_only_material_light"
     android:textSize="20dp"
+    android:textColorHighlight="#000000"
     />

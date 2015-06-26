@@ -32,6 +32,7 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
                 android:id="@+id/spinnerObra"
                 />
 
@@ -55,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/producaoengenheiro"
-
+                android:paddingLeft="10dp"
                 android:editable="false"
                 android:enabled="false" />
         </TableRow>
@@ -78,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/producaoresponsavel"
                 android:enabled="false"
-                android:editable="false" />
+                android:editable="false"
+                android:paddingLeft="10dp"/>
         </TableRow>
 
 
@@ -112,6 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerSetor"
+                android:paddingLeft="10dp"
                 />
 
         </TableRow>
@@ -131,7 +134,9 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/producaosubprojeto" />
+                android:id="@+id/producaosubprojeto"
+                android:paddingLeft="10dp"
+                />
 
         </TableRow>
         <TableRow
@@ -149,7 +154,9 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/producaoatividade" />
+                android:id="@+id/producaoatividade"
+                android:paddingLeft="10dp"
+                />
         </TableRow>
         <TableRow
             android:layout_width="fill_parent"
@@ -166,7 +173,9 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/producaopavimento" />
+                android:id="@+id/producaopavimento"
+                android:paddingLeft="10dp"
+                />
         </TableRow>
     </TableLayout>
     <TableLayout
@@ -193,7 +202,9 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/empreiteiracontrato" />
+                android:id="@+id/empreiteiracontrato"
+                android:paddingLeft="10dp"
+                />
 
 
 
@@ -214,7 +225,9 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/colaboradorempreiteira" />
+                android:id="@+id/colaboradorempreiteira"
+                android:paddingLeft="10dp"
+                />
 
         </TableRow>
     </TableLayout>
@@ -281,7 +294,7 @@
                 android:id="@+id/tituloelementoproducao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.15"
+                android:layout_weight="0.16"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
@@ -293,7 +306,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="0.20"
+                android:layout_weight="0.19"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
                 android:text="UNID. MED."

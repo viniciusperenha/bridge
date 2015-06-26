@@ -83,7 +83,7 @@ public class ProducaoActivity extends PrincipalActivity {
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
         //carrega spinner de obras do usuario
-        ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), android.R.layout.simple_spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
+        ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), R.layout.spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
         adapter.setDropDownViewResource(R.layout.item_lista);
 
         spinnerObra.setAdapter(adapter);
@@ -107,7 +107,7 @@ public class ProducaoActivity extends PrincipalActivity {
                     projeto = (Plaprojeto) consultarPorId(projeto, usuarioGlobal.getObraselecionada().getFkIdProjeto().toString());
                     usuarioGlobal.setProjetoselecionado(projeto);
                     //carrega spinner de setores da obra
-                    ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, setoresDisponiveisObra(projeto));
+                    ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), R.layout.spinner_item, setoresDisponiveisObra(projeto));
                     adapterSetor.setDropDownViewResource(R.layout.item_lista);
                     setor.setAdapter(adapterSetor);
                 } else {
@@ -139,7 +139,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 if(setor.getSelectedItemPosition()>0) {
                     usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
                     //lista subprojetos
-                    ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaSubProjetos((Plasetorprojeto) setor.getSelectedItem()));
+                    ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), R.layout.spinner_item, listaSubProjetos((Plasetorprojeto) setor.getSelectedItem()));
                     adapterSubprojeto.setDropDownViewResource(R.layout.item_lista);
                     subprojeto.setAdapter(adapterSubprojeto);
                 } else {
@@ -168,12 +168,12 @@ public class ProducaoActivity extends PrincipalActivity {
 
                     usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
                     //lista spinner atividades
-                    ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
+                    ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), R.layout.spinner_item, listaAtividadesSubProjeto((Plasubprojeto) subprojeto.getSelectedItem()));
                     adapterSubprojetoAtividade.setDropDownViewResource(R.layout.item_lista);
                     atividade.setAdapter(adapterSubprojetoAtividade);
 
                     //lista spinner pavimentos
-                    ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, listaPavimentoProjeto());
+                    ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), R.layout.spinner_item, listaPavimentoProjeto());
                     adapterPavimento.setDropDownViewResource(R.layout.item_lista);
                     pavimento.setAdapter(adapterPavimento);
                 } else {
@@ -201,7 +201,7 @@ public class ProducaoActivity extends PrincipalActivity {
                     usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
 
                     //verifica a(s) empreiterias da obra pelo contrato e parametro
-                    ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, listaEmpreiteirasContrato());
+                    ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), R.layout.spinner_item, listaEmpreiteirasContrato());
                     adapterEmpreiteria.setDropDownViewResource(R.layout.item_lista);
                     empreiteira.setAdapter(adapterEmpreiteria);
                 } else {
@@ -244,7 +244,7 @@ public class ProducaoActivity extends PrincipalActivity {
                     usuarioGlobal.setEmpreiteiraselecionada((Engempreiteira) empreiteira.getSelectedItem());
 
                     //busca colaboradores da obra
-                    ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, listaColaboradorObra());
+                    ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), R.layout.spinner_item, listaColaboradorObra());
                     adapteColaboradorEmpreiteira.setDropDownViewResource(R.layout.item_lista);
                     colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
                 } else {
@@ -302,42 +302,42 @@ public class ProducaoActivity extends PrincipalActivity {
     public void limpaSetor(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.setSetorprojetoselecionado(null);
-        ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plasetorprojeto>());
+        ArrayAdapter<Plasetorprojeto> adapterSetor = new ArrayAdapter<Plasetorprojeto>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Plasetorprojeto>());
         setor.setAdapter(adapterSetor);
     }
 
     public void limpaSubprojeto(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.setSubprojetoselecionado(null);
-        ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plasubprojeto>());
+        ArrayAdapter<Plasubprojeto> adapterSubprojeto = new ArrayAdapter<Plasubprojeto>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Plasubprojeto>());
         subprojeto.setAdapter(adapterSubprojeto);
     }
 
     public void limpaAtividade(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.setAtividadeselecionada(null);
-        ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plaatividade>());
+        ArrayAdapter<Plaatividade> adapterSubprojetoAtividade = new ArrayAdapter<Plaatividade>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Plaatividade>());
         atividade.setAdapter(adapterSubprojetoAtividade);
     }
 
     public void limpaPavimento(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.setPavimentosubprojetoprojetoselecionado(null);
-        ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Plapavimentosubprojeto>());
+        ArrayAdapter<Plapavimentosubprojeto> adapterPavimento = new ArrayAdapter<Plapavimentosubprojeto>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Plapavimentosubprojeto>());
         pavimento.setAdapter(adapterPavimento);
     }
 
     public void limpaEmpreiteira(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.setEmpreiteiraselecionada(null);
-        ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Engempreiteira>());
+        ArrayAdapter<Engempreiteira> adapterEmpreiteria = new ArrayAdapter<Engempreiteira>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Engempreiteira>());
         empreiteira.setAdapter(adapterEmpreiteria);
     }
 
     public void limpaColaboradores(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.setColaboradorselecionado(null);
-        ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<Rhcolaborador>());
+        ArrayAdapter<Rhcolaborador> adapteColaboradorEmpreiteira = new ArrayAdapter<Rhcolaborador>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Rhcolaborador>());
         colaboradorempreiteira.setAdapter(adapteColaboradorEmpreiteira);
     }
 

@@ -435,7 +435,7 @@ public class LoginActivity extends Activity {
         protected void onPostExecute(String s) {
 
             btLogin.setEnabled(true);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, consultaUsuarios());
             adapter.setDropDownViewResource(R.layout.item_lista);
             spUsuarios.setAdapter(adapter);
         }

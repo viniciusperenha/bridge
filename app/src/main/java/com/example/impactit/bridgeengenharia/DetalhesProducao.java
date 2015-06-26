@@ -102,7 +102,7 @@ public class DetalhesProducao extends ActionBarActivity {
         producao = (EditText) findViewById(R.id.producao);
 
 
-        ArrayAdapter<Platarefa> adapterTarefa = new ArrayAdapter<Platarefa>(getApplicationContext(), android.R.layout.simple_spinner_item, listaTarefa());
+        ArrayAdapter<Platarefa> adapterTarefa = new ArrayAdapter<Platarefa>(getApplicationContext(), R.layout.spinner_item, listaTarefa());
         adapterTarefa.setDropDownViewResource(R.layout.item_lista);
         tarefa.setAdapter(adapterTarefa);
 
@@ -112,7 +112,7 @@ public class DetalhesProducao extends ActionBarActivity {
                 usuarioGlobal.setTarefaselecionada((Platarefa) tarefa.getSelectedItem());
 
                 //carrega servicos
-                ArrayAdapter<Orcservico> adapter = new ArrayAdapter<Orcservico>(getApplicationContext(), android.R.layout.simple_spinner_item, listaServicosBusca());
+                ArrayAdapter<Orcservico> adapter = new ArrayAdapter<Orcservico>(getApplicationContext(), R.layout.spinner_item, listaServicosBusca());
                 adapter.setDropDownViewResource(R.layout.item_lista);
                 spinnerServicos.setAdapter(adapter);
 
@@ -128,7 +128,7 @@ public class DetalhesProducao extends ActionBarActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //busca
                 //carrega spinner de servicos
-                ArrayAdapter<Orcservico> adapter = new ArrayAdapter<Orcservico>(getApplicationContext(), android.R.layout.simple_spinner_item, listaServicosBusca());
+                ArrayAdapter<Orcservico> adapter = new ArrayAdapter<Orcservico>(getApplicationContext(), R.layout.spinner_item, listaServicosBusca());
                 adapter.setDropDownViewResource(R.layout.item_lista);
                 spinnerServicos.setAdapter(adapter);
 
@@ -154,7 +154,7 @@ public class DetalhesProducao extends ActionBarActivity {
                 //armazena servico
                 usuarioGlobal.setServicoselecionado((Orcservico) spinnerServicos.getSelectedItem());
 
-                ArrayAdapter<Orcelementoproducao> adapterElementoProducao = new ArrayAdapter<Orcelementoproducao>(getApplicationContext(), android.R.layout.simple_spinner_item, listaElementoProdutao());
+                ArrayAdapter<Orcelementoproducao> adapterElementoProducao = new ArrayAdapter<Orcelementoproducao>(getApplicationContext(), R.layout.spinner_item, listaElementoProdutao());
                 adapterElementoProducao.setDropDownViewResource(R.layout.item_lista);
                 spinnerelementoproducao.setAdapter(adapterElementoProducao);
 
