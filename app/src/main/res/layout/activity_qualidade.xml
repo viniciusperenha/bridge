@@ -17,21 +17,26 @@
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingLeft="15dp"
+            android:paddingLeft="10dp"
             android:background="@color/button_material_light"
-
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Projeto"
-                android:id="@+id/textView2" />
+                android:text="Obra"
+                android:id="@+id/textView2"
+                android:minWidth="120dp"
+                />
+
 
             <Spinner
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerprojeto" />
+                android:paddingLeft="10dp"
+                android:id="@+id/spinnerObra"
+                android:background="#ffffff"
+                />
 
         </TableRow>
 
@@ -40,18 +45,24 @@
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
             android:background="@color/button_material_light"
+            android:paddingTop="15dp"
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Engenheiro"
-                android:id="@+id/textView3" />
+                android:id="@+id/textView3"
+                android:minWidth="120dp"
+                />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText4" />
+                android:id="@+id/producaoengenheiro"
+                android:paddingLeft="10dp"
+                android:editable="false"
+                android:enabled="false" />
         </TableRow>
 
         <TableRow
@@ -59,19 +70,28 @@
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
             android:background="@color/button_material_light"
+            android:paddingTop="15dp"
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Responsável"
-                android:id="@+id/textView4" />
+                android:id="@+id/textView4"
+                android:minWidth="120dp"
+                />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText5" />
+                android:id="@+id/producaoresponsavel"
+                android:enabled="false"
+                android:editable="false"
+                android:paddingLeft="10dp"/>
         </TableRow>
+
+
+
 
     </TableLayout>
 
@@ -88,17 +108,50 @@
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
             android:background="@color/button_material_light"
+            android:paddingTop="15dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setor"
+                android:id="@+id/textView12"
+                android:minWidth="120dp"
+                />
+
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerSetor"
+                android:paddingLeft="10dp"
+                android:background="#ffffff"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:background="@color/button_material_light"
+            android:paddingTop="15dp"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Local"
-                android:id="@+id/textView5" />
+                android:text="Subprojeto"
+                android:id="@+id/textView5"
+                android:minWidth="120dp"
+                />
 
-            <EditText
-                android:layout_width="match_parent"
+            <Spinner
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText6" />
+                android:id="@+id/producaosubprojeto"
+                android:paddingLeft="10dp"
+                android:background="#ffffff"
+                />
 
         </TableRow>
         <TableRow
@@ -106,46 +159,44 @@
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
             android:background="@color/button_material_light"
+            android:paddingTop="15dp"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Atividade"
+                android:minWidth="120dp"
                 />
 
-            <EditText
-                android:layout_width="match_parent"
+            <Spinner
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText7" />
+                android:id="@+id/producaoatividade"
+                android:paddingLeft="10dp"
+                android:background="#ffffff"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:background="@color/button_material_light"
+            android:paddingTop="15dp"
+            >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pavimento"
+                android:minWidth="120dp"
                 />
 
-            <EditText
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText8" />
-
-        </TableRow>
-
-    </TableLayout>
-    <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tabelapavimento"
-        android:layout_marginTop="2dp"
-        >
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <ListView
+            <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/listView" />
+                android:id="@+id/producaopavimento"
+                android:paddingLeft="10dp"
+                android:background="#ffffff"
+                />
         </TableRow>
     </TableLayout>
 
