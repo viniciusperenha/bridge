@@ -23,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Setor"
+                android:minWidth="140dp"
                 android:id="@+id/textsetor" />
 
             <EditText
@@ -46,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SubProjeto"
+                android:minWidth="140dp"
                 android:id="@+id/textView5" />
 
             <EditText
@@ -69,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Atividade"
+                android:minWidth="140dp"
                 android:id="@+id/textView6"
                 />
 
@@ -76,7 +79,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/atividade"
-
                 android:editable="false"
                 android:enabled="false" />
         </TableRow>
@@ -92,6 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pavimento"
+                android:minWidth="140dp"
                 android:id="@+id/textView7" />
 
             <EditText
@@ -113,6 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Empreiteira"
+                android:minWidth="140dp"
                 android:id="@+id/textView8" />
 
             <EditText
@@ -134,6 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Colaborador"
+                android:minWidth="140dp"
                 android:id="@+id/textView9" />
 
             <EditText
@@ -159,6 +164,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
+
             android:background="@color/button_material_light"
             >
 
@@ -166,19 +172,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tarefa"
+                android:minWidth="140dp"
                 android:id="@+id/textView23"
                 />
 
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tarefa" />
+                android:id="@+id/tarefa"
+                android:background="#ffffff"
+                />
         </TableRow>
 
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
+            android:paddingTop="5dp"
             android:background="@color/button_material_light"
             >
 
@@ -186,6 +196,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cod. Serviço:"
+                android:minWidth="140dp"
                 android:id="@+id/textView2" />
 
 
@@ -204,6 +215,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
+            android:paddingTop="5dp"
             android:background="@color/button_material_light"
             >
 
@@ -211,13 +223,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Serviço"
+                android:minWidth="140dp"
                 android:id="@+id/textView3"
                 />
 
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/servico" />
+                android:id="@+id/servico"
+                android:background="#ffffff"
+                />
         </TableRow>
 
         <TableRow
@@ -231,6 +246,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Unidade"
+                android:minWidth="140dp"
                 android:id="@+id/textView4" />
 
             <EditText
@@ -263,12 +279,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Elemento"
+                android:minWidth="140dp"
                 android:id="@+id/textView10" />
 
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/elementoproducao" />
+                android:id="@+id/elementoproducao"
+                android:background="#ffffff"
+                />
 
         </TableRow>
 
@@ -282,7 +301,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Produzido"
-                android:id="@+id/textView11" />
+                android:id="@+id/textView11"
+                android:minWidth="140dp"
+                />
 
             <EditText
                 android:layout_width="match_parent"
@@ -304,7 +325,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Produção"
-                android:id="@+id/textView12" />
+                android:id="@+id/textView12"
+                android:minWidth="140dp"
+                />
 
 
             <EditText
@@ -338,7 +361,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Observações"
-                    android:id="@+id/textView13" />
+                    android:id="@+id/textView13"
+                    />
 
             </TableRow>
             <TableRow

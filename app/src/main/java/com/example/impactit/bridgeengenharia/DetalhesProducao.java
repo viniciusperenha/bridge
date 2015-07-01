@@ -116,6 +116,11 @@ public class DetalhesProducao extends ActionBarActivity {
                 adapter.setDropDownViewResource(R.layout.item_lista);
                 spinnerServicos.setAdapter(adapter);
 
+                unidademedida.setText("");
+                totalproduzido.setText("");
+                limpaElemento();
+
+
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -182,6 +187,15 @@ public class DetalhesProducao extends ActionBarActivity {
         });
 
 
+    }
+
+
+    public void limpaElemento(){
+
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.setElementoproducaoselecionado(null);
+        ArrayAdapter<Orcelementoproducao> adapterElementoProducao = new ArrayAdapter<Orcelementoproducao>(getApplicationContext(), R.layout.spinner_item, new ArrayList<Orcelementoproducao>());
+        spinnerelementoproducao.setAdapter(adapterElementoProducao);
     }
 
 
