@@ -11,4 +11,5 @@
     <string name="title_activity_detalhes_producao">Detalhes Produção</string>
     <string name="title_activity_detalhes_producao_gravada">Detalhes</string>
     <string name="select">Selecione</string>
+    <string name="title_activity_detalhes_qualidade">DetalhesQualidade</string>
 </resources>

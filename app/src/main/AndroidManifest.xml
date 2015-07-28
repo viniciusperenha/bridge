@@ -46,6 +46,10 @@
             android:name=".detalhes_producao_gravada"
             android:label="@string/title_activity_detalhes_producao_gravada" >
         </activity>
+        <activity
+            android:name=".DetalhesQualidade"
+            android:label="@string/title_activity_detalhes_qualidade" >
+        </activity>
     </application>
 
 </manifest>
