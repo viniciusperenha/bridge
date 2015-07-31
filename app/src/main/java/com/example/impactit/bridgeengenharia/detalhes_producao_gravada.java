@@ -203,8 +203,6 @@ public class detalhes_producao_gravada extends ActionBarActivity {
         });
 
         alertbox.show();
-
-
     }
 
 
@@ -274,15 +272,15 @@ public class detalhes_producao_gravada extends ActionBarActivity {
 
         Cursor c = db.rawQuery("SELECT SUM(pro.quantidade) FROM Engproducao as pro  " +
                 " inner join Plasubprojetosetorprojeto pssp on pssp.id = pro.fkIdSubprojetoSetorProjeto " +
-                " where pro.status is null " +
-                " and pro.fkIdObra = " + obra.getId() + " " +
-                " and pssp.fkIdSetorProjeto = " + String.valueOf(subprojeto.getFkIdSetorProjeto()) + " " +
-                " and pssp.fkIdSubprojeto = " + String.valueOf(subprojeto.getFkIdSubprojeto()) + " " +
-                " and pro.fkIdAtividade = " + atividade.getId() + " " +
-                " and pro.fkIdPavimentoSubprojeto = " + pavimento.getId() + " " +
-                " and pro.fkIdServico = " + servico.getId() + " " +
-                " and pro.fkIdElementoProducao = " + elementoproducao.getId() + " " +
-                " and pro.fkIdEmpreiteira = " + empreiteira.getId(), null);
+                " where (pro.status is null OR pro.status = 'N' OR pro.status = '') " +
+                " and (pro.fkIdObra = " + obra.getId() + ") " +
+                " and (pssp.fkIdSetorProjeto = " + String.valueOf(subprojeto.getFkIdSetorProjeto()) + ") " +
+                " and (pssp.fkIdSubprojeto = " + String.valueOf(subprojeto.getFkIdSubprojeto()) + ") " +
+                " and (pro.fkIdAtividade = " + atividade.getId() + ") " +
+                " and (pro.fkIdPavimentoSubprojeto = " + pavimento.getId() + ") " +
+                " and (pro.fkIdServico = " + servico.getId() + ") " +
+                " and (pro.fkIdElementoProducao = " + elementoproducao.getId() + ") " +
+                " and (pro.fkIdEmpreiteira = " + empreiteira.getId()+")", null);
 
 
         if(c.moveToNext()){

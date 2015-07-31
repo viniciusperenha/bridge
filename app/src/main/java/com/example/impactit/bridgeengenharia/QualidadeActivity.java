@@ -280,7 +280,7 @@ public class QualidadeActivity extends PrincipalActivity {
             listaObras.add(aux);
             for(int i=0; i<ob.getCount();i++){
                 aux = new Engobra();
-                aux = (Engobra) consultarPorId(aux, ob.getString(0));
+                aux = (Engobra) consultarPorId(aux, ob.getString(ob.getColumnIndex("id")));
                 if(aux.equals(obraclienteselcionar)){
                     posicaoobra = i+1;
                 }
@@ -397,11 +397,16 @@ public class QualidadeActivity extends PrincipalActivity {
                     " inner join Orcservico as s on s.id=pro.fkIdServico " +
                     " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
                     " inner join Orcunidademedida as um on um.id = s.fkIdUnidadeMedida " +
-                    " where (pro.status is null OR pro.status = 'N') " +
+                    " Inner Join Plasubprojetosetorprojeto as pspp on pspp.id = pro.fkIdSubprojetoSetorProjeto " +
+                    " where (pro.status is null OR pro.status = 'N' OR pro.status = '') " +
                     " and (pro.fkIdObra='" + usuarioGlobal.getObraselecionada().getId() + "')";
 
             if (usuarioGlobal.getSetorprojetoselecionado() != null) {
                 s += " and (pro.fkIdSetorProjeto=" + usuarioGlobal.getSetorprojetoselecionado().getId()+")";
+            }
+            if (usuarioGlobal.getSubprojetoselecionado() != null) {
+                s += " and (pspp.fkIdSubprojeto = "+usuarioGlobal.getSubprojetoselecionado().getId()+") " +
+                        " and (pspp.fkIdSetorProjeto = "+usuarioGlobal.getSetorprojetoselecionado().getId()+") ";
             }
             if (usuarioGlobal.getPavimentosubprojetoprojetoselecionado() != null) {
                 s += " and (pro.fkIdPavimentoSubprojeto=" + usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId()+")";

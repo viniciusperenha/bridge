@@ -22,6 +22,9 @@ import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.Empempresa;
+import com.example.impactit.bridgeengenharia.entidades.EngInstrucaoQualidadeServico;
+import com.example.impactit.bridgeengenharia.entidades.EngItemVerificacaoServico;
+import com.example.impactit.bridgeengenharia.entidades.EngVerificacaoQualidadeServico;
 import com.example.impactit.bridgeengenharia.entidades.Engcolaboradorobra;
 import com.example.impactit.bridgeengenharia.entidades.Engcontratoempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engcontratoservicoempreiteira;
@@ -416,6 +419,30 @@ public class LoginActivity extends Activity {
                 }.getType();
                 inserir((List<Plasubprojetosetorprojeto>) gson.fromJson(lista.toString(), listType));
 
+                //insere EngInstrucaoQualidadeServico
+                lista = new JSONArray();
+                lista = consultaGenerica(EngInstrucaoQualidadeServico.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<EngInstrucaoQualidadeServico>>() {
+                }.getType();
+                inserir((List<EngInstrucaoQualidadeServico>) gson.fromJson(lista.toString(), listType));
+
+                //insere EngVerificacaoQualidadeServico
+                lista = new JSONArray();
+                lista = consultaGenerica(EngVerificacaoQualidadeServico.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<EngVerificacaoQualidadeServico>>() {
+                }.getType();
+                inserir((List<EngVerificacaoQualidadeServico>) gson.fromJson(lista.toString(), listType));
+
+                //insere EngItemVerificacaoServico
+                lista = new JSONArray();
+                lista = consultaGenerica(EngItemVerificacaoServico.class);
+                gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSz").create();
+                listType = new TypeToken<List<EngItemVerificacaoServico>>() {
+                }.getType();
+                inserir((List<EngItemVerificacaoServico>) gson.fromJson(lista.toString(), listType));
+
 
                 publishProgress("Sincronizado com sucesso!");
             } catch (Exception e) {
@@ -586,8 +613,6 @@ public class LoginActivity extends Activity {
                 sb.setLength(sb.length() - 1);
                 sb.append(")");
 
-
-
                 db.execSQL(sb.toString());
 
             }
@@ -607,7 +632,8 @@ public class LoginActivity extends Activity {
                 "Engempreiteira", "Sisfuncao",
                 "Engobra", "Plaprojeto", "Sisusuario", "Orcelementoproducao",
                 "Plasubprojeto", "Sisparametro", "Engproducao", "Plapavimentosubprojeto",
-                "Plasetorprojeto", "Plasubprojetosetorprojeto"
+                "Plasetorprojeto", "Plasubprojetosetorprojeto", "EngInstrucaoQualidadeServico",
+                "EngVerificacaoQualidadeServico", "EngItemVerificacaoServico"
                 };
     }
 

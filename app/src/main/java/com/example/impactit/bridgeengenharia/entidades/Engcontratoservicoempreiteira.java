@@ -8,12 +8,18 @@ import java.io.Serializable;
 public class Engcontratoservicoempreiteira implements Serializable {
     private Long id;
     private double quantidade;
+
     private Long fkIdAtividade;
+
     private Long fkIdContratoEmpreiteira;
+
     private Long fkIdServico;
-    private Long fkIdSubprojeto;
+
     private Long fkIdTarefa;
-    private Long fkIdTipoPavimento;
+
+    private Long fkIdSetorProjeto;
+
+    private Long fkIdSubprojetoSetorProjeto;
 
     public Long getId() {
         return id;
@@ -55,13 +61,7 @@ public class Engcontratoservicoempreiteira implements Serializable {
         this.fkIdServico = fkIdServico;
     }
 
-    public Long getFkIdSubprojeto() {
-        return fkIdSubprojeto;
-    }
 
-    public void setFkIdSubprojeto(Long fkIdSubprojeto) {
-        this.fkIdSubprojeto = fkIdSubprojeto;
-    }
 
     public Long getFkIdTarefa() {
         return fkIdTarefa;
@@ -71,11 +71,19 @@ public class Engcontratoservicoempreiteira implements Serializable {
         this.fkIdTarefa = fkIdTarefa;
     }
 
-    public Long getFkIdTipoPavimento() {
-        return fkIdTipoPavimento;
+    public Long getFkIdSetorProjeto() {
+        return fkIdSetorProjeto;
     }
 
-    public void setFkIdTipoPavimento(Long fkIdTipoPavimento) {
-        this.fkIdTipoPavimento = fkIdTipoPavimento;
+    public void setFkIdSetorProjeto(Long fkIdSetorProjeto) {
+        this.fkIdSetorProjeto = fkIdSetorProjeto;
+    }
+
+    public Long getFkIdSubprojetoSetorProjeto() {
+        return fkIdSubprojetoSetorProjeto;
+    }
+
+    public void setFkIdSubprojetoSetorProjeto(Long fkIdSubprojetoSetorProjeto) {
+        this.fkIdSubprojetoSetorProjeto = fkIdSubprojetoSetorProjeto;
     }
 }

@@ -42,15 +42,15 @@ public class Engproducao implements Serializable {
 
     private String observacao;
 
-    private Long fkidColaboradorApontou;
+    private Long fkIdUsuarioApontador;
 
 
-    public Long getFkidColaboradorApontou() {
-        return fkidColaboradorApontou;
+    public Long getFkIdUsuarioApontador() {
+        return fkIdUsuarioApontador;
     }
 
-    public void setFkidColaboradorApontou(Long fkidColaboradorApontou) {
-        this.fkidColaboradorApontou = fkidColaboradorApontou;
+    public void setFkIdUsuarioApontador(Long fkIdUsuarioApontador) {
+        this.fkIdUsuarioApontador = fkIdUsuarioApontador;
     }
 
     public Long getId() {

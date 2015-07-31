@@ -275,16 +275,20 @@ public class DetalhesProducao extends ActionBarActivity {
             c = db.rawQuery("Select Distinct(ser.id) from Orcservico ser " +
                     " inner join Engcontratoservicoempreiteira cse on cse.fkIdServico = ser.id " +
                     " inner join Engcontratoempreiteira cemp on cemp.id = cse.fkIdContratoEmpreiteira " +
+                    " inner Join Plasubprojetosetorprojeto as pspp on pspp.id = cse.fkIdSubprojetoSetorProjeto" +
                     " where cemp.fkIdObra = " + usuarioGlobal.getObraselecionada().getId() + " " +
-                    " and cse.fkIdSubprojeto = " + usuarioGlobal.getSubprojetoselecionado().getId() + " " +
+                    " and pspp.fkIdSubprojeto = " + usuarioGlobal.getSubprojetoselecionado().getId() + " " +
+                    " and pspp.fkIdSetorProjeto = " +usuarioGlobal.getSetorprojetoselecionado().getId()+ " " +
                     " and cse.fkIdAtividade = " + usuarioGlobal.getAtividadeselecionada().getId() + " " +
                     " and cse.fkIdTarefa = " + usuarioGlobal.getTarefaselecionada().getId(), null);
         } else {
             c = db.rawQuery("Select Distinct(ser.id) from Orcservico ser " +
                     " inner join Engcontratoservicoempreiteira cse on cse.fkIdServico = ser.id " +
                     " inner join Engcontratoempreiteira cemp on cemp.id = cse.fkIdContratoEmpreiteira " +
+                    " inner Join Plasubprojetosetorprojeto as pspp on pspp.id = cse.fkIdSubprojetoSetorProjeto" +
                     " where cemp.fkIdObra = " + usuarioGlobal.getObraselecionada().getId() + " " +
-                    " and cse.fkIdSubprojeto = " + usuarioGlobal.getSubprojetoselecionado().getId() + " " +
+                    " and pspp.fkIdSubprojeto = " + usuarioGlobal.getSubprojetoselecionado().getId() + " " +
+                    " and pspp.fkIdSetorProjeto = " +usuarioGlobal.getSetorprojetoselecionado().getId()+ " " +
                     " and cse.fkIdAtividade = " + usuarioGlobal.getAtividadeselecionada().getId() + " " +
                     " and cse.fkIdTarefa = " + usuarioGlobal.getTarefaselecionada().getId() + " " +
                     " and ser.codigo like '%" + codigo.getText() + "%'", null);
@@ -351,15 +355,15 @@ public class DetalhesProducao extends ActionBarActivity {
 
         Cursor c = db.rawQuery("SELECT SUM(pro.quantidade) FROM Engproducao as pro  " +
                 " inner join Plasubprojetosetorprojeto pssp on pssp.id = pro.fkIdSubprojetoSetorProjeto " +
-                " where pro.status is null " +
-                " and pro.fkIdObra = " + usuarioglobal.getObraselecionada().getId() + " " +
-                " and pssp.fkIdSetorProjeto = " + usuarioglobal.getSetorprojetoselecionado().getId() + " " +
-                " and pssp.fkIdSubprojeto = " + usuarioglobal.getSubprojetoselecionado().getId() + " " +
-                " and pro.fkIdAtividade = " + usuarioglobal.getAtividadeselecionada().getId() + " " +
-                " and pro.fkIdPavimentoSubprojeto = " + usuarioglobal.getPavimentosubprojetoprojetoselecionado().getId() + " " +
-                " and pro.fkIdServico = " + usuarioglobal.getServicoselecionado().getId() + " " +
-                " and pro.fkIdElementoProducao = " + usuarioglobal.getElementoproducaoselecionado().getId() + " " +
-                " and pro.fkIdEmpreiteira = " + usuarioglobal.getEmpreiteiraselecionada().getId(), null);
+                " where (pro.status is null OR pro.status = 'N' OR pro.status = '') " +
+                " and (pro.fkIdObra = " + usuarioglobal.getObraselecionada().getId() + ") " +
+                " and (pssp.fkIdSetorProjeto = " + usuarioglobal.getSetorprojetoselecionado().getId() + ") " +
+                " and (pssp.fkIdSubprojeto = " + usuarioglobal.getSubprojetoselecionado().getId() + ") " +
+                " and (pro.fkIdAtividade = " + usuarioglobal.getAtividadeselecionada().getId() + ") " +
+                " and (pro.fkIdPavimentoSubprojeto = " + usuarioglobal.getPavimentosubprojetoprojetoselecionado().getId() + ") " +
+                " and (pro.fkIdServico = " + usuarioglobal.getServicoselecionado().getId() + ") " +
+                " and (pro.fkIdElementoProducao = " + usuarioglobal.getElementoproducaoselecionado().getId() + ") " +
+                " and (pro.fkIdEmpreiteira = " + usuarioglobal.getEmpreiteiraselecionada().getId()+") ", null);
 
 
         if(c.moveToNext()){
@@ -394,7 +398,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setStatus("N");
             pro.setObservacao(observacao.getText().toString());
-            pro.setFkidColaboradorApontou(usuarioglobal.getUsuarioLogado().getId());
+            pro.setFkIdUsuarioApontador(usuarioglobal.getUsuarioLogado().getId());
 
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
@@ -443,7 +447,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setStatus("N");
             pro.setObservacao(observacao.getText().toString());
-            pro.setFkidColaboradorApontou(usuarioglobal.getUsuarioLogado().getId());
+            pro.setFkIdUsuarioApontador(usuarioglobal.getUsuarioLogado().getId());
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
 

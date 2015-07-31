@@ -15,6 +15,7 @@ import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
+import com.example.impactit.bridgeengenharia.entidades.Plasubprojetosetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Platarefa;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
@@ -41,6 +42,7 @@ public class GlobalClass extends Application {
     public Orcservico servicoselecionado;
     public Platarefa tarefaselecionada;
     public Engproducao producaoselecionadamostrar;
+    public Plasubprojetosetorprojeto plasubprojetosetorprojetoselecionado;
 
     public Sisusuario getUsuarioLogado() {
         return usuarioLogado;
@@ -145,6 +147,14 @@ public class GlobalClass extends Application {
 
     public void setProducaoselecionadamostrar(Engproducao producaoselecionadamostrar) {
         this.producaoselecionadamostrar = producaoselecionadamostrar;
+    }
+
+    public Plasubprojetosetorprojeto getPlasubprojetosetorprojetoselecionado() {
+        return plasubprojetosetorprojetoselecionado;
+    }
+
+    public void setPlasubprojetosetorprojetoselecionado(Plasubprojetosetorprojeto plasubprojetosetorprojetoselecionado) {
+        this.plasubprojetosetorprojetoselecionado = plasubprojetosetorprojetoselecionado;
     }
 }
 
