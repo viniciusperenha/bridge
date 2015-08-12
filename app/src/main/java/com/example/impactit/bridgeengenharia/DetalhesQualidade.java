@@ -102,7 +102,7 @@ public class DetalhesQualidade extends ActionBarActivity {
         ati = (Plaatividade) consultarPorId(ati, usuarioGlobal.getElementoproducaoselecionado().getFkIdAtividade().toString());
         atividade.setText(ati.getNome());
 
-        Plapavimentosubprojeto pav = buscaPavimentoSubProjeto(subsetor, se);
+        Plapavimentosubprojeto pav = buscaPavimentoSubProjeto(subsetor, se,usuarioGlobal.getElementoproducaoselecionado());
         pavimento.setText(pav.getNome());
 
         Platarefa tar = new Platarefa();
@@ -196,10 +196,12 @@ public class DetalhesQualidade extends ActionBarActivity {
     }
 
 
-    public Plapavimentosubprojeto buscaPavimentoSubProjeto(Plasubprojetosetorprojeto subsetor, Plasetorprojeto setor){
+    public Plapavimentosubprojeto buscaPavimentoSubProjeto(Plasubprojetosetorprojeto subsetor, Plasetorprojeto setor, Orcelementoproducao orcelementoproducao){
         Cursor c = db.rawQuery("Select p.id from Plapavimentosubprojeto as p " +
+                " inner join Orcpavimentoelementoproducao as pep on pep.fkIdPavimentoSubprojeto = p.id " +
                 " where p.fkIdSubprojetoSetorProjeto = "+subsetor.getId()+"" +
-                " and p.fkIdSetorProjeto = "+setor.getId()+" order by p.id desc limit 1",null);
+                " and p.fkIdSetorProjeto = "+setor.getId()+"" +
+                " and pep.fkIdElementoProducao = "+orcelementoproducao.getId(),null);
         if(c.getCount()>0){
             c.moveToFirst();
             Plapavimentosubprojeto aux = new Plapavimentosubprojeto();
@@ -228,10 +230,12 @@ public class DetalhesQualidade extends ActionBarActivity {
         if (c.moveToFirst()) {
             QualidadeTO qualidadeaux;
             EngItemVerificacaoServico itemaux;
+
             for (int i = 0; i < c.getCount(); i++) {
                 qualidadeaux = new QualidadeTO();
                 itemaux = new EngItemVerificacaoServico();
-                qualidadeaux.setEngItemVerificacaoServico((EngItemVerificacaoServico) consultarPorId(itemaux,String.valueOf(c.getLong(0))));
+                itemaux = (EngItemVerificacaoServico) consultarPorId(itemaux,String.valueOf(c.getLong(0)));
+                qualidadeaux.setEngItemVerificacaoServico(itemaux);
                 qualidadeaux.setEngVerificacaoQualidadeServico(qualidadesApontadas(itemaux, orcelementoproducao, plapavimentosubprojeto, platarefa, orcservico, engobra, plaatividade, plasetorprojeto,plasubprojetosetorprojeto));
                 itemsqualidade.add(qualidadeaux);
                 c.moveToNext();
@@ -263,9 +267,7 @@ public class DetalhesQualidade extends ActionBarActivity {
                 " AND fkIdAtividade = "+plaatividade.getId()+" " +
                 " AND fkIdSetorProjeto = "+plasetorprojeto.getId()+" " +
                 " AND fkIdSubprojetoSetorProjeto = "+plasubprojetosetorprojeto.getId();
-        System.out.println("--------------------------------------------------------");
-        System.out.println(s);
-        System.out.println("--------------------------------------------------------");
+
         Cursor c = db.rawQuery(s, null);
         if(c.moveToFirst()){
             EngVerificacaoQualidadeServico engVerificacaoretorno = new EngVerificacaoQualidadeServico();

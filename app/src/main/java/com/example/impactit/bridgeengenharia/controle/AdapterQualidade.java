@@ -56,55 +56,68 @@ public class AdapterQualidade extends BaseAdapter {
             holder.rp = (CheckBox) convertView.findViewById(R.id.rp);
             holder.acr = (CheckBox) convertView.findViewById(R.id.acr);
             holder.asr = (CheckBox) convertView.findViewById(R.id.asr);
-
-            holder.iditem.setText(items.get(position).getEngItemVerificacaoServico().getId().toString());
-            holder.verificacao.setText(items.get(position).getEngItemVerificacaoServico().getVerificacao());
-            holder.criterio.setText(items.get(position).getEngItemVerificacaoServico().getCriterioAceitacao());
-
+            convertView.setTag(holder);
 
             holder.ap.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
+                    QualidadeTO qualidadeTO = (QualidadeTO) v.getTag();
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Aprovado ativado", Toast.LENGTH_SHORT).show();
                     }
-                    items.get(position).setAp(cb.isChecked());
+                    qualidadeTO.setAp(cb.isChecked());
                 }
             });
 
             holder.rp.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
+                    QualidadeTO qualidadeTO = (QualidadeTO) v.getTag();
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Reprovado ativado", Toast.LENGTH_SHORT).show();
                     }
-                    items.get(position).setRp(cb.isChecked());
+                    qualidadeTO.setRp(cb.isChecked());
                 }
             });
 
             holder.acr.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
+                    QualidadeTO qualidadeTO = (QualidadeTO) v.getTag();
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Aprovado com Reparos ativado", Toast.LENGTH_SHORT).show();
                     }
-                    items.get(position).setAcr(cb.isChecked());
+                    qualidadeTO.setAcr(cb.isChecked());
                 }
             });
 
             holder.asr.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
+                    QualidadeTO qualidadeTO = (QualidadeTO) v.getTag();
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Aprovado sem Reparos ativado", Toast.LENGTH_SHORT).show();
                     }
-                    items.get(position).setAsr(cb.isChecked());
+                    qualidadeTO.setAsr(cb.isChecked());
                 }
             });
 
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        QualidadeTO qualidadeTO = items.get(position);
+        holder.iditem.setText(items.get(position).getEngItemVerificacaoServico().getId().toString());
+        holder.verificacao.setText(items.get(position).getEngItemVerificacaoServico().getVerificacao());
+        holder.criterio.setText(items.get(position).getEngItemVerificacaoServico().getCriterioAceitacao());
+        holder.ap.setChecked(qualidadeTO.isAp());
+        holder.rp.setChecked(qualidadeTO.isRp());
+        holder.acr.setChecked(qualidadeTO.isAcr());
+        holder.asr.setChecked(qualidadeTO.isAsr());
+        holder.ap.setTag(qualidadeTO);
+        holder.rp.setTag(qualidadeTO);
+        holder.acr.setTag(qualidadeTO);
+        holder.asr.setTag(qualidadeTO);
+
         return convertView;
     }
 
