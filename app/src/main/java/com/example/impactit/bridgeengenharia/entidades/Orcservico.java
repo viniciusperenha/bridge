@@ -9,7 +9,7 @@ public class Orcservico implements Serializable {
     private Long id;
     private String codigo;
     private String nome;
-    private int fkIdUnidadeMedida;
+    private Long fkIdUnidadeMedida;
     private Double razaoUnitariaProducao;
     private Double horasTrabalhadasDia;
     private Long fkIdGrupoServico;
@@ -40,11 +40,11 @@ public class Orcservico implements Serializable {
         this.nome = nome;
     }
 
-    public int getFkIdUnidadeMedida() {
+    public Long getFkIdUnidadeMedida() {
         return fkIdUnidadeMedida;
     }
 
-    public void setFkIdUnidadeMedida(int fkIdUnidadeMedida) {
+    public void setFkIdUnidadeMedida(Long fkIdUnidadeMedida) {
         this.fkIdUnidadeMedida = fkIdUnidadeMedida;
     }
 

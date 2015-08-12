@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     tools:context="com.example.impactit.bridgeengenharia.DetalhesQualidade">>
 
 
@@ -131,29 +131,6 @@
                 android:editable="false" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:background="@color/button_material_light"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Colaborador"
-                android:id="@+id/textView9"
-                android:minWidth="140dp"
-                />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/colaborador"
-                android:enabled="false"
-                android:editable="false" />
-        </TableRow>
-
     </TableLayout>
 
 
@@ -213,28 +190,7 @@
                 />
         </TableRow>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:background="@color/button_material_light"
-            >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Unidade"
-                android:id="@+id/textView4"
-                android:minWidth="140dp"
-                />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/unidademedida"
-                android:enabled="false"
-                android:editable="false" />
-        </TableRow>
 
     </TableLayout>
 
@@ -295,32 +251,6 @@
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:background="@color/button_material_light"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Produção"
-                android:id="@+id/textView12"
-                android:minWidth="140dp"
-                />
-
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/producao"
-                android:enabled="false"
-                android:editable="false"
-                />
-
-        </TableRow>
-
     </TableLayout>
 
     <TableLayout
@@ -328,7 +258,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tabelamedicoes"
         android:layout_marginTop="2dp"
-        android:stretchColumns="0"
+        android:stretchColumns="1"
         android:id="@+id/tabelaobservacoes">
         <TableRow
             android:layout_width="fill_parent"
@@ -343,7 +273,48 @@
                 android:layout_height="wrap_content"
                 android:text="Observações"
                 android:id="@+id/textView13"
+                android:minWidth="140dp"
+                />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:inputType="textMultiLine"
+                android:background="#ffffff"
+                android:id="@+id/observacoes"
+                />
 
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabelaobservacoes"
+        android:layout_marginTop="2dp"
+        android:stretchColumns="1"
+        android:id="@+id/tabelalegenda">
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:background="@color/button_material_light"
+            >
+            <TextView
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AP:Aprovado"
+                android:id="@+id/txap"
+                android:scaleType="fitXY"
+
+                />
+            <TextView
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RP: Reprovado"
+                android:id="@+id/txrp"
+                android:layout_marginLeft="20dp"
+                android:scaleType="fitXY"
                 />
 
         </TableRow>
@@ -353,24 +324,54 @@
             android:paddingLeft="10dp"
             android:background="@color/button_material_light"
             >
+            <TextView
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACR: Aprovado com Reparo"
+                android:id="@+id/txacr"
 
+                android:scaleType="fitXY"
+                />
+            <TextView
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ASR: Aprovado sem Reparo"
+                android:id="@+id/txasr"
+                android:layout_marginLeft="20dp"
+                android:scaleType="fitXY"
+                />
 
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="100dp"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/observacoes"
-                android:enabled="false"
-                android:editable="false"/>
-        </TableRow>
+            </TableRow>
+
     </TableLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabelalegenda"
+        android:id="@+id/botaosalvar"
+        android:background="@color/button_material_light"
+        android:paddingTop="15dp"
+        >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar Qualidade"
+            android:id="@+id/button"
+            android:textAlignment="center"
+            android:background="#1F74B5"
+            />
+
+    </LinearLayout>
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cabecalholista"
-        android:layout_below="@+id/tabelaobservacoes"
+        android:layout_below="@+id/botaosalvar"
 
         >
         <TableRow
@@ -380,73 +381,30 @@
             android:background="@color/accent_material_dark"
             >
             <TextView
-                android:id="@+id/tituloidservico"
+                android:id="@+id/verificacao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.20"
+                android:layout_weight="0.5"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
                 android:text="VERIFICAÇÃO"
                 android:textStyle="bold"
+                android:textAlignment="center"
                 />
+
             <TextView
-                android:id="@+id/tituloservico"
+                android:id="@+id/status"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="0.40"
+                android:layout_weight="0.5"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
-                android:text="CRITÉRIO DE ACEITAÇÃO"
+                android:text="STATUS"
                 android:textStyle="bold"
                 />
-            <TextView
-                android:id="@+id/aprovado"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.10"
-                android:layout_marginLeft="5dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="false"
-                android:text="AP"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/reprovado"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="0.10"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="false"
-                android:text="RP"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/aprovadocomreparo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="0.10"
-                android:layout_marginLeft="5dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="false"
-                android:textDirection="rtl"
-                android:text="ACR"
-                />
-            <TextView
-                android:id="@+id/aprovadosemreparo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="0.10"
-                android:layout_marginLeft="5dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="false"
-                android:textDirection="rtl"
-                android:text="ASR"
-                />
+
 
         </TableRow>
     </TableLayout>
@@ -456,6 +414,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/cabecalholista"
+        android:id="@+id/lista"
         >
         <ListView
             android:layout_width="fill_parent"
@@ -463,6 +422,5 @@
             android:id="@+id/listaApontamentosProducao" />
 
     </LinearLayout>
-
 
 </RelativeLayout>

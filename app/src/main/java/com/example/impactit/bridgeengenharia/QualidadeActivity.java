@@ -78,8 +78,6 @@ public class QualidadeActivity extends PrincipalActivity {
         setor = (Spinner) findViewById(R.id.spinnerSetor);
         listaApontamentosProducao = (ListView) findViewById(R.id.listaApontamentosProducao);
 
-
-
         //carrega spinner de obras do usuario
         ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), R.layout.spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
         adapter.setDropDownViewResource(R.layout.item_lista);
@@ -192,9 +190,8 @@ public class QualidadeActivity extends PrincipalActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor c = (Cursor) parent.getItemAtPosition(position);
                 Orcelementoproducao elementoselecionado = new Orcelementoproducao();
-                elementoselecionado = (Orcelementoproducao) consultarPorId(elementoselecionado , String.valueOf(c.getLong(2)));
+                elementoselecionado = (Orcelementoproducao) consultarPorId(elementoselecionado , String.valueOf(c.getLong(c.getColumnIndexOrThrow("_id"))));
                 usuarioGlobal.setElementoproducaoselecionado(elementoselecionado);
-
                 Intent intent = new Intent(getApplicationContext(), DetalhesQualidade.class);
                 startActivity(intent);
 
@@ -392,7 +389,7 @@ public class QualidadeActivity extends PrincipalActivity {
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
 
         if(usuarioGlobal.getObraselecionada()!=null){
-            String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.nome as nomeunidade, SUM(pro.quantidade) as quantidade" +
+            String s = "Select ep.id as _id, s.nome as nomeservico, pro.id as proid, ep.codigo, um.nome as nomeunidade, SUM(pro.quantidade) as quantidade" +
                     " from Engproducao as pro " +
                     " inner join Orcservico as s on s.id=pro.fkIdServico " +
                     " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
@@ -414,8 +411,7 @@ public class QualidadeActivity extends PrincipalActivity {
             if (usuarioGlobal.getAtividadeselecionada() != null) {
                 s += " and (pro.fkIdAtividade=" + usuarioGlobal.getAtividadeselecionada().getId()+")";
             }
-            s+= " GROUP BY (ep.codigo)";
-
+            s+= " GROUP BY (_id)";
 
             Cursor c = db.rawQuery(s, null);
 

@@ -44,6 +44,7 @@ public class GlobalClass extends Application {
     public Engproducao producaoselecionadamostrar;
     public Plasubprojetosetorprojeto plasubprojetosetorprojetoselecionado;
 
+
     public Sisusuario getUsuarioLogado() {
         return usuarioLogado;
     }

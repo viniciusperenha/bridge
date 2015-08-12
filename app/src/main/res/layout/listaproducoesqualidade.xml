@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+    >
+<TableRow
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="15dp"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.5"
+        >
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+
+            >
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                >
+                <TextView
+                    android:id="@+id/iditem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:scaleType="fitXY"
+                    android:layout_weight="0.0"
+                    />
+
+                <TextView
+                    android:id="@+id/verificacao"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:text="VERIFICAÇÃO"
+                    android:textStyle="bold"
+                    android:adjustViewBounds="false"
+                    android:layout_weight="1"
+                    />
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="15dp"
+                >
+                <TextView
+                    android:id="@+id/criterio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.40"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="false"
+                    android:text="CRITÉRIO DE ACEITAÇÃO"
+                    android:textSize="10dp"
+                    />
+
+
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+
+                >
+                <CheckBox
+                    android:id="@+id/ap"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="false"
+                    android:text="AP"
+                    android:textStyle="bold"
+                    />
+
+                <CheckBox
+                    android:id="@+id/rp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.25"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="false"
+                    android:text="RP"
+                    android:textStyle="bold"
+                    />
+
+                <CheckBox
+                    android:id="@+id/acr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="0.25"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="false"
+                    android:textDirection="rtl"
+                    android:text="ACR"
+                    />
+
+                <CheckBox
+                    android:id="@+id/asr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="0.25"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="false"
+                    android:textDirection="rtl"
+                    android:text="ASR"
+                    />
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+
+
+    </TableRow>
+</TableLayout>

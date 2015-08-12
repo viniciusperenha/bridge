@@ -477,7 +477,7 @@ public class LoginActivity extends Activity {
 
             try {
                 DefaultHttpClient dhc = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet("http://192.168.25.2:8080/" + classe.getSimpleName().toLowerCase());
+                HttpGet httpGet = new HttpGet("http://192.168.25.233:8080/" + classe.getSimpleName().toLowerCase());
                 HttpResponse resposta = null;
                 resposta = dhc.execute(httpGet);
                 String res = EntityUtils.toString(resposta.getEntity());

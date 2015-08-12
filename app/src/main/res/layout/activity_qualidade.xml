@@ -246,6 +246,7 @@
                 android:text="ELEMENTO"
                 android:textStyle="bold"
                 />
+
             <TextView
                 android:id="@+id/titulounidademedida"
                 android:layout_width="0dp"
