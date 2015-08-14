@@ -57,7 +57,7 @@ public class AdapterQualidade extends BaseAdapter {
             holder.acr = (CheckBox) convertView.findViewById(R.id.acr);
             holder.asr = (CheckBox) convertView.findViewById(R.id.asr);
             convertView.setTag(holder);
-
+            final ViewHolder finalholder = holder;
             holder.ap.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
@@ -66,6 +66,7 @@ public class AdapterQualidade extends BaseAdapter {
                         Toast.makeText(mInflater.getContext(), "Aprovado ativado", Toast.LENGTH_SHORT).show();
                     }
                     qualidadeTO.setAp(cb.isChecked());
+                    validacheckbox(finalholder);
                 }
             });
 
@@ -77,6 +78,7 @@ public class AdapterQualidade extends BaseAdapter {
                         Toast.makeText(mInflater.getContext(), "Reprovado ativado", Toast.LENGTH_SHORT).show();
                     }
                     qualidadeTO.setRp(cb.isChecked());
+                    validacheckbox(finalholder);
                 }
             });
 
@@ -88,6 +90,7 @@ public class AdapterQualidade extends BaseAdapter {
                         Toast.makeText(mInflater.getContext(), "Aprovado com Reparos ativado", Toast.LENGTH_SHORT).show();
                     }
                     qualidadeTO.setAcr(cb.isChecked());
+                    validacheckbox(finalholder);
                 }
             });
 
@@ -99,12 +102,14 @@ public class AdapterQualidade extends BaseAdapter {
                         Toast.makeText(mInflater.getContext(), "Aprovado sem Reparos ativado", Toast.LENGTH_SHORT).show();
                     }
                     qualidadeTO.setAsr(cb.isChecked());
+                    validacheckbox(finalholder);
                 }
             });
 
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         QualidadeTO qualidadeTO = items.get(position);
         holder.iditem.setText(items.get(position).getEngItemVerificacaoServico().getId().toString());
         holder.verificacao.setText(items.get(position).getEngItemVerificacaoServico().getVerificacao());
@@ -117,8 +122,35 @@ public class AdapterQualidade extends BaseAdapter {
         holder.rp.setTag(qualidadeTO);
         holder.acr.setTag(qualidadeTO);
         holder.asr.setTag(qualidadeTO);
-
+        validacheckbox(holder);
         return convertView;
+    }
+
+    private void validacheckbox(ViewHolder finalholder) {
+        //todos estao desmarcados
+        if((!finalholder.ap.isChecked())&&(!finalholder.rp.isChecked())&&(!finalholder.acr.isChecked())&&(!finalholder.asr.isChecked())){
+            finalholder.acr.setEnabled(false);
+            finalholder.asr.setEnabled(false);
+            finalholder.rp.setEnabled(true);
+            finalholder.ap.setEnabled(true);
+            return;
+        } else {
+            if (finalholder.ap.isChecked()) { //aprovado desabilita acr e asr
+                finalholder.acr.setEnabled(false);
+                finalholder.asr.setEnabled(false);
+                finalholder.ap.setEnabled(true);
+                finalholder.rp.setEnabled(true);
+                return;
+            }
+            if (finalholder.rp.isChecked()) { //reprovado desabilita ap
+                finalholder.ap.setEnabled(false);
+                finalholder.acr.setEnabled(true);
+                finalholder.asr.setEnabled(true);
+                finalholder.rp.setEnabled(true);
+                return;
+            }
+        }
+
     }
 
     private class ViewHolder {

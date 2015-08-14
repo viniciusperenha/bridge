@@ -50,6 +50,16 @@
             android:name=".DetalhesQualidade"
             android:label="@string/title_activity_detalhes_qualidade" >
         </activity>
+        <activity
+            android:name=".OcorrenciaActivity"
+            android:label="@string/title_activity_ocorrencia" >
+        </activity>
+        <activity
+            android:name=".FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,9 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.AdapterQualidade;
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
@@ -43,20 +47,29 @@ import java.util.Map;
 
 
 public class DetalhesQualidade extends ActionBarActivity {
-    public static SQLiteDatabase db;
-    public EditText subprojeto;
-    public EditText atividade;
-    public EditText pavimento;
-    public EditText tarefa;
-    public EditText servico;
-    public EditText elementoproducao;
-    public EditText totalproduzido;
-    public EditText observacao;
-    public EditText setor;
-    public EditText empreiteira;
-    public EditText colaborador;
-    public ListView listaApontamentosProducao;
-    public ArrayList<QualidadeTO> itemsqualidade = new ArrayList<>();
+    private static SQLiteDatabase db;
+    private EditText subprojeto;
+    private EditText atividade;
+    private EditText pavimento;
+    private EditText tarefa;
+    private EditText servico;
+    private EditText elementoproducao;
+    private EditText totalproduzido;
+    private EditText observacao;
+    private EditText setor;
+    private EditText empreiteira;
+    private EditText colaborador;
+    private ListView listaApontamentosProducao;
+    private ArrayList<QualidadeTO> itemsqualidade = new ArrayList<>();
+    private Engempreiteira emp;
+    private Plasetorprojeto se;
+    private Plasubprojeto sub;
+    private Plasubprojetosetorprojeto subsetor;
+    private Plaatividade ati;
+    private Plapavimentosubprojeto pav;
+    private Platarefa tar;
+    private Orcservico ser;
+    private Orcunidademedida um;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,35 +98,35 @@ public class DetalhesQualidade extends ActionBarActivity {
         listaApontamentosProducao = (ListView) findViewById(R.id.listaApontamentosProducao);
 
 
-        Engempreiteira emp = ultimaProducaoEmpreiteira(usuarioGlobal.getElementoproducaoselecionado());
+        emp = ultimaProducaoEmpreiteira(usuarioGlobal.getElementoproducaoselecionado());
         empreiteira.setText(emp.getNomeFantasia());
 
-        Plasetorprojeto se = new Plasetorprojeto();
+        se = new Plasetorprojeto();
         se = (Plasetorprojeto) consultarPorId(se, usuarioGlobal.getElementoproducaoselecionado().getFkIdSetorProjeto().toString());
         setor.setText(se.getNome());
 
-        Plasubprojeto sub = new Plasubprojeto();
-        Plasubprojetosetorprojeto subsetor = new Plasubprojetosetorprojeto();
+        sub = new Plasubprojeto();
+        subsetor = new Plasubprojetosetorprojeto();
         subsetor = (Plasubprojetosetorprojeto) consultarPorId(subsetor, usuarioGlobal.getElementoproducaoselecionado().getFkIdSubprojetoSetorProjeto().toString());
         sub = (Plasubprojeto) consultarPorId(sub, subsetor.getFkIdSubprojeto().toString());
         subprojeto.setText(sub.getDescricao());
 
-        Plaatividade ati = new Plaatividade();
+        ati = new Plaatividade();
         ati = (Plaatividade) consultarPorId(ati, usuarioGlobal.getElementoproducaoselecionado().getFkIdAtividade().toString());
         atividade.setText(ati.getNome());
 
-        Plapavimentosubprojeto pav = buscaPavimentoSubProjeto(subsetor, se,usuarioGlobal.getElementoproducaoselecionado());
+        pav = buscaPavimentoSubProjeto(subsetor, se,usuarioGlobal.getElementoproducaoselecionado());
         pavimento.setText(pav.getNome());
 
-        Platarefa tar = new Platarefa();
+        tar = new Platarefa();
         tar = (Platarefa) consultarPorId(tar, usuarioGlobal.getElementoproducaoselecionado().getFkIdTarefa().toString());
         tarefa.setText(tar.getNome());
 
-        Orcservico ser = new Orcservico();
+        ser = new Orcservico();
         ser = (Orcservico) consultarPorId(ser, usuarioGlobal.getElementoproducaoselecionado().getFkIdServico().toString());
         servico.setText(ser.getNome());
 
-        Orcunidademedida um = new Orcunidademedida();
+        um = new Orcunidademedida();
         um = (Orcunidademedida) consultarPorId(um, ser.getFkIdUnidadeMedida().toString());
 
 
@@ -135,6 +148,30 @@ public class DetalhesQualidade extends ActionBarActivity {
                 ));
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle("Deseja cancelar o apontamento?");
+        alertbox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                // finish used for destroyed activity
+                db.close();
+                DetalhesQualidade.this.finish();
+            }
+
+        });
+
+        alertbox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                // Nothing will be happened when clicked on no button
+                // of Dialog
+            }
+        });
+
+        alertbox.show();
+
+        return;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -237,6 +274,26 @@ public class DetalhesQualidade extends ActionBarActivity {
                 itemaux = (EngItemVerificacaoServico) consultarPorId(itemaux,String.valueOf(c.getLong(0)));
                 qualidadeaux.setEngItemVerificacaoServico(itemaux);
                 qualidadeaux.setEngVerificacaoQualidadeServico(qualidadesApontadas(itemaux, orcelementoproducao, plapavimentosubprojeto, platarefa, orcservico, engobra, plaatividade, plasetorprojeto,plasubprojetosetorprojeto));
+
+                if(qualidadeaux.getEngVerificacaoQualidadeServico()!=null) {
+                    System.out.println("------------------------------------------------- "+qualidadeaux.getEngVerificacaoQualidadeServico().getStatus());
+                    if(qualidadeaux.getEngVerificacaoQualidadeServico().getStatus()!=null) {
+                        if (qualidadeaux.getEngVerificacaoQualidadeServico().getStatus().equals("AP")) {
+                            qualidadeaux.setAp(true);
+                        }
+                        if (qualidadeaux.getEngVerificacaoQualidadeServico().getStatus().equals("RP")) {
+                            qualidadeaux.setRp(true);
+                        }
+                        if (qualidadeaux.getEngVerificacaoQualidadeServico().getStatus().equals("ACR")) {
+                            qualidadeaux.setAcr(true);
+                            qualidadeaux.setRp(true);
+                        }
+                        if (qualidadeaux.getEngVerificacaoQualidadeServico().getStatus().equals("ASR")) {
+                            qualidadeaux.setAsr(true);
+                            qualidadeaux.setRp(true);
+                        }
+                    }
+                }
                 itemsqualidade.add(qualidadeaux);
                 c.moveToNext();
             }
@@ -278,6 +335,105 @@ public class DetalhesQualidade extends ActionBarActivity {
         return null;
     }
 
+    public void gravarQualidade(View v){
+        observacao = (EditText) findViewById(R.id.observacoes);
+        for(QualidadeTO qto:itemsqualidade){
+            //verifica se há registro
+            if(qto.getEngVerificacaoQualidadeServico()==null){
+                String status="";
+                if(qto.isAp()){
+                    status = "AP";
+                }
+                if(qto.isRp()){
+                    status = "RP";
+                }
+                if(qto.isAcr()){
+                    status = "ACR";
+                }
+                if(qto.isAsr()){
+                    status = "ASR";
+                }
+                if(!"".equals(status)) { //verifica se foi apontado algo
+
+
+                    GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+                    EngVerificacaoQualidadeServico engVerificacaoQualidadeServico = new EngVerificacaoQualidadeServico();
+                    //dados tela
+                    engVerificacaoQualidadeServico.setDataInspecao(new Date());
+                    engVerificacaoQualidadeServico.setStatus(status);
+                    engVerificacaoQualidadeServico.setObservacao(observacao.getText().toString());
+                    //preenche fks
+                    engVerificacaoQualidadeServico.setFkIdItemVerificacaoServico(qto.getEngItemVerificacaoServico().getId());
+                    engVerificacaoQualidadeServico.setFkIdElementoProducao(usuarioGlobal.getElementoproducaoselecionado().getId());
+                    engVerificacaoQualidadeServico.setFkIdPavimentoSubprojeto(pav.getId());
+                    engVerificacaoQualidadeServico.setFkIdSubprojetoSetorProjeto(subsetor.getId());
+                    engVerificacaoQualidadeServico.setFkIdSetorProjeto(se.getId());
+                    engVerificacaoQualidadeServico.setFkIdAtividade(ati.getId());
+                    engVerificacaoQualidadeServico.setFkIdConferente(usuarioGlobal.getUsuarioLogado().getId());
+                    engVerificacaoQualidadeServico.setFkIdObra(usuarioGlobal.getObraselecionada().getId());
+                    engVerificacaoQualidadeServico.setFkIdServico(ser.getId());
+                    engVerificacaoQualidadeServico.setFkIdTarefa(tar.getId());
+                    inserir(engVerificacaoQualidadeServico);
+                }
+            } else {
+                String status="";
+                if(qto.isAp()){
+                    status = "AP";
+                }
+                if(qto.isRp()){
+                    status = "RP";
+                }
+                if(qto.isAcr()){
+                    status = "ACR";
+                }
+                if(qto.isAsr()){
+                    status = "ASR";
+                }
+                if(qto.getEngVerificacaoQualidadeServico().getStatus()!=null) {
+                    //foi alterado o status
+                    if (!qto.getEngVerificacaoQualidadeServico().getStatus().equals(status)) {
+                        ContentValues cv = new ContentValues();
+                        cv.put("status", status);
+                        cv.put("observacao", observacao.getText().toString());
+                        db.update("EngVerificacaoQualidadeServico", cv, "id=" + qto.getEngVerificacaoQualidadeServico().getId(), null);
+                    }
+                } else{
+                    ContentValues cv = new ContentValues();
+                    cv.put("status", status);
+                    cv.put("observacao", observacao.getText().toString());
+                    cv.put("dataAlteracaoInspecao",String.valueOf(new Date()));
+                    db.update("EngVerificacaoQualidadeServico", cv, "id=" + qto.getEngVerificacaoQualidadeServico().getId(), null);
+                }
+            }
+        }
+        db.close();
+        Toast.makeText(getApplicationContext(), "Qualidade apontada com sucesso!", Toast.LENGTH_LONG).show();
+        DetalhesQualidade.this.finish();
+    }
+
+    public void inserir(Object obj) {
+        try {
+
+            Class classe = obj.getClass();
+
+            ContentValues cv = new ContentValues();
+            for (Field f : classe.getDeclaredFields()) {
+                f.setAccessible(true);
+                Object valor = f.get(obj);
+
+                if (valor != null) {
+                    cv.put(f.getName(), valor.toString());
+                }
+                System.out.println(f.getName()+" "+valor.toString());
+            }
+
+            db.insert(classe.getSimpleName().toLowerCase(), null, cv);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
 
     public Object consultarPorId(Object obj, String id) {
         Cursor c = db.rawQuery("SELECT * FROM " + obj.getClass().getSimpleName().toLowerCase()+" where id = "+id, null);

@@ -363,6 +363,7 @@
             android:id="@+id/button"
             android:textAlignment="center"
             android:background="#1F74B5"
+            android:onClick="gravarQualidade"
             />
 
     </LinearLayout>

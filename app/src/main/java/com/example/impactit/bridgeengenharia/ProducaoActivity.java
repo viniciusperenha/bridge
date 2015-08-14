@@ -39,21 +39,21 @@ import java.util.List;
 
 public class ProducaoActivity extends PrincipalActivity {
 
-    public static SQLiteDatabase db;
-    public Spinner spinnerObra;
-    public TextView engenheiro;
-    public TextView responsavel;
-    public Rhcolaborador responsavelobra;
-    public Rhcolaborador engenheiroresidente;
-    public Plaprojeto projeto;
-    public Spinner subprojeto;
-    public Spinner atividade;
-    public Spinner pavimento;
-    public Spinner empreiteira;
-    public Spinner colaboradorempreiteira;
-    public Spinner setor;
-    public ListView listaApontamentosProducao;
-    public static Integer posicaoobra;
+    private static SQLiteDatabase db;
+    private Spinner spinnerObra;
+    private TextView engenheiro;
+    private TextView responsavel;
+    private Rhcolaborador responsavelobra;
+    private Rhcolaborador engenheiroresidente;
+    private Plaprojeto projeto;
+    private Spinner subprojeto;
+    private Spinner atividade;
+    private Spinner pavimento;
+    private Spinner empreiteira;
+    private Spinner colaboradorempreiteira;
+    private Spinner setor;
+    private ListView listaApontamentosProducao;
+    private static Integer posicaoobra;
 
 
     @Override

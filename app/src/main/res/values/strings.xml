@@ -12,4 +12,10 @@
     <string name="title_activity_detalhes_producao_gravada">Detalhes</string>
     <string name="select">Selecione</string>
     <string name="title_activity_detalhes_qualidade">DetalhesQualidade</string>
+    <string name="pav">Pavimento</string>
+    <string name="title_activity_ocorrencia">Ocorrencia</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

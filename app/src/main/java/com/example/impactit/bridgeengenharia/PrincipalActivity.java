@@ -1,19 +1,14 @@
 package com.example.impactit.bridgeengenharia;
 
-        import android.app.Activity;
-        import android.content.Intent;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.support.v7.app.ActionBarActivity;
-        import android.os.Bundle;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.widget.ImageButton;
-        import android.widget.TextView;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-
-        import com.example.impactit.bridgeengenharia.controle.GlobalClass;
-        import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
+import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 
 
 public class PrincipalActivity extends Activity {
@@ -72,7 +67,7 @@ public class PrincipalActivity extends Activity {
     }
 
     public void ocorrencia(View view) {
-        Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+        Intent intent = new Intent(getApplicationContext(), OcorrenciaActivity.class);
         startActivity(intent);
     }
 
