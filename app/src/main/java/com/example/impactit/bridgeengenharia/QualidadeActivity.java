@@ -65,6 +65,8 @@ public class QualidadeActivity extends PrincipalActivity {
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.novoUsuarioGlobal();
+        setTheme(usuarioGlobal.estiloSelecionado);
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 
@@ -153,6 +155,7 @@ public class QualidadeActivity extends PrincipalActivity {
             }
         });
 
+
         //onchange spinner subprojeto
         subprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -184,6 +187,52 @@ public class QualidadeActivity extends PrincipalActivity {
             }
         });
 
+
+        //onchange spinner subprojeto
+        atividade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(atividade.getSelectedItemPosition()>0) {
+
+                    usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
+
+                } else {
+                    usuarioGlobal.setAtividadeselecionada(null);
+
+                }
+                //carrega os apontamentos
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+        //onchange spinner subprojeto
+        pavimento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(atividade.getSelectedItemPosition()>0) {
+
+                    usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
+
+                } else {
+                    usuarioGlobal.setPavimentosubprojetoprojetoselecionado(null);
+
+                }
+                //carrega os apontamentos
+                listaApontamentosProducao.setAdapter(carregaApontamentos());
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+
         listaApontamentosProducao.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
@@ -197,6 +246,19 @@ public class QualidadeActivity extends PrincipalActivity {
 
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        //recupera os dados
+        usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
+        usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
+        usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
+        usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
+        usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
 
     }
 
@@ -383,6 +445,7 @@ public class QualidadeActivity extends PrincipalActivity {
         return lista;
 
     }
+
 
 
     public SimpleCursorAdapter carregaApontamentos(){

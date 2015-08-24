@@ -35,6 +35,7 @@ public class ArquivosActivity extends PrincipalActivity {
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        setTheme(usuarioGlobal.estiloSelecionado);
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 
@@ -102,5 +103,13 @@ public class ArquivosActivity extends PrincipalActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void mudaEstilo(View v,int i){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.estiloSelecionado=i;
+        setTheme(usuarioGlobal.estiloSelecionado);
+        setContentView(R.layout.activity_sistema);
+
     }
 }

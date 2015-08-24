@@ -31,4 +31,55 @@
     <style name="ButtonBarButton" />
 
 
+    <!-- Base application theme. -->
+    <style name="AppTheme1" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">16dp</item>
+        <item name="android:spinnerDropDownItemStyle">@style/StandardSpinner1</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="StandardSpinner1" parent="@android:style/Widget.Spinner">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppTheme2" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">18dp</item>
+        <item name="android:spinnerDropDownItemStyle">@style/StandardSpinner2</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="StandardSpinner2" parent="@android:style/Widget.Spinner">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="AppTheme3" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">20dp</item>
+        <item name="android:spinnerDropDownItemStyle">@style/StandardSpinner3</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="StandardSpinner3" parent="@android:style/Widget.Spinner">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppTheme4" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">22dp</item>
+        <item name="android:spinnerDropDownItemStyle">@style/StandardSpinner4</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="StandardSpinner4" parent="@android:style/Widget.Spinner">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="AppTheme5" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">24dp</item>
+        <item name="android:spinnerDropDownItemStyle">@style/StandardSpinner5</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="StandardSpinner5" parent="@android:style/Widget.Spinner">
+        <item name="android:textSize">24sp</item>
+    </style>
+
 </resources>

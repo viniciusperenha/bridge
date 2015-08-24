@@ -58,6 +58,7 @@ public class detalhes_producao_gravada extends ActionBarActivity {
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
         //global que armazena na sessao
         GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
+        setTheme(usuarioglobal.estiloSelecionado);
 
         //busca setor
         Plasetorprojeto setorprojetoobj = new Plasetorprojeto();

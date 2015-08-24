@@ -66,6 +66,7 @@ public class AdapterQualidade extends BaseAdapter {
                         Toast.makeText(mInflater.getContext(), "Aprovado ativado", Toast.LENGTH_SHORT).show();
                     }
                     qualidadeTO.setAp(cb.isChecked());
+                    finalholder.rp.setChecked(false);
                     validacheckbox(finalholder);
                 }
             });
@@ -77,6 +78,7 @@ public class AdapterQualidade extends BaseAdapter {
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Reprovado ativado", Toast.LENGTH_SHORT).show();
                     }
+                    finalholder.ap.setChecked(false);
                     qualidadeTO.setRp(cb.isChecked());
                     validacheckbox(finalholder);
                 }
@@ -89,6 +91,7 @@ public class AdapterQualidade extends BaseAdapter {
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Aprovado com Reparos ativado", Toast.LENGTH_SHORT).show();
                     }
+                    finalholder.asr.setChecked(false);
                     qualidadeTO.setAcr(cb.isChecked());
                     validacheckbox(finalholder);
                 }
@@ -101,6 +104,7 @@ public class AdapterQualidade extends BaseAdapter {
                     if(cb.isChecked()) {
                         Toast.makeText(mInflater.getContext(), "Aprovado sem Reparos ativado", Toast.LENGTH_SHORT).show();
                     }
+                    finalholder.acr.setChecked(false);
                     qualidadeTO.setAsr(cb.isChecked());
                     validacheckbox(finalholder);
                 }
@@ -149,6 +153,7 @@ public class AdapterQualidade extends BaseAdapter {
                 finalholder.rp.setEnabled(true);
                 return;
             }
+
         }
 
     }

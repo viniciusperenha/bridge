@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.impactit.bridgeengenharia.SistemaActivity">
+    <include layout="@layout/activity_principal" />
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:layout_marginTop="2dp"
+        android:layout_below="@+id/menuprincipal"
+        android:id="@+id/tabelaobra"
+        >
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:background="@color/button_material_light"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tema"
+                android:id="@+id/textView2"
+                android:minWidth="120dp"
+                />
+
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:id="@+id/spinnerTemas"
+                android:background="#ffffff"
+
+                />
+
+        </TableRow>
+
+
+
+    </TableLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabelaobra"
+        android:id="@+id/layoutbotaonovo"
+        android:background="@color/button_material_light"
+        android:paddingTop="15dp"
+        >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alterar Tema"
+            android:id="@+id/button"
+            android:onClick="mudarTema"
+            android:textAlignment="center"
+            android:background="#1F74B5"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

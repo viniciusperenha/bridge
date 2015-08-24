@@ -5,6 +5,7 @@ import android.app.Application;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.impactit.bridgeengenharia.R;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Engproducao;
@@ -43,6 +44,7 @@ public class GlobalClass extends Application {
     public Platarefa tarefaselecionada;
     public Engproducao producaoselecionadamostrar;
     public Plasubprojetosetorprojeto plasubprojetosetorprojetoselecionado;
+    public int estiloSelecionado;
 
 
     public Sisusuario getUsuarioLogado() {
@@ -156,6 +158,22 @@ public class GlobalClass extends Application {
 
     public void setPlasubprojetosetorprojetoselecionado(Plasubprojetosetorprojeto plasubprojetosetorprojetoselecionado) {
         this.plasubprojetosetorprojetoselecionado = plasubprojetosetorprojetoselecionado;
+    }
+
+    public void novoUsuarioGlobal(){
+        obraselecionada = null;
+        projetoselecionado = null;
+        empreiteiraselecionada = null;
+        colaboradorselecionado = null;
+        atividadeselecionada = null;
+        subprojetoselecionado = null;
+        pavimentosubprojetoprojetoselecionado = null;
+        setorprojetoselecionado = null;
+        elementoproducaoselecionado = null;
+        servicoselecionado = null;
+        tarefaselecionada = null;
+        producaoselecionadamostrar = null;
+        plasubprojetosetorprojetoselecionado = null;
     }
 }
 

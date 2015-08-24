@@ -35,27 +35,31 @@ import com.example.impactit.bridgeengenharia.entidades.Platarefa;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 
 public class DetalhesProducao extends ActionBarActivity {
 
-    public static SQLiteDatabase db;
-    public EditText subprojeto;
-    public EditText atividade;
-    public EditText pavimento;
-    public EditText empreiteira;
-    public EditText colaborador;
-    public Spinner tarefa;
-    public Spinner spinnerServicos;
-    public EditText codigoservico;
-    public EditText unidademedida;
-    public Spinner spinnerelementoproducao;
-    public EditText totalproduzido;
-    public EditText producao;
-    public EditText setor;
+    private static SQLiteDatabase db;
+    private EditText subprojeto;
+    private EditText atividade;
+    private EditText pavimento;
+    private EditText empreiteira;
+    private EditText colaborador;
+    private Spinner tarefa;
+    private Spinner spinnerServicos;
+    private EditText codigoservico;
+    private EditText unidademedida;
+    private Spinner spinnerelementoproducao;
+    private EditText totalproduzido;
+    private EditText producao;
+    private EditText setor;
+    private EditText dataProducao;
 
 
 
@@ -68,6 +72,7 @@ public class DetalhesProducao extends ActionBarActivity {
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        setTheme(usuarioGlobal.estiloSelecionado);
         //carrega campos
         setor = (EditText) findViewById(R.id.setor);
         setor.setText(usuarioGlobal.getSetorprojetoselecionado().getNome());
@@ -101,6 +106,7 @@ public class DetalhesProducao extends ActionBarActivity {
 
         producao = (EditText) findViewById(R.id.producao);
 
+        dataProducao = (EditText) findViewById(R.id.data);
 
         ArrayAdapter<Platarefa> adapterTarefa = new ArrayAdapter<Platarefa>(getApplicationContext(), R.layout.spinner_item, listaTarefa());
         adapterTarefa.setDropDownViewResource(R.layout.item_lista);
@@ -375,12 +381,18 @@ public class DetalhesProducao extends ActionBarActivity {
     }
 
 
-    public void gravaApontamento(View view){
+    public void gravaApontamento(View view) throws ParseException {
         if("".equals(producao.getText().toString())){
             Toast.makeText(getApplicationContext(), "Preencha a produção", Toast.LENGTH_LONG).show();
         } else {
             GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
             EditText observacao = (EditText) findViewById(R.id.observacoes);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d = sdf.parse(dataProducao.getText().toString());
+            Calendar c = Calendar.getInstance();
+            c.setTime(d);
+
             //grava o apontamento
             Engproducao pro = new Engproducao();
             pro.setFkIdObra(usuarioglobal.getObraselecionada().getId());
@@ -393,16 +405,15 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
             pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
             pro.setFkIdColaborador(usuarioglobal.getColaboradorselecionado().getId());
-            pro.setData(new Timestamp(System.currentTimeMillis()));
+            pro.setData(new Timestamp(c.getTimeInMillis()));
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setStatus("N");
             pro.setObservacao(observacao.getText().toString());
             pro.setFkIdUsuarioApontador(usuarioglobal.getUsuarioLogado().getId());
 
-            //busca id
-            pro.setId(buscaUltimoId(pro.getClass()));
 
+            //busca id
             inserir(pro);
             db.close();
             Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
@@ -424,12 +435,18 @@ public class DetalhesProducao extends ActionBarActivity {
         onBackPressed();
     }
 
-    public void gravaNovoApontamento(View view){
+    public void gravaNovoApontamento(View view) throws ParseException {
         if("".equals(producao.getText().toString())){
             Toast.makeText(getApplicationContext(), "Preencha a produção", Toast.LENGTH_LONG).show();
         } else {
             GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
             EditText observacao = (EditText) findViewById(R.id.observacoes);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+            Date d = sdf.parse(dataProducao.getText().toString());
+            Calendar c = Calendar.getInstance();
+            c.setTime(d);
+
             //grava o apontamento
             Engproducao pro = new Engproducao();
             pro.setFkIdObra(usuarioglobal.getObraselecionada().getId());
@@ -442,7 +459,7 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
             pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
             pro.setFkIdColaborador(usuarioglobal.getColaboradorselecionado().getId());
-            pro.setData(new Timestamp(System.currentTimeMillis()));
+            pro.setData(new Timestamp(c.getTimeInMillis()));
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setStatus("N");
@@ -457,7 +474,7 @@ public class DetalhesProducao extends ActionBarActivity {
             producao.requestFocus();
             //busca o total produzido
             totalproduzido.setText(String.valueOf(buscaTotalProduzido((Orcelementoproducao) spinnerelementoproducao.getSelectedItem())));
-
+            dataProducao.setText(new Date().toString());
         }
 
     }

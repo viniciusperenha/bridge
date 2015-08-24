@@ -420,7 +420,8 @@
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listaApontamentosProducao" />
+            android:id="@+id/listaApontamentosProducao"
+            android:fastScrollAlwaysVisible="true" />
 
     </LinearLayout>
 

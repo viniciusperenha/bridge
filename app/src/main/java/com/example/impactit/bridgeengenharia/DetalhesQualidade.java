@@ -81,6 +81,7 @@ public class DetalhesQualidade extends ActionBarActivity {
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        setTheme(usuarioGlobal.estiloSelecionado);
 
         //carrega campos da view
         setor = (EditText) findViewById(R.id.setor);
@@ -276,7 +277,6 @@ public class DetalhesQualidade extends ActionBarActivity {
                 qualidadeaux.setEngVerificacaoQualidadeServico(qualidadesApontadas(itemaux, orcelementoproducao, plapavimentosubprojeto, platarefa, orcservico, engobra, plaatividade, plasetorprojeto,plasubprojetosetorprojeto));
 
                 if(qualidadeaux.getEngVerificacaoQualidadeServico()!=null) {
-                    System.out.println("------------------------------------------------- "+qualidadeaux.getEngVerificacaoQualidadeServico().getStatus());
                     if(qualidadeaux.getEngVerificacaoQualidadeServico().getStatus()!=null) {
                         if (qualidadeaux.getEngVerificacaoQualidadeServico().getStatus().equals("AP")) {
                             qualidadeaux.setAp(true);

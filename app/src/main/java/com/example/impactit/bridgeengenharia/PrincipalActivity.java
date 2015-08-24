@@ -1,6 +1,8 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,10 +21,14 @@ public class PrincipalActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+
+        setTheme(usuarioGlobal.estiloSelecionado);
+
+        setContentView(R.layout.activity_principal);
+
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 
@@ -72,10 +78,35 @@ public class PrincipalActivity extends Activity {
     }
 
     public void sistema(View view) {
-        Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SistemaActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(this.getClass().equals(PrincipalActivity.class)) {
+            AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+            alertbox.setTitle("Deseja sair?");
+            alertbox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // finish used for destroyed activity
+                    finish();
+                }
+
+            });
+
+            alertbox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // Nothing will be happened when clicked on no button
+                    // of Dialog
+                }
+            });
+
+            alertbox.show();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
 }
 

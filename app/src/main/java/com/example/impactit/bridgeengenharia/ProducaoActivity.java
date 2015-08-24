@@ -76,6 +76,8 @@ public class ProducaoActivity extends PrincipalActivity {
 
         //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        setTheme(usuarioGlobal.estiloSelecionado);
+        usuarioGlobal.novoUsuarioGlobal();
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 
@@ -345,6 +347,20 @@ public class ProducaoActivity extends PrincipalActivity {
     @Override
     public void onResume(){
         super.onResume();
+
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        //recupera os dados
+        usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
+        usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
+        usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
+        usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
+        usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
+        usuarioGlobal.setEmpreiteiraselecionada((Engempreiteira) empreiteira.getSelectedItem());
+        usuarioGlobal.setColaboradorselecionado((Rhcolaborador) colaboradorempreiteira.getSelectedItem());
+        Plaprojeto plaprojeto = new Plaprojeto();
+        if(spinnerObra.getSelectedItemPosition()>0) {
+            usuarioGlobal.setProjetoselecionado((Plaprojeto) consultarPorId(plaprojeto, usuarioGlobal.getObraselecionada().getFkIdProjeto().toString()));
+        }
         try {
             listaApontamentosProducao.setAdapter(carregaApontamentos());
         } catch (Exception e){
@@ -612,7 +628,6 @@ public class ProducaoActivity extends PrincipalActivity {
             if (usuarioGlobal.getPavimentosubprojetoprojetoselecionado() != null) {
                 s += " and (pro.fkIdPavimentoSubprojeto=" + usuarioGlobal.getPavimentosubprojetoprojetoselecionado().getId()+")";
             }
-
             if (usuarioGlobal.getAtividadeselecionada() != null) {
                 s += " and (pro.fkIdAtividade=" + usuarioGlobal.getAtividadeselecionada().getId()+")";
             }
@@ -654,7 +669,9 @@ public class ProducaoActivity extends PrincipalActivity {
                 // Assign adapter to ListView
                 return dataAdapter;
             }
+
         }
+
         return null;
     }
 

@@ -216,7 +216,7 @@
                 android:id="@+id/tituloidservico"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.15"
+                android:layout_weight="0"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
@@ -269,6 +269,19 @@
                 android:adjustViewBounds="false"
                 android:textDirection="rtl"
                 android:text="QTDE"
+
+                />
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="0.15"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:textDirection="rtl"
+                android:text="STATUS"
 
                 />
 

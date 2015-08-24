@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
@@ -50,26 +51,33 @@ public class OcorrenciaActivity extends PrincipalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //usuario global
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         setContentView(R.layout.activity_ocorrencia);
+
+        TextView tv = (TextView) findViewById(R.id.nomeusuario);
+        tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
+
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
-        //usuario global
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.novoUsuarioGlobal();
 
         spinnerObra = (Spinner) findViewById(R.id.spinnerobraocorrencia);
         spinnerSetor = (Spinner) findViewById(R.id.spinnersetorocorrencia);
         spinnerSubprojeto = (Spinner) findViewById(R.id.spinnersubprojetoocorrencia);
         editResponsavel = (EditText) findViewById(R.id.editresponsavelocorrencia);
         editEngenheiro = (EditText) findViewById(R.id.editengenheiroocorrencia);
-        editOcorrencia = (EditText) findViewById(R.id.editengenheiroocorrencia);
+        editOcorrencia = (EditText) findViewById(R.id.editocorrencia);
 
         //carrega spinner de obras do usuario
         ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), R.layout.spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
         adapter.setDropDownViewResource(R.layout.item_lista);
 
         spinnerObra.setAdapter(adapter);
-
 
         spinnerObra.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -272,7 +280,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
     public Plasubprojetosetorprojeto buscaSubprojetoSetorProjeto(Plasetorprojeto set, Plasubprojeto subprojeto){
         Cursor c = db.rawQuery("SELECT pspp.id FROM Plasubprojetosetorprojeto as pspp" +
                 " where pspp.fkIdSetorProjeto = "+set.getId()+" " +
-                " and psp.fkIdSubprojeto = "+subprojeto.getId(), null);
+                " and pspp.fkIdSubprojeto = "+subprojeto.getId(), null);
 
         if(c.moveToFirst()){
             Plasubprojetosetorprojeto aux = new Plasubprojetosetorprojeto();
@@ -287,21 +295,37 @@ public class OcorrenciaActivity extends PrincipalActivity {
 
 
     public void gravarOcorrencia(View v){
-        if(editOcorrencia.getText().equals("")){
-            Toast.makeText(getApplicationContext(), "Preencha a ocorrência", Toast.LENGTH_LONG).show();
-            return;
-        }
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        EngOcorrenciaNaoPlanejada engOcorrenciaNaoPlanejada = new EngOcorrenciaNaoPlanejada();
-        engOcorrenciaNaoPlanejada.setData(new Date());
-        engOcorrenciaNaoPlanejada.setDescricao(editOcorrencia.getText().toString());
-        engOcorrenciaNaoPlanejada.setFkIdObra(usuarioGlobal.getObraselecionada().getId());
-        engOcorrenciaNaoPlanejada.setFkIdSetorProjeto(usuarioGlobal.getSetorprojetoselecionado().getId());
-        engOcorrenciaNaoPlanejada.setFkIdSubprojetoSetorProjeto(usuarioGlobal.getPlasubprojetosetorprojetoselecionado().getId());
-        inserir(engOcorrenciaNaoPlanejada);
-        Toast.makeText(getApplicationContext(), "Ocorrência gravada com sucesso!", Toast.LENGTH_LONG).show();
-        db.close();
-        OcorrenciaActivity.this.finish();
+        String validacoes = "";
+        //verifica campos obrigatorios
+        if(usuarioGlobal.getObraselecionada()==null){
+            validacoes = "Obra";
+        }
+        if(usuarioGlobal.getSetorprojetoselecionado()==null){
+            validacoes += " Setor";
+        }
+        if(usuarioGlobal.getPlasubprojetosetorprojetoselecionado()==null){
+            validacoes += " Subprojeto";
+        }
+        if("".equals(validacoes)) {
+
+            if ("".equals(editOcorrencia.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Preencha a ocorrência", Toast.LENGTH_LONG).show();
+                return;
+            }
+            EngOcorrenciaNaoPlanejada engOcorrenciaNaoPlanejada = new EngOcorrenciaNaoPlanejada();
+            engOcorrenciaNaoPlanejada.setData(new Date());
+            engOcorrenciaNaoPlanejada.setDescricao(editOcorrencia.getText().toString());
+            engOcorrenciaNaoPlanejada.setFkIdObra(usuarioGlobal.getObraselecionada().getId());
+            engOcorrenciaNaoPlanejada.setFkIdSetorProjeto(usuarioGlobal.getSetorprojetoselecionado().getId());
+            engOcorrenciaNaoPlanejada.setFkIdSubprojetoSetorProjeto(usuarioGlobal.getPlasubprojetosetorprojetoselecionado().getId());
+            inserir(engOcorrenciaNaoPlanejada);
+            Toast.makeText(getApplicationContext(), "Ocorrência gravada com sucesso!", Toast.LENGTH_LONG).show();
+            db.close();
+            OcorrenciaActivity.this.finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Selecione: "+validacoes+" para ocorrência", Toast.LENGTH_LONG).show();
+        }
     }
 
     public Object consultarPorId(Object obj, String id) {
