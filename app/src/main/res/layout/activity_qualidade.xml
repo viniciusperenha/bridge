@@ -239,7 +239,7 @@
                 android:id="@+id/tituloelementoproducao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.17"
+                android:layout_weight="0.20"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
@@ -247,23 +247,13 @@
                 android:textStyle="bold"
                 />
 
-            <TextView
-                android:id="@+id/titulounidademedida"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="0.18"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="false"
-                android:text="UNID. MED."
-                android:textStyle="bold"
-                />
+
             <TextView
                 android:id="@+id/tituloquantidade"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_weight="0.10"
+                android:layout_weight="0.20"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
@@ -276,7 +266,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_weight="0.15"
+                android:layout_weight="0.20"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"

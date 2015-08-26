@@ -297,24 +297,13 @@
             android:paddingLeft="15dp"
             android:background="@color/accent_material_dark"
             >
-            <TextView
-                android:id="@+id/tituloidservico"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:layout_marginLeft="5dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="false"
-                android:text="ID"
-                android:textStyle="bold"
 
-                />
             <TextView
                 android:id="@+id/tituloservico"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="0.55"
+                android:layout_weight="0.40"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
                 android:text="SERVIÇO"
@@ -324,7 +313,7 @@
                 android:id="@+id/tituloelementoproducao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.17"
+                android:layout_weight="0.15"
                 android:layout_marginLeft="5dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
@@ -336,7 +325,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="0.18"
+                android:layout_weight="0.20"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="false"
                 android:text="UNID. MED."
@@ -364,11 +353,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/cabecalholista"
+        android:id="@+id/lista"
         >
             <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/listaApontamentosProducao" />
+                android:id="@+id/listaApontamentosProducao"
+                android:fastScrollAlwaysVisible="true"
+                />
 
     </LinearLayout>
 

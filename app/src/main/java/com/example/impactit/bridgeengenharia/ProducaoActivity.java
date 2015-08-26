@@ -609,7 +609,7 @@ public class ProducaoActivity extends PrincipalActivity {
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
 
         if(usuarioGlobal.getObraselecionada()!=null){
-            String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.nome as nomeunidade,pro.quantidade " +
+            String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.sigla as nomeunidade,pro.quantidade " +
                     " from Engproducao as pro " +
                     " inner join Orcservico as s on s.id=pro.fkIdServico " +
                     " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
@@ -644,17 +644,17 @@ public class ProducaoActivity extends PrincipalActivity {
             // The desired columns to be bound
             if (c.moveToFirst()) {
                 String[] columns = new String[]{
-                        c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
+                    c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
                 };
 
                 // the XML defined views which the data will be bound to
                 int[] to = new int[]{
-                        R.id.idservico,
-                        R.id.servico,
-                        R.id.idproducao,
-                        R.id.elementoproducao,
-                        R.id.unidademedida,
-                        R.id.quantidade
+                    R.id.idservico,
+                    R.id.servico,
+                    R.id.idproducao,
+                    R.id.elementoproducao,
+                    R.id.unidademedida,
+                    R.id.quantidade
                 };
 
                 // create the adapter using the cursor pointing to the desired data

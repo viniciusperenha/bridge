@@ -17,10 +17,14 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.impactit.bridgeengenharia.controle.AdapterElemento;
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+import com.example.impactit.bridgeengenharia.entidades.ElementoTO;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Engproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
+import com.example.impactit.bridgeengenharia.entidades.Orcservico;
+import com.example.impactit.bridgeengenharia.entidades.Orcunidademedida;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
@@ -237,13 +241,11 @@ public class QualidadeActivity extends PrincipalActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor c = (Cursor) parent.getItemAtPosition(position);
-                Orcelementoproducao elementoselecionado = new Orcelementoproducao();
-                elementoselecionado = (Orcelementoproducao) consultarPorId(elementoselecionado , String.valueOf(c.getLong(c.getColumnIndexOrThrow("_id"))));
-                usuarioGlobal.setElementoproducaoselecionado(elementoselecionado);
+                ElementoTO elementoTO = (ElementoTO) listaApontamentosProducao.getAdapter().getItem(position);
+                System.out.println("------------------------------"+elementoTO.getOrcelementoproducao().getId());
+                usuarioGlobal.setElementoproducaoselecionado(elementoTO.getOrcelementoproducao());
                 Intent intent = new Intent(getApplicationContext(), DetalhesQualidade.class);
                 startActivity(intent);
-
             }
         });
 
@@ -448,11 +450,11 @@ public class QualidadeActivity extends PrincipalActivity {
 
 
 
-    public SimpleCursorAdapter carregaApontamentos(){
+    public AdapterElemento carregaApontamentos(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
 
         if(usuarioGlobal.getObraselecionada()!=null){
-            String s = "Select ep.id as _id, s.nome as nomeservico, pro.id as proid, ep.codigo, um.nome as nomeunidade, SUM(pro.quantidade) as quantidade" +
+            String s = "Select ep.id as _id, s.id as idservico, pro.id as proid, ep.codigo, um.id as unidade, SUM(pro.quantidade) as quantidade" +
                     " from Engproducao as pro " +
                     " inner join Orcservico as s on s.id=pro.fkIdServico " +
                     " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
@@ -477,39 +479,92 @@ public class QualidadeActivity extends PrincipalActivity {
             s+= " GROUP BY (_id)";
 
             Cursor c = db.rawQuery(s, null);
-
-            // The desired columns to be bound
             if (c.moveToFirst()) {
-                String[] columns = new String[]{
-                        c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
-                };
 
-                // the XML defined views which the data will be bound to
-                int[] to = new int[]{
-                        R.id.idservico,
-                        R.id.servico,
-                        R.id.idproducao,
-                        R.id.elementoproducao,
-                        R.id.unidademedida,
-                        R.id.quantidade
-                };
-
-                // create the adapter using the cursor pointing to the desired data
-                //as well as the layout information
-                SimpleCursorAdapter dataAdapter = new SimpleCursorAdapter(
-                        this, R.layout.listaapontamentos,
-                        c,
-                        columns,
-                        to,
-                        0);
-
-                // Assign adapter to ListView
-                return dataAdapter;
+                ArrayList<ElementoTO> elementoTO = new ArrayList<>();
+                ElementoTO auxElementoTO;
+                for (int i = 0; i < c.getCount(); i++) {
+                    auxElementoTO = new ElementoTO();
+                    auxElementoTO.setOrcelementoproducao((Orcelementoproducao) consultarPorId(new Orcelementoproducao(), c.getString(c.getColumnIndexOrThrow("_id"))));
+                    auxElementoTO.setEngproducao((Engproducao) consultarPorId(new Engproducao(), c.getString(c.getColumnIndexOrThrow("proid"))));
+                    auxElementoTO.setOrcservico((Orcservico) consultarPorId(new Orcservico(), c.getString(c.getColumnIndexOrThrow("idservico"))));
+                    auxElementoTO.setOrcunidademedida((Orcunidademedida) consultarPorId(new Orcunidademedida(), c.getString(c.getColumnIndexOrThrow("unidade"))));
+                    auxElementoTO.setQuantidade(c.getDouble(c.getColumnIndexOrThrow("quantidade")));
+                    auxElementoTO.setStatus(retornaStatusQualidade(auxElementoTO));
+                    elementoTO.add(auxElementoTO);
+                    c.moveToNext();
+                }
+                AdapterElemento adapterElemento = new AdapterElemento(this, elementoTO);
+                return adapterElemento;
             }
+
         }
         return null;
     }
 
+    private String retornaStatusQualidade(ElementoTO elementoTO) {
+
+        String s = ("SELECT item.id " +
+                " FROM EngItemVerificacaoServico as item " +
+                " where item.fkIdTarefa = " + elementoTO.getOrcelementoproducao().getFkIdTarefa());
+
+        Cursor c = db.rawQuery(s, null);
+
+        String sbusca = "SELECT status FROM EngVerificacaoQualidadeServico where " +
+                " fkIdElementoProducao = "+elementoTO.getOrcelementoproducao().getId().toString()+" " +
+                " AND fkIdPavimentoSubprojeto = "+elementoTO.getEngproducao().getFkIdPavimentoSubprojeto().toString()+ " " +
+                " AND fkIdTarefa = "+elementoTO.getOrcelementoproducao().getFkIdTarefa().toString()+" " +
+                " AND fkIdServico = "+elementoTO.getOrcservico().getId().toString()+" " +
+                " AND fkIdObra = "+elementoTO.getEngproducao().getFkIdObra().toString()+" " +
+                " AND fkIdAtividade = "+elementoTO.getEngproducao().getFkIdAtividade().toString()+" " +
+                " AND fkIdSetorProjeto = "+elementoTO.getEngproducao().getFkIdSetorProjeto()+" " +
+                " AND fkIdSubprojetoSetorProjeto = "+elementoTO.getOrcelementoproducao().getFkIdSubprojetoSetorProjeto().toString();
+
+        Cursor cbusca = db.rawQuery(sbusca, null);
+        if(!c.moveToFirst()){
+            return "Em Branco";
+        }
+
+        if(c.getCount()==cbusca.getCount()){
+            System.out.println("-------------------- 1 if");
+            int qtd = 0;
+            if(cbusca.moveToFirst()) {
+                for (int i = 0; i < cbusca.getCount(); i++) {
+                    if ((cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("AP")) || (cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("ACR")) || (cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("ASR"))) {
+                        qtd++;
+                    }
+                    System.out.println("---------status: "+cbusca.getString(cbusca.getColumnIndexOrThrow("status"))+"---------------------------------------");
+                    cbusca.moveToNext();
+                }
+            }
+            System.out.println("---------------------count: "+c.getCount()+"--"+qtd);
+            if(qtd==c.getCount()){
+                return "Finalizado";
+            } else {
+                return  "Iniciado";
+            }
+        }
+        if(c.getCount()>cbusca.getCount()) {
+            System.out.println("-------------------- 2 if");
+            int qtd = 0;
+            if(cbusca.moveToFirst()) {
+                for (int i = 0; i < cbusca.getCount(); i++) {
+                    if (cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("")) {
+                        qtd++;
+                    }
+                    System.out.println("---------status: "+cbusca.getString(cbusca.getColumnIndexOrThrow("status"))+"---------------------------------------");
+                    cbusca.moveToNext();
+                }
+            }
+            System.out.println("---------------------count: "+c.getCount()+"--"+qtd);
+            if(qtd==0){
+                return "Em Branco";
+            } else {
+                return  "Iniciado";
+            }
+        }
+        return "";
+    }
 
 
     public Object consultarPorId(Object obj, String id) {
