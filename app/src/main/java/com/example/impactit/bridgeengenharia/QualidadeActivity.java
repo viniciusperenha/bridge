@@ -242,7 +242,7 @@ public class QualidadeActivity extends PrincipalActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ElementoTO elementoTO = (ElementoTO) listaApontamentosProducao.getAdapter().getItem(position);
-                System.out.println("------------------------------"+elementoTO.getOrcelementoproducao().getId());
+
                 usuarioGlobal.setElementoproducaoselecionado(elementoTO.getOrcelementoproducao());
                 Intent intent = new Intent(getApplicationContext(), DetalhesQualidade.class);
                 startActivity(intent);
@@ -254,14 +254,7 @@ public class QualidadeActivity extends PrincipalActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        //recupera os dados
-        usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
-        usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
-        usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
-        usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
-        usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
-
+        listaApontamentosProducao.setAdapter(carregaApontamentos());
     }
 
 
@@ -526,18 +519,18 @@ public class QualidadeActivity extends PrincipalActivity {
         }
 
         if(c.getCount()==cbusca.getCount()){
-            System.out.println("-------------------- 1 if");
+
             int qtd = 0;
             if(cbusca.moveToFirst()) {
                 for (int i = 0; i < cbusca.getCount(); i++) {
                     if ((cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("AP")) || (cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("ACR")) || (cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("ASR"))) {
                         qtd++;
                     }
-                    System.out.println("---------status: "+cbusca.getString(cbusca.getColumnIndexOrThrow("status"))+"---------------------------------------");
+
                     cbusca.moveToNext();
                 }
             }
-            System.out.println("---------------------count: "+c.getCount()+"--"+qtd);
+
             if(qtd==c.getCount()){
                 return "Finalizado";
             } else {
@@ -545,18 +538,18 @@ public class QualidadeActivity extends PrincipalActivity {
             }
         }
         if(c.getCount()>cbusca.getCount()) {
-            System.out.println("-------------------- 2 if");
+
             int qtd = 0;
             if(cbusca.moveToFirst()) {
                 for (int i = 0; i < cbusca.getCount(); i++) {
                     if (cbusca.getString(cbusca.getColumnIndexOrThrow("status")).equals("")) {
                         qtd++;
                     }
-                    System.out.println("---------status: "+cbusca.getString(cbusca.getColumnIndexOrThrow("status"))+"---------------------------------------");
+
                     cbusca.moveToNext();
                 }
             }
-            System.out.println("---------------------count: "+c.getCount()+"--"+qtd);
+
             if(qtd==0){
                 return "Em Branco";
             } else {

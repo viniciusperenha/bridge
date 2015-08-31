@@ -135,7 +135,7 @@ public class detalhes_producao_gravada extends ActionBarActivity {
                 empreiteiraobj
                 )));
 
-        System.out.println(usuarioglobal.getProducaoselecionadamostrar().getQuantidade());
+
 
         producao = (EditText) findViewById(R.id.producao);
         producao.setText(String.valueOf(usuarioglobal.getProducaoselecionadamostrar().getQuantidade()));

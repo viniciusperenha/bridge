@@ -2,62 +2,39 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-     >
+    >
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:paddingLeft="15dp"
         >
-        <TextView
-            android:id="@+id/idservico"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="false"
 
-            />
         <TextView
-            android:id="@+id/servico"
+            android:id="@+id/servicoproducao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_weight="0.40"
+            android:layout_weight="0.60"
             android:scaleType="fitXY"
             android:adjustViewBounds="false"
             />
+
         <TextView
-            android:id="@+id/idproducao"
+            android:id="@+id/elementoproducaoproducao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="false"
-            />
-        <TextView
-            android:id="@+id/elementoproducao"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.15"
-            android:layout_marginLeft="5dp"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="false"
-            />
-        <TextView
-            android:id="@+id/unidademedida"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_weight="0.20"
+            android:layout_marginLeft="5dp"
             android:scaleType="fitXY"
             android:adjustViewBounds="false"
             />
+
         <TextView
-            android:id="@+id/quantidade"
+            android:id="@+id/quantidadeproducao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:layout_weight="0.10"
+            android:layout_weight="0.20"
             android:layout_marginLeft="5dp"
             android:scaleType="fitXY"
             android:adjustViewBounds="false"

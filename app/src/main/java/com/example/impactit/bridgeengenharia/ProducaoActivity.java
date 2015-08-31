@@ -18,15 +18,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.impactit.bridgeengenharia.controle.AdapterProducao;
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.Engproducao;
+import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
+import com.example.impactit.bridgeengenharia.entidades.Orcservico;
+import com.example.impactit.bridgeengenharia.entidades.Orcunidademedida;
 import com.example.impactit.bridgeengenharia.entidades.Plaatividade;
 import com.example.impactit.bridgeengenharia.entidades.Plapavimentosubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
+import com.example.impactit.bridgeengenharia.entidades.ProducaoTO;
 import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
 
@@ -285,18 +290,18 @@ public class ProducaoActivity extends PrincipalActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor c = (Cursor) parent.getItemAtPosition(position);
+
                 //armazena o servico na sessao
-                Engproducao producaoselecionada = new Engproducao();
-                producaoselecionada = (Engproducao) consultarPorId(producaoselecionada , String.valueOf(c.getLong(2)));
-                usuarioGlobal.setProducaoselecionadamostrar(producaoselecionada);
+                ProducaoTO producaoTO = new ProducaoTO();
+                producaoTO = (ProducaoTO) listaApontamentosProducao.getAdapter().getItem(position);
+
+                usuarioGlobal.setProducaoselecionadamostrar(producaoTO.getEngproducao());
 
                 Intent intent = new Intent(getApplicationContext(), detalhes_producao_gravada.class);
                 startActivity(intent);
 
             }
         });
-
 
     }
 
@@ -347,25 +352,7 @@ public class ProducaoActivity extends PrincipalActivity {
     @Override
     public void onResume(){
         super.onResume();
-
-        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        //recupera os dados
-        usuarioGlobal.setObraselecionada((Engobra) spinnerObra.getSelectedItem());
-        usuarioGlobal.setSetorprojetoselecionado((Plasetorprojeto) setor.getSelectedItem());
-        usuarioGlobal.setSubprojetoselecionado((Plasubprojeto) subprojeto.getSelectedItem());
-        usuarioGlobal.setAtividadeselecionada((Plaatividade) atividade.getSelectedItem());
-        usuarioGlobal.setPavimentosubprojetoprojetoselecionado((Plapavimentosubprojeto) pavimento.getSelectedItem());
-        usuarioGlobal.setEmpreiteiraselecionada((Engempreiteira) empreiteira.getSelectedItem());
-        usuarioGlobal.setColaboradorselecionado((Rhcolaborador) colaboradorempreiteira.getSelectedItem());
-        Plaprojeto plaprojeto = new Plaprojeto();
-        if(spinnerObra.getSelectedItemPosition()>0) {
-            usuarioGlobal.setProjetoselecionado((Plaprojeto) consultarPorId(plaprojeto, usuarioGlobal.getObraselecionada().getFkIdProjeto().toString()));
-        }
-        try {
-            listaApontamentosProducao.setAdapter(carregaApontamentos());
-        } catch (Exception e){
-            System.out.println(e.toString());
-        }
+        listaApontamentosProducao.setAdapter(carregaApontamentos());
     }
 
 
@@ -605,11 +592,11 @@ public class ProducaoActivity extends PrincipalActivity {
         return lista;
     }
 
-    public SimpleCursorAdapter carregaApontamentos(){
+    public AdapterProducao carregaApontamentos(){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
 
         if(usuarioGlobal.getObraselecionada()!=null){
-            String s = "Select s.codigo as _id, s.nome as nomeservico, pro.id as proid,ep.codigo, um.sigla as nomeunidade,pro.quantidade " +
+            String s = "Select s.id as servico, pro.id as producao,ep.id as elementoproducao, um.id as unidademedida " +
                     " from Engproducao as pro " +
                     " inner join Orcservico as s on s.id=pro.fkIdServico " +
                     " inner join Orcelementoproducao as ep on ep.id=pro.fkIdElementoProducao " +
@@ -638,40 +625,27 @@ public class ProducaoActivity extends PrincipalActivity {
                 s += " and (pro.fkIdColaborador=" + usuarioGlobal.getColaboradorselecionado().getId()+")";
             }
 
-
+            System.out.println("---------------------------------------\n"+s);
             Cursor c = db.rawQuery(s, null);
-
-            // The desired columns to be bound
+            // verifica resultado
             if (c.moveToFirst()) {
-                String[] columns = new String[]{
-                    c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), c.getColumnName(4), c.getColumnName(5)
-                };
-
-                // the XML defined views which the data will be bound to
-                int[] to = new int[]{
-                    R.id.idservico,
-                    R.id.servico,
-                    R.id.idproducao,
-                    R.id.elementoproducao,
-                    R.id.unidademedida,
-                    R.id.quantidade
-                };
-
-                // create the adapter using the cursor pointing to the desired data
-                //as well as the layout information
-                SimpleCursorAdapter dataAdapter = new SimpleCursorAdapter(
-                        this, R.layout.listaapontamentos,
-                        c,
-                        columns,
-                        to,
-                        0);
-
-                // Assign adapter to ListView
-                return dataAdapter;
+                ArrayList<ProducaoTO> itemsproducao = new ArrayList<>();
+                ProducaoTO producaoTO;
+                for(int i=0;i<c.getCount();i++){
+                    producaoTO = new ProducaoTO();
+                    producaoTO.setOrcservico((Orcservico) consultarPorId(new Orcservico(), String.valueOf(c.getLong(c.getColumnIndexOrThrow("servico")))));
+                    producaoTO.setEngproducao((Engproducao) consultarPorId(new Engproducao(), String.valueOf(c.getLong(c.getColumnIndexOrThrow("producao")))));
+                    producaoTO.setOrcunidademedida((Orcunidademedida) consultarPorId(new Orcunidademedida(), String.valueOf(c.getLong(c.getColumnIndexOrThrow("unidademedida")))));
+                    producaoTO.setOrcelementoproducao((Orcelementoproducao) consultarPorId(new Orcelementoproducao(), String.valueOf(c.getLong(c.getColumnIndexOrThrow("elementoproducao")))));
+                    itemsproducao.add(producaoTO);
+                    c.moveToNext();
+                }
+                AdapterProducao adapterProducao = new AdapterProducao(this, itemsproducao);
+                // retorna o adapter
+                c.close();
+                return adapterProducao;
             }
-
         }
-
         return null;
     }
 

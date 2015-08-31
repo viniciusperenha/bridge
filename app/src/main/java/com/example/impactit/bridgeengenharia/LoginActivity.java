@@ -1,8 +1,10 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ContentValues;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -106,6 +108,8 @@ public class LoginActivity extends Activity {
             adapter.setDropDownViewResource(R.layout.item_lista);
             spUsuarios.setAdapter(adapter);
         }
+
+
     }
 
     @Override
@@ -533,7 +537,7 @@ public class LoginActivity extends Activity {
                        f.setAccessible(true);
                        if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                            if (f.getType().equals(Date.class)) {
-                               System.out.println(c.getString(i));
+
                                //TODO: criar conversao para data
 
                            }

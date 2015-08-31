@@ -3,6 +3,8 @@
     package="com.example.impactit.bridgeengenharia" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission  android:name="android.permission.GET_TASKS"/>
+    <uses-permission  android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".controle.GlobalClass"

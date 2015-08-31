@@ -2,8 +2,11 @@ package com.example.impactit.bridgeengenharia.controle;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.example.impactit.bridgeengenharia.R;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
@@ -174,6 +177,25 @@ public class GlobalClass extends Application {
         tarefaselecionada = null;
         producaoselecionadamostrar = null;
         plasubprojetosetorprojetoselecionado = null;
+    }
+
+    public boolean checkConexaoInternet(Context c)
+    {
+
+        ConnectivityManager connectivity = (ConnectivityManager)getApplicationContext().getSystemService(c.CONNECTIVITY_SERVICE);
+
+        if (connectivity != null)
+        {
+            NetworkInfo[] inf = connectivity.getAllNetworkInfo();
+            if (inf != null)
+                for (int i = 0; i < inf.length; i++)
+                    if (inf[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
+
+        }
+        return false;
     }
 }
 

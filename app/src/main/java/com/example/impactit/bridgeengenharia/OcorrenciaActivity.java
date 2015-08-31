@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,8 @@ public class OcorrenciaActivity extends PrincipalActivity {
             setTheme(usuarioGlobal.estiloSelecionado);
         }
         setContentView(R.layout.activity_ocorrencia);
+        ImageButton ib = (ImageButton) findViewById(R.id.ocorrencia);
+        ib.setImageResource(R.drawable.ocorrenciaselecionado);
 
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());

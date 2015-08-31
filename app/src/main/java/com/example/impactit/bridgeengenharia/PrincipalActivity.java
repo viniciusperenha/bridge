@@ -1,22 +1,29 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+
+import java.util.List;
 
 
 public class PrincipalActivity extends Activity {
 
     public Intent it;
-
+    private List<ActivityManager.RunningTaskInfo> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,8 @@ public class PrincipalActivity extends Activity {
 
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
+        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
 
     }
 
@@ -58,28 +67,41 @@ public class PrincipalActivity extends Activity {
     }
 
     public void documentos(View view) {
-        Intent intent = new Intent(getApplicationContext(), ArquivosActivity.class);
-        startActivity(intent);
+        if(!tasks.get(0).topActivity.toString().equals("ComponentInfo{com.example.impactit.bridgeengenharia/com.example.impactit.bridgeengenharia.ArquivosActivity}")) {
+            GlobalClass gb = (GlobalClass) getApplicationContext();
+
+            Toast.makeText(getApplicationContext(), "internet: "+gb.checkConexaoInternet(this), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), ArquivosActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void producao(View view) {
-        Intent intent = new Intent(getApplicationContext(), ProducaoActivity.class);
-        startActivity(intent);
+        if(!tasks.get(0).topActivity.toString().equals("ComponentInfo{com.example.impactit.bridgeengenharia/com.example.impactit.bridgeengenharia.ProducaoActivity}")) {
+            Intent intent = new Intent(getApplicationContext(), ProducaoActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void qualidade(View view) {
-        Intent intent = new Intent(getApplicationContext(), QualidadeActivity.class);
-        startActivity(intent);
+        if(!tasks.get(0).topActivity.toString().equals("ComponentInfo{com.example.impactit.bridgeengenharia/com.example.impactit.bridgeengenharia.QualidadeActivity}")) {
+            Intent intent = new Intent(getApplicationContext(), QualidadeActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void ocorrencia(View view) {
-        Intent intent = new Intent(getApplicationContext(), OcorrenciaActivity.class);
-        startActivity(intent);
+        if(!tasks.get(0).topActivity.toString().equals("ComponentInfo{com.example.impactit.bridgeengenharia/com.example.impactit.bridgeengenharia.OcorrenciaActivity}")) {
+            Intent intent = new Intent(getApplicationContext(), OcorrenciaActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void sistema(View view) {
-        Intent intent = new Intent(getApplicationContext(), SistemaActivity.class);
-        startActivity(intent);
+        if(!tasks.get(0).topActivity.toString().equals("ComponentInfo{com.example.impactit.bridgeengenharia/com.example.impactit.bridgeengenharia.SistemaActivity}")) {
+            Intent intent = new Intent(getApplicationContext(), SistemaActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

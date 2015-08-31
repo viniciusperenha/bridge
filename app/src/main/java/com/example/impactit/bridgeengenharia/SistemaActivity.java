@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ public class SistemaActivity extends PrincipalActivity {
         super.onCreate(savedInstanceState);
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         setContentView(R.layout.activity_sistema);
+        ImageButton ib = (ImageButton) findViewById(R.id.sistema);
+        ib.setImageResource(R.drawable.sistemaselecionado);
 
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
