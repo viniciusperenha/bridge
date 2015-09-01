@@ -56,7 +56,7 @@ public class AdapterElemento extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ElementoTO elementoTO = items.get(position);
+
         holder.idservico.setText(items.get(position).getOrcservico().getId().toString());
         holder.servico.setText(items.get(position).getOrcservico().getNome());
         holder.idproducao.setText(items.get(position).getOrcelementoproducao().getId().toString());

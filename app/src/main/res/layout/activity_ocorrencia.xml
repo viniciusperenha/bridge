@@ -216,4 +216,86 @@ tools:context="com.example.impactit.bridgeengenharia.OcorrenciaActivity">>
 
     </LinearLayout>
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cabecalholista"
+        android:layout_below="@+id/layoutbotaonovo"
+
+        >
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="15dp"
+            android:background="@color/accent_material_dark"
+            >
+
+            <TextView
+                android:id="@+id/ocorrenciaobra"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="0.15"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:text="OBRA"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/ocorrenciasetor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:text="SETOR"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/ocorrenciasubprojeto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:textDirection="rtl"
+                android:text="SUBPROJETO"
+
+                />
+            <TextView
+                android:id="@+id/ocorrenciatexto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="0.45"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="false"
+                android:textDirection="rtl"
+                android:text="OCORRÊNCIA"
+
+                />
+
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/cabecalholista"
+        >
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listaocorrencias"
+            android:fastScrollAlwaysVisible="true"
+            />
+
+    </LinearLayout>
+
 </RelativeLayout>

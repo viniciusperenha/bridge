@@ -64,6 +64,10 @@ public class ProducaoActivity extends PrincipalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         setContentView(R.layout.activity_producao);
         ImageButton ib = (ImageButton) findViewById(R.id.producao);
         ib.setImageResource(R.drawable.producaoselecionado);
@@ -79,9 +83,8 @@ public class ProducaoActivity extends PrincipalActivity {
         setor = (Spinner) findViewById(R.id.spinnerSetor);
         listaApontamentosProducao = (ListView) findViewById(R.id.listaApontamentosProducao);
 
-        //usuario global
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        setTheme(usuarioGlobal.estiloSelecionado);
+
+
         usuarioGlobal.novoUsuarioGlobal();
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());

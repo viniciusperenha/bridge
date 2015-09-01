@@ -29,10 +29,10 @@ public class PrincipalActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //usuario global
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-
-        setTheme(usuarioGlobal.estiloSelecionado);
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
 
         setContentView(R.layout.activity_principal);
 

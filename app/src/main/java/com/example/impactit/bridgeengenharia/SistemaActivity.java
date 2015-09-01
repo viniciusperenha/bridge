@@ -27,18 +27,22 @@ public class SistemaActivity extends PrincipalActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         setContentView(R.layout.activity_sistema);
         ImageButton ib = (ImageButton) findViewById(R.id.sistema);
         ib.setImageResource(R.drawable.sistemaselecionado);
 
-        TextView tv = (TextView) findViewById(R.id.nomeusuario);
-        tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
+
 
         carregaDadosView();
     }
 
     public void carregaDadosView(){
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        TextView tv = (TextView) findViewById(R.id.nomeusuario);
+        tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
         spinnerTemas = (Spinner) findViewById(R.id.spinnerTemas);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, listaTemas());
         adapter.setDropDownViewResource(R.layout.item_lista);
@@ -46,29 +50,20 @@ public class SistemaActivity extends PrincipalActivity {
 
         if(usuarioGlobal.estiloSelecionado>=0) {
             for (int i = 0; i < estilos.length; i++) {
-                if (i == usuarioGlobal.estiloSelecionado) {
+                if (estilos[i] == usuarioGlobal.estiloSelecionado) {
                     posicao = i;
                 }
             }
         }
         spinnerTemas.setSelection(posicao);
-        //onchange spinner setor
-        spinnerTemas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                usuarioGlobal.estiloSelecionado = estilos[spinnerTemas.getSelectedItemPosition()];
-            }
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-
 
     }
 
 
     public void mudarTema(View v){
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        setTheme( usuarioGlobal.estiloSelecionado);
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.estiloSelecionado = estilos[spinnerTemas.getSelectedItemPosition()];
+        setTheme(usuarioGlobal.estiloSelecionado);
         setContentView(R.layout.activity_sistema);
         carregaDadosView();
     }

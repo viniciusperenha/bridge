@@ -29,13 +29,13 @@ public class ArquivosActivity extends PrincipalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         setContentView(R.layout.activity_arquivos);
         ImageButton ib = (ImageButton) findViewById(R.id.documentos);
         ib.setImageResource(R.drawable.documentosselecionado);
-
-        //usuario global
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        setTheme(usuarioGlobal.estiloSelecionado);
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 

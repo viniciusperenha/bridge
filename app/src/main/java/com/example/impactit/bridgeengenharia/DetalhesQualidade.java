@@ -75,13 +75,14 @@ public class DetalhesQualidade extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_qualidade);
-
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
-        //usuario global
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        setTheme(usuarioGlobal.estiloSelecionado);
+
 
         //carrega campos da view
         setor = (EditText) findViewById(R.id.setor);
@@ -373,6 +374,7 @@ public class DetalhesQualidade extends ActionBarActivity {
                     engVerificacaoQualidadeServico.setFkIdObra(usuarioGlobal.getObraselecionada().getId());
                     engVerificacaoQualidadeServico.setFkIdServico(ser.getId());
                     engVerificacaoQualidadeServico.setFkIdTarefa(tar.getId());
+                    engVerificacaoQualidadeServico.setId(buscaUltimoId(engVerificacaoQualidadeServico.getClass()));
                     inserir(engVerificacaoQualidadeServico);
                 }
             } else {
@@ -411,6 +413,14 @@ public class DetalhesQualidade extends ActionBarActivity {
         DetalhesQualidade.this.finish();
     }
 
+    public Long buscaUltimoId(Class classe){
+        Cursor c = db.rawQuery("Select id from "+classe.getSimpleName()+" order by id desc limit 1",null);
+        if(c.moveToNext()){
+            return c.getLong(0)+1;
+        }
+        return 1l;
+    }
+
     public void inserir(Object obj) {
         try {
 
@@ -424,7 +434,7 @@ public class DetalhesQualidade extends ActionBarActivity {
                 if (valor != null) {
                     cv.put(f.getName(), valor.toString());
                 }
-                System.out.println(f.getName()+" "+valor.toString());
+
             }
 
             db.insert(classe.getSimpleName().toLowerCase(), null, cv);

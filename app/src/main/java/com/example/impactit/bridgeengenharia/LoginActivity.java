@@ -90,6 +90,10 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        usuarioGlobal.estiloSelecionado=R.style.AppTheme3;
+        setTheme(usuarioGlobal.estiloSelecionado);
+
         setContentView(R.layout.activity_login);
         btLogin = (Button) findViewById(R.id.btLogin);
 
@@ -481,7 +485,7 @@ public class LoginActivity extends Activity {
 
             try {
                 DefaultHttpClient dhc = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet("http://192.168.25.2:8080/" + classe.getSimpleName().toLowerCase());
+                HttpGet httpGet = new HttpGet("http://192.168.25.221:8080/" + classe.getSimpleName().toLowerCase());
                 HttpResponse resposta = null;
                 resposta = dhc.execute(httpGet);
                 String res = EntityUtils.toString(resposta.getEntity());

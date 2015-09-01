@@ -67,12 +67,14 @@ public class DetalhesProducao extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.example.impactit.bridgeengenharia.R.layout.activity_detalhes_producao);
-
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
-        setTheme(usuarioGlobal.estiloSelecionado);
+
         //carrega campos
         setor = (EditText) findViewById(R.id.setor);
         setor.setText(usuarioGlobal.getSetorprojetoselecionado().getNome());
@@ -423,12 +425,11 @@ public class DetalhesProducao extends ActionBarActivity {
     }
 
     public Long buscaUltimoId(Class classe){
-        Long id = 0L;
         Cursor c = db.rawQuery("Select id from "+classe.getSimpleName()+" order by id desc limit 1",null);
         if(c.moveToNext()){
-            return id = c.getLong(0)+1;
+            return c.getLong(0)+1;
         }
-        return null;
+        return 1l;
     }
 
     public void cancelaApontamento(View view){

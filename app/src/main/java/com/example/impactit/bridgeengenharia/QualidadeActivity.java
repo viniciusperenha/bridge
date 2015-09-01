@@ -60,6 +60,10 @@ public class QualidadeActivity extends PrincipalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.estiloSelecionado>0) {
+            setTheme(usuarioGlobal.estiloSelecionado);
+        }
         setContentView(R.layout.activity_qualidade);
         ImageButton ib = (ImageButton) findViewById(R.id.qualidade);
         ib.setImageResource(R.drawable.qualidadeselecionado);
@@ -67,10 +71,9 @@ public class QualidadeActivity extends PrincipalActivity {
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
-        //usuario global
-        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+
         usuarioGlobal.novoUsuarioGlobal();
-        setTheme(usuarioGlobal.estiloSelecionado);
+
         TextView tv = (TextView) findViewById(R.id.nomeusuario);
         tv.setText(usuarioGlobal.getUsuarioLogado().getNome());
 

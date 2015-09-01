@@ -15,13 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.impactit.bridgeengenharia.controle.AdapterOcorrencia;
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
 import com.example.impactit.bridgeengenharia.entidades.EngOcorrenciaNaoPlanejada;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
+import com.example.impactit.bridgeengenharia.entidades.OcorrenciaTO;
 import com.example.impactit.bridgeengenharia.entidades.Plaprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
@@ -47,7 +51,8 @@ public class OcorrenciaActivity extends PrincipalActivity {
     private Rhcolaborador responsavelobra;
     private Rhcolaborador engenheiroresidente;
     private Plaprojeto projeto;
-    public static Integer posicaoobra;
+    private static Integer posicaoobra;
+    private ListView listaocorrencias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
         editResponsavel = (EditText) findViewById(R.id.editresponsavelocorrencia);
         editEngenheiro = (EditText) findViewById(R.id.editengenheiroocorrencia);
         editOcorrencia = (EditText) findViewById(R.id.editocorrencia);
+        listaocorrencias = (ListView) findViewById(R.id.listaocorrencias);
 
         //carrega spinner de obras do usuario
         ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), R.layout.spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
@@ -112,6 +118,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
                     limpaSubprojeto();
 
                 }
+                listaocorrencias.setAdapter(listaOcorrencias());
             }
             public void onNothingSelected(AdapterView<?> parent) { return; }
 
@@ -131,6 +138,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
 
                     limpaSubprojeto();
                 }
+                listaocorrencias.setAdapter(listaOcorrencias());
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -142,10 +150,11 @@ public class OcorrenciaActivity extends PrincipalActivity {
         spinnerSubprojeto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(spinnerSubprojeto.getSelectedItemPosition()>0) {
-                    usuarioGlobal.setPlasubprojetosetorprojetoselecionado(buscaSubprojetoSetorProjeto(usuarioGlobal.getSetorprojetoselecionado(),(Plasubprojeto) spinnerSubprojeto.getSelectedItem()));
+                    usuarioGlobal.setPlasubprojetosetorprojetoselecionado(buscaSubprojetoSetorProjeto(usuarioGlobal.getSetorprojetoselecionado(), (Plasubprojeto) spinnerSubprojeto.getSelectedItem()));
                 } else {
                     usuarioGlobal.setPlasubprojetosetorprojetoselecionado(null);
                 }
+                listaocorrencias.setAdapter(listaOcorrencias());
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -295,7 +304,43 @@ public class OcorrenciaActivity extends PrincipalActivity {
         return null;
     }
 
+    public AdapterOcorrencia listaOcorrencias(){
+        GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.getObraselecionada()!=null) {
+            String s = "SELECT * FROM EngOcorrenciaNaoPlanejada where" +
+                    " fkIdObra = " + usuarioGlobal.getObraselecionada().getId();
+            if (usuarioGlobal.getSetorprojetoselecionado() != null) {
+                s += " and fkIdSetorProjeto = " + usuarioGlobal.getSetorprojetoselecionado().getId();
+            }
+            if (usuarioGlobal.getPlasubprojetosetorprojetoselecionado() != null) {
+                s += " and fkIdSubprojetoSetorProjeto = " + usuarioGlobal.getPlasubprojetosetorprojetoselecionado().getId();
+            }
+            s += " order by data";
 
+            Cursor c = db.rawQuery(s, null);
+            System.out.println("----------------------------------"+c.getCount());
+
+            if (c.moveToFirst()) {
+                ArrayList<OcorrenciaTO> ocorrenciaTOs = new ArrayList<>();
+                OcorrenciaTO auxOcorrenciaTO;
+                for (int i = 0; i < c.getCount(); i++) {
+                    auxOcorrenciaTO = new OcorrenciaTO();
+                    auxOcorrenciaTO.setEngobra((Engobra) consultarPorId(new Engobra(), c.getString(c.getColumnIndexOrThrow("fkIdObra"))));
+                    auxOcorrenciaTO.setPlasetorprojeto((Plasetorprojeto) consultarPorId(new Plasetorprojeto(), c.getString(c.getColumnIndexOrThrow("fkIdSetorProjeto"))));
+                    Plasubprojetosetorprojeto plasubprojetosetorprojeto = (Plasubprojetosetorprojeto) consultarPorId(new Plasubprojetosetorprojeto(), c.getString(c.getColumnIndexOrThrow("fkIdSubprojetoSetorProjeto")));
+                    auxOcorrenciaTO.setPlasubprojeto((Plasubprojeto) consultarPorId(new Plasubprojeto(), String.valueOf(plasubprojetosetorprojeto.getFkIdSubprojeto())));
+                    auxOcorrenciaTO.setEngOcorrenciaNaoPlanejada((EngOcorrenciaNaoPlanejada) consultarPorId(new EngOcorrenciaNaoPlanejada(),c.getString(c.getColumnIndexOrThrow("id"))));
+                    ocorrenciaTOs.add(auxOcorrenciaTO);
+                    c.moveToNext();
+                }
+                AdapterOcorrencia adapterOcorrencia = new AdapterOcorrencia(ocorrenciaTOs, this);
+                c.close();
+                return adapterOcorrencia;
+            }
+        }
+
+        return null;
+    }
 
     public void gravarOcorrencia(View v){
         GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
@@ -322,6 +367,8 @@ public class OcorrenciaActivity extends PrincipalActivity {
             engOcorrenciaNaoPlanejada.setFkIdObra(usuarioGlobal.getObraselecionada().getId());
             engOcorrenciaNaoPlanejada.setFkIdSetorProjeto(usuarioGlobal.getSetorprojetoselecionado().getId());
             engOcorrenciaNaoPlanejada.setFkIdSubprojetoSetorProjeto(usuarioGlobal.getPlasubprojetosetorprojetoselecionado().getId());
+            engOcorrenciaNaoPlanejada.setFkIdResponsavel(usuarioGlobal.getUsuarioLogado().getId());
+            engOcorrenciaNaoPlanejada.setId(buscaUltimoId(engOcorrenciaNaoPlanejada.getClass()));
             inserir(engOcorrenciaNaoPlanejada);
             Toast.makeText(getApplicationContext(), "Ocorrência gravada com sucesso!", Toast.LENGTH_LONG).show();
             db.close();
@@ -329,6 +376,14 @@ public class OcorrenciaActivity extends PrincipalActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Selecione: "+validacoes+" para ocorrência", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public Long buscaUltimoId(Class classe){
+        Cursor c = db.rawQuery("Select id from "+classe.getSimpleName()+" order by id desc limit 1",null);
+        if(c.moveToNext()){
+            return c.getLong(0)+1;
+        }
+        return 1l;
     }
 
     public Object consultarPorId(Object obj, String id) {
@@ -386,8 +441,9 @@ public class OcorrenciaActivity extends PrincipalActivity {
 
                 if (valor != null) {
                     cv.put(f.getName(), valor.toString());
+                    System.out.println(f.getName()+" "+valor.toString());
                 }
-                System.out.println(f.getName()+" "+valor.toString());
+
             }
 
             db.insert(classe.getSimpleName().toLowerCase(), null, cv);
