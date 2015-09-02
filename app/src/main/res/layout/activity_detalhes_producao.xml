@@ -344,6 +344,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:paddingLeft="10dp"
+            android:paddingTop="10dp"
             android:background="@color/button_material_light"
             >
 
@@ -397,8 +398,6 @@
                 android:paddingLeft="10dp"
                 android:background="@color/button_material_light"
                 >
-
-
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="100dp"

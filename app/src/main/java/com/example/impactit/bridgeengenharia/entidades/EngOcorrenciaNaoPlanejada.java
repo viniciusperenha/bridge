@@ -20,6 +20,16 @@ public class EngOcorrenciaNaoPlanejada {
 
     private Long fkIdResponsavel;
 
+    private Boolean transmitir;
+
+    public Boolean getTransmitir() {
+        return transmitir;
+    }
+
+    public void setTransmitir(Boolean transmitir) {
+        this.transmitir = transmitir;
+    }
+
     public Long getId() {
         return id;
     }

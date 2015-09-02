@@ -30,7 +30,9 @@ import com.example.impactit.bridgeengenharia.entidades.Rhcolaborador;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class detalhes_producao_gravada extends ActionBarActivity {
@@ -227,12 +229,13 @@ public class detalhes_producao_gravada extends ActionBarActivity {
                     Field f= obj.getClass().getDeclaredField(c.getColumnName(i));
                     f.setAccessible(true);
                     if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
-                        //System.out.println(f.getType());
-
                         if (f.getType().equals(Date.class)) {
-
-                            //TODO: criar conversao para data
-
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                            String dataparse = c.getString(i);
+                            dataparse = dataparse.replace("BRT","-0300");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                            Date parse = sdf2.parse(dataparse);
+                            f.set(obj, parse);
                         }
                         if (f.getType().equals(Long.class)) {
                             f.set(obj, Long.parseLong(c.getString(i)));

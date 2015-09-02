@@ -77,6 +77,7 @@ import java.util.Date;
 import java.util.List;
 
 import java.lang.Object;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -133,8 +134,12 @@ public class LoginActivity extends Activity {
 
         //clicou no botao sincronizar
         if (id == R.id.action_settings) {
-
-            sincronizar();
+            GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+            if(usuarioGlobal.checkConexaoInternet(getApplicationContext())) {
+                sincronizar();
+            } else {
+                Toast.makeText(getApplicationContext(), "Sem conexão com a internet.", Toast.LENGTH_LONG).show();
+            }
 
             return true;
         }
@@ -454,7 +459,7 @@ public class LoginActivity extends Activity {
 
                 publishProgress("Sincronizado com sucesso!");
             } catch (Exception e) {
-                System.out.println(e.toString());
+
                 publishProgress(e.toString());
             }
 
@@ -485,7 +490,7 @@ public class LoginActivity extends Activity {
 
             try {
                 DefaultHttpClient dhc = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet("http://192.168.25.221:8080/" + classe.getSimpleName().toLowerCase());
+                HttpGet httpGet = new HttpGet("http://192.168.25.2:8080/" + classe.getSimpleName().toLowerCase());
                 HttpResponse resposta = null;
                 resposta = dhc.execute(httpGet);
                 String res = EntityUtils.toString(resposta.getEntity());
@@ -541,10 +546,12 @@ public class LoginActivity extends Activity {
                        f.setAccessible(true);
                        if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                            if (f.getType().equals(Date.class)) {
-
-                               //TODO: criar conversao para data
-
-                           }
+                               SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                               String dataparse = c.getString(i);
+                               dataparse = dataparse.replace("BRT","-0300");
+                               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                               Date parse = sdf2.parse(dataparse);
+                               f.set(obj, parse);                           }
                            if (f.getType().equals(Long.class)) {
                                f.set(obj, Long.parseLong(c.getString(i)));
                            }

@@ -37,9 +37,11 @@ import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ProducaoActivity extends PrincipalActivity {
@@ -628,7 +630,7 @@ public class ProducaoActivity extends PrincipalActivity {
                 s += " and (pro.fkIdColaborador=" + usuarioGlobal.getColaboradorselecionado().getId()+")";
             }
 
-            System.out.println("---------------------------------------\n"+s);
+
             Cursor c = db.rawQuery(s, null);
             // verifica resultado
             if (c.moveToFirst()) {
@@ -670,9 +672,12 @@ public class ProducaoActivity extends PrincipalActivity {
                     f.setAccessible(true);
                     if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                         if (f.getType().equals(Date.class)) {
-                            //System.out.println(c.getString(i));
-                            //TODO: criar conversao para data
-
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                            String dataparse = c.getString(i);
+                            dataparse = dataparse.replace("BRT","-0300");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                            Date parse = sdf2.parse(dataparse);
+                            f.set(obj, parse);
                         }
                         if (f.getType().equals(Long.class)) {
                             f.set(obj, Long.parseLong(c.getString(i)));

@@ -35,9 +35,11 @@ import com.example.impactit.bridgeengenharia.entidades.Sisusuario;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class OcorrenciaActivity extends PrincipalActivity {
@@ -318,7 +320,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
             s += " order by data";
 
             Cursor c = db.rawQuery(s, null);
-            System.out.println("----------------------------------"+c.getCount());
+
 
             if (c.moveToFirst()) {
                 ArrayList<OcorrenciaTO> ocorrenciaTOs = new ArrayList<>();
@@ -369,6 +371,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
             engOcorrenciaNaoPlanejada.setFkIdSubprojetoSetorProjeto(usuarioGlobal.getPlasubprojetosetorprojetoselecionado().getId());
             engOcorrenciaNaoPlanejada.setFkIdResponsavel(usuarioGlobal.getUsuarioLogado().getId());
             engOcorrenciaNaoPlanejada.setId(buscaUltimoId(engOcorrenciaNaoPlanejada.getClass()));
+            engOcorrenciaNaoPlanejada.setTransmitir(true);
             inserir(engOcorrenciaNaoPlanejada);
             Toast.makeText(getApplicationContext(), "Ocorrência gravada com sucesso!", Toast.LENGTH_LONG).show();
             db.close();
@@ -401,8 +404,12 @@ public class OcorrenciaActivity extends PrincipalActivity {
                     f.setAccessible(true);
                     if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                         if (f.getType().equals(Date.class)) {
-                            //System.out.println(c.getString(i));
-                            //TODO: criar conversao para data
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                            String dataparse = c.getString(i);
+                            dataparse = dataparse.replace("BRT","-0300");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                            Date parse = sdf2.parse(dataparse);
+                            f.set(obj, parse);
                         }
                         if (f.getType().equals(Long.class)) {
                             f.set(obj, Long.parseLong(c.getString(i)));
@@ -433,7 +440,6 @@ public class OcorrenciaActivity extends PrincipalActivity {
         try {
 
             Class classe = obj.getClass();
-
             ContentValues cv = new ContentValues();
             for (Field f : classe.getDeclaredFields()) {
                 f.setAccessible(true);
@@ -441,13 +447,9 @@ public class OcorrenciaActivity extends PrincipalActivity {
 
                 if (valor != null) {
                     cv.put(f.getName(), valor.toString());
-                    System.out.println(f.getName()+" "+valor.toString());
                 }
-
             }
-
             db.insert(classe.getSimpleName().toLowerCase(), null, cv);
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }

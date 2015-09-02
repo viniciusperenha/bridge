@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+import com.example.impactit.bridgeengenharia.entidades.EngOcorrenciaNaoPlanejada;
+import com.example.impactit.bridgeengenharia.entidades.EngVerificacaoQualidadeServico;
 import com.example.impactit.bridgeengenharia.entidades.Engempreiteira;
 import com.example.impactit.bridgeengenharia.entidades.Engproducao;
 import com.example.impactit.bridgeengenharia.entidades.Orcelementoproducao;
@@ -31,6 +34,12 @@ import com.example.impactit.bridgeengenharia.entidades.Plasetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Plasubprojetosetorprojeto;
 import com.example.impactit.bridgeengenharia.entidades.Platarefa;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
@@ -41,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class DetalhesProducao extends ActionBarActivity {
@@ -109,6 +119,10 @@ public class DetalhesProducao extends ActionBarActivity {
         producao = (EditText) findViewById(R.id.producao);
 
         dataProducao = (EditText) findViewById(R.id.data);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        dataProducao.setText(simpleDateFormat.format(new Date()));
 
         ArrayAdapter<Platarefa> adapterTarefa = new ArrayAdapter<Platarefa>(getApplicationContext(), R.layout.spinner_item, listaTarefa());
         adapterTarefa.setDropDownViewResource(R.layout.item_lista);
@@ -390,10 +404,7 @@ public class DetalhesProducao extends ActionBarActivity {
             GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
             EditText observacao = (EditText) findViewById(R.id.observacoes);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date d = sdf.parse(dataProducao.getText().toString());
-            Calendar c = Calendar.getInstance();
-            c.setTime(d);
+
 
             //grava o apontamento
             Engproducao pro = new Engproducao();
@@ -407,19 +418,26 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
             pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
             pro.setFkIdColaborador(usuarioglobal.getColaboradorselecionado().getId());
-            pro.setData(new Timestamp(c.getTimeInMillis()));
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyy");
+            pro.setData(sdf1.parse(dataProducao.getText().toString()));
+
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setStatus("N");
             pro.setObservacao(observacao.getText().toString());
             pro.setFkIdUsuarioApontador(usuarioglobal.getUsuarioLogado().getId());
-
-
             //busca id
+            pro.setId(buscaUltimoId(pro.getClass()));
+            pro.setTransmitir(true);
             inserir(pro);
-            db.close();
-            Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
-            DetalhesProducao.this.finish();
+            if(usuarioglobal.checkConexaoInternet(getApplicationContext())){
+                sincronizar();
+            } else {
+                db.close();
+                Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
+                DetalhesProducao.this.finish();
+            }
 
         }
     }
@@ -443,11 +461,6 @@ public class DetalhesProducao extends ActionBarActivity {
             GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
             EditText observacao = (EditText) findViewById(R.id.observacoes);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
-            Date d = sdf.parse(dataProducao.getText().toString());
-            Calendar c = Calendar.getInstance();
-            c.setTime(d);
-
             //grava o apontamento
             Engproducao pro = new Engproducao();
             pro.setFkIdObra(usuarioglobal.getObraselecionada().getId());
@@ -460,7 +473,10 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdElementoProducao(usuarioglobal.getElementoproducaoselecionado().getId());
             pro.setFkIdEmpreiteira(usuarioglobal.getEmpreiteiraselecionada().getId());
             pro.setFkIdColaborador(usuarioglobal.getColaboradorselecionado().getId());
-            pro.setData(new Timestamp(c.getTimeInMillis()));
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyy");
+            pro.setData(sdf1.parse(dataProducao.getText().toString()));
+
             pro.setDataRegistro(new Timestamp(System.currentTimeMillis()));
             pro.setQuantidade(Double.parseDouble(producao.getText().toString()));
             pro.setStatus("N");
@@ -468,16 +484,27 @@ public class DetalhesProducao extends ActionBarActivity {
             pro.setFkIdUsuarioApontador(usuarioglobal.getUsuarioLogado().getId());
             //busca id
             pro.setId(buscaUltimoId(pro.getClass()));
-
+            pro.setTransmitir(true);
             inserir(pro);
+
+            if(usuarioglobal.checkConexaoInternet(getApplicationContext())){
+                sincronizar();
+            }
+
             Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
             producao.setText("");
             producao.requestFocus();
             //busca o total produzido
             totalproduzido.setText(String.valueOf(buscaTotalProduzido((Orcelementoproducao) spinnerelementoproducao.getSelectedItem())));
-            dataProducao.setText(new Date().toString());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+            dataProducao.setText(simpleDateFormat.format(new Date()));
         }
 
+    }
+
+    private void sincronizar() {
+        new Sincronizador().execute();
     }
 
     public Long buscaSubprojetoSetorProjetoRetornaId(Plasetorprojeto setor, Plasubprojeto subprojeto){
@@ -506,7 +533,7 @@ public class DetalhesProducao extends ActionBarActivity {
                 if (valor != null) {
                     cv.put(f.getName(), valor.toString());
                 }
-                System.out.println(f.getName()+" "+valor.toString());
+
             }
 
             db.insert(classe.getSimpleName().toLowerCase(), null, cv);
@@ -537,10 +564,12 @@ public class DetalhesProducao extends ActionBarActivity {
                     f.setAccessible(true);
                     if((!"".equals(c.getString(i)))&&(c.getString(i)!=null)) {
                         if (f.getType().equals(Date.class)) {
-
-                            //TODO: criar conversao para data
-
-                        }
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                            String dataparse = c.getString(i);
+                            dataparse = dataparse.replace("BRT","-0300");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                            Date parse = sdf2.parse(dataparse);
+                            f.set(obj, parse);                        }
                         if (f.getType().equals(Long.class)) {
                             f.set(obj, Long.parseLong(c.getString(i)));
                         }
@@ -565,6 +594,147 @@ public class DetalhesProducao extends ActionBarActivity {
         }
         return obj;
 
+    }
+
+
+    class Sincronizador extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                publishProgress("Conectando...");
+
+                String s = "Select * from Engproducao where transmitir != '' and transmitir is not null";
+                //conexao com banco de dados
+
+                Cursor c = db.rawQuery(s,null);
+                if(c.moveToFirst()){
+                    enviaGenerico(new Engproducao().getClass(), c);
+                }
+                c.close();
+
+                s = "Select * from EngVerificacaoQualidadeServico where transmitir != '' and transmitir is not null";
+                c = db.rawQuery(s,null);
+                if(c.moveToFirst()){
+                    enviaGenerico(new EngVerificacaoQualidadeServico().getClass(), c);
+                }
+                c.close();
+
+                s = "Select * from EngOcorrenciaNaoPlanejada where transmitir != '' and transmitir is not null";
+                c = db.rawQuery(s,null);
+                if(c.moveToFirst()){
+                    enviaGenerico(new EngOcorrenciaNaoPlanejada().getClass(), c);
+                }
+
+                publishProgress("Sincronizado com sucesso!");
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                publishProgress(e.toString());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            return;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            db.close();
+            Toast.makeText(getApplicationContext(), "Apontamento inserido com sucesso!", Toast.LENGTH_LONG).show();
+            DetalhesProducao.this.finish();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            Toast.makeText(getApplicationContext(), values[0], Toast.LENGTH_LONG).show();
+        }
+
+
+        public void enviaGenerico(Class classe, Cursor c) {
+
+            try {
+                if(c.moveToFirst()) {
+                    int qt = 0;
+                    for(int j=0;j<c.getCount();j++) {
+                        HttpResponse response;
+                        HttpClient client = new DefaultHttpClient();
+                        HttpPost httpPost = new HttpPost("http://192.168.25.2:8080/" + classe.getSimpleName().toLowerCase());
+                        httpPost.setHeader("Content-Type", "application/json");
+                        String json = "{";
+                        for (int i = 0; i < c.getColumnCount(); i++) {
+
+                            if(classe.getSimpleName().toLowerCase().equals("engocorrencianaoplanejada")) {
+                                if ((!c.getColumnName(i).equals("transmitir")) && (!c.getColumnName(i).equals("id"))) {
+                                    if (c.getColumnName(i).startsWith("data")) {
+                                        SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                                        String dataparse = c.getString(i);
+                                        dataparse = dataparse.replace("BRT", "-0300");
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                                        Date parse = sdf2.parse(dataparse);
+                                        json += "\"" + c.getColumnName(i) + "\":\"" + sdf.format(parse) + " \",";
+                                        continue;
+                                    }
+                                    json += "\"" + c.getColumnName(i) + "\":\"" + c.getString(i) + "\",";
+                                }
+                            } else {
+                                if (!c.getColumnName(i).equals("transmitir")) {
+                                    if (c.getColumnName(i).startsWith("data")) {
+
+                                        try {
+
+                                            if(c.getString(i).length()>23) {
+
+                                                SimpleDateFormat sdf2 = new SimpleDateFormat("E MMM dd HH:mm:ss zzzz yyyy", Locale.US);
+                                                String dataparse = c.getString(i);
+                                                dataparse = dataparse.replace("BRT", "-0300");
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                                                Date parse = sdf2.parse(dataparse);
+                                                json += "\"" + c.getColumnName(i) + "\":\"" + sdf.format(parse) + " \",";
+                                            } else {
+
+                                                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.US);
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
+                                                Date parse = sdf2.parse(c.getString(i));
+                                                json += "\"" + c.getColumnName(i) + "\":\"" + sdf.format(parse) + " \",";
+                                            }
+                                        }catch (Exception e){
+                                            System.out.println(e.toString());
+                                        }
+
+
+                                        continue;
+                                    }
+                                    json += "\"" + c.getColumnName(i) + "\":\"" + c.getString(i) + "\",";
+                                }
+                            }
+                        }
+                        json = json.substring(0, json.length() - 1);
+                        json += "}";
+                        System.out.println("-----------------------------------"+json);
+                        httpPost.setEntity(new StringEntity(json));
+                        //verificar status se enviado editar
+                        response = client.execute(httpPost);
+                        System.out.println(response.getStatusLine().getStatusCode());
+                        if(response.getStatusLine().getStatusCode()==201){
+                            ContentValues cv = new ContentValues();
+                            cv.put("transmitir", "");
+                            db.update(classe.getSimpleName().toLowerCase(), cv, "id=" + String.valueOf(c.getLong(c.getColumnIndexOrThrow("id"))), null);
+                        }
+                        qt++;
+                        c.moveToNext();
+                    }
+                    publishProgress(classe.getSimpleName().toLowerCase()+" enviadas: "+qt);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
     }
 
 }

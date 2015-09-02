@@ -36,6 +36,16 @@ public class EngVerificacaoQualidadeServico {
 
     private Long fkIdTarefa;
 
+    private Boolean transmitir;
+
+    public Boolean getTransmitir() {
+        return transmitir;
+    }
+
+    public void setTransmitir(Boolean transmitir) {
+        this.transmitir = transmitir;
+    }
+
     public Long getId() {
         return id;
     }

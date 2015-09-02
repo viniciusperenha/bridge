@@ -66,5 +66,27 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutbotaonovo"
+        android:id="@+id/layoutbotaotransmitir"
+        android:background="@color/button_material_light"
+        android:paddingTop="15dp"
+        >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transmitir Dados"
+            android:id="@+id/buttontransmitir"
+            android:onClick="transmiteDados"
+            android:textAlignment="center"
+            android:background="#1F74B5"
+            />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -14,7 +14,7 @@ public class Engproducao implements Serializable {
 
     private Long fkIdSubprojetoSetorProjeto;
 
-    private Timestamp data;
+    private Date data;
 
     private Timestamp dataRegistro;
 
@@ -44,6 +44,15 @@ public class Engproducao implements Serializable {
 
     private Long fkIdUsuarioApontador;
 
+    private Boolean transmitir;
+
+    public Boolean getTransmitir() {
+        return transmitir;
+    }
+
+    public void setTransmitir(Boolean transmitir) {
+        this.transmitir = transmitir;
+    }
 
     public Long getFkIdUsuarioApontador() {
         return fkIdUsuarioApontador;
@@ -77,11 +86,11 @@ public class Engproducao implements Serializable {
         this.dataRegistro = dataRegistro;
     }
 
-    public Timestamp getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(Timestamp data) {
+    public void setData(Date data) {
         this.data = data;
     }
 
