@@ -76,11 +76,11 @@ public class DetalhesProducao extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.example.impactit.bridgeengenharia.R.layout.activity_detalhes_producao);
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         if(usuarioGlobal.estiloSelecionado>0) {
             setTheme(usuarioGlobal.estiloSelecionado);
         }
+        setContentView(com.example.impactit.bridgeengenharia.R.layout.activity_detalhes_producao);
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 

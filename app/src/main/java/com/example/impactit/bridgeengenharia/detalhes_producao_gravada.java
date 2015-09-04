@@ -54,11 +54,11 @@ public class detalhes_producao_gravada extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_producao_gravada);
         final GlobalClass usuarioglobal = (GlobalClass) getApplicationContext();
         if(usuarioglobal.estiloSelecionado>0) {
             setTheme(usuarioglobal.estiloSelecionado);
         }
+        setContentView(R.layout.activity_detalhes_producao_gravada);
 
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);

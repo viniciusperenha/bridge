@@ -84,11 +84,12 @@ public class DetalhesQualidade extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_qualidade);
+
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         if(usuarioGlobal.estiloSelecionado>0) {
             setTheme(usuarioGlobal.estiloSelecionado);
         }
+        setContentView(R.layout.activity_detalhes_qualidade);
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 

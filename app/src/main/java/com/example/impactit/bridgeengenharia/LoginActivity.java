@@ -2,9 +2,11 @@ package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -91,30 +93,51 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
         usuarioGlobal.estiloSelecionado=R.style.AppTheme3;
-        setTheme(usuarioGlobal.estiloSelecionado);
+        System.out.println("------------------------"+R.style.AppTheme3);
+        setTheme(R.style.AppTheme3);
 
-        setContentView(R.layout.activity_login);
         btLogin = (Button) findViewById(R.id.btLogin);
-
-
         spUsuarios = (Spinner) findViewById(R.id.spinnerLogin);
 
-        try{
-            db = SQLiteDatabase.openDatabase("bridge", null, SQLiteDatabase.OPEN_READONLY);
-        }
-        catch (SQLiteException e){
-            e.printStackTrace();
-        }
+        criaBanco();
 
         if(db!=null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, consultaUsuarios());
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, consultaUsuarios());
             adapter.setDropDownViewResource(R.layout.item_lista);
             spUsuarios.setAdapter(adapter);
         }
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle("Deseja sair?");
+        alertbox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                // finish used for destroyed activity
+                if(db!=null){
+                    db.close();
+                }
+                finish();
+            }
+
+        });
+
+        alertbox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                // Nothing will be happened when clicked on no button
+                // of Dialog
+            }
+        });
+
+        alertbox.show();
+
+        return;
     }
 
     @Override
@@ -165,16 +188,14 @@ public class LoginActivity extends Activity {
     public ArrayList consultaUsuarios() {
         Cursor c = db.rawQuery("SELECT login FROM sisusuario ORDER BY login", null);
         ArrayList<String> usuarios = new ArrayList<String>();
-        if (c.getCount() > 0) {
-            c.moveToFirst();
+        if ( c.moveToFirst()) {
             usuarios.add(c.getString(0));
             while (c.moveToNext()) {
                 usuarios.add(c.getString(0));
             }
-
+            return usuarios;
         }
-        return usuarios;
-
+        return null;
     }
 
 

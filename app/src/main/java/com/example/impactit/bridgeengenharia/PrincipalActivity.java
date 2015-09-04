@@ -68,9 +68,6 @@ public class PrincipalActivity extends Activity {
 
     public void documentos(View view) {
         if(!tasks.get(0).topActivity.toString().equals("ComponentInfo{com.example.impactit.bridgeengenharia/com.example.impactit.bridgeengenharia.ArquivosActivity}")) {
-            GlobalClass gb = (GlobalClass) getApplicationContext();
-
-            Toast.makeText(getApplicationContext(), "internet: "+gb.checkConexaoInternet(this), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getApplicationContext(), ArquivosActivity.class);
             startActivity(intent);
         }
