@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +16,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.impactit.bridgeengenharia.controle.AdapterOcorrencia;
 import com.example.impactit.bridgeengenharia.controle.GlobalClass;
+import com.example.impactit.bridgeengenharia.controle.SincronizarAsyncTask;
 import com.example.impactit.bridgeengenharia.entidades.EngOcorrenciaNaoPlanejada;
 import com.example.impactit.bridgeengenharia.entidades.Engobra;
 import com.example.impactit.bridgeengenharia.entidades.OcorrenciaTO;
@@ -374,11 +375,17 @@ public class OcorrenciaActivity extends PrincipalActivity {
             engOcorrenciaNaoPlanejada.setTransmitir(true);
             inserir(engOcorrenciaNaoPlanejada);
             Toast.makeText(getApplicationContext(), "Ocorrência gravada com sucesso!", Toast.LENGTH_LONG).show();
-            db.close();
-            OcorrenciaActivity.this.finish();
+            if(usuarioGlobal.checkConexaoInternet(getApplicationContext())){
+                sincronizar();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Selecione: "+validacoes+" para ocorrência", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void sincronizar() {
+        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(this, db);
+        sincronizarAsyncTask.execute();
     }
 
     public Long buscaUltimoId(Class classe){
@@ -462,17 +469,16 @@ public class OcorrenciaActivity extends PrincipalActivity {
         alertbox.setTitle("Deseja cancelar a ocorrência?");
         alertbox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
-                // finish used for destroyed activity
-                db.close();
-                OcorrenciaActivity.this.finish();
+            // finish para apagar activity
+            db.close();
+            OcorrenciaActivity.this.finish();
             }
 
         });
 
         alertbox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
-                // Nothing will be happened when clicked on no button
-                // of Dialog
+
             }
         });
 
