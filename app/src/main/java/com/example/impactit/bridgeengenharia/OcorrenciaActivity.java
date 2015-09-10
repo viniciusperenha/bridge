@@ -2,6 +2,7 @@ package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -57,6 +58,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
     private static Integer posicaoobra;
     private ListView listaocorrencias;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +86,7 @@ public class OcorrenciaActivity extends PrincipalActivity {
         editEngenheiro = (EditText) findViewById(R.id.editengenheiroocorrencia);
         editOcorrencia = (EditText) findViewById(R.id.editocorrencia);
         listaocorrencias = (ListView) findViewById(R.id.listaocorrencias);
+
 
         //carrega spinner de obras do usuario
         ArrayAdapter<Engobra> adapter = new ArrayAdapter<Engobra>(getApplicationContext(), R.layout.spinner_item, obrasDisponiveisUsuario(usuarioGlobal.getUsuarioLogado()));
@@ -378,13 +381,16 @@ public class OcorrenciaActivity extends PrincipalActivity {
             if(usuarioGlobal.checkConexaoInternet(getApplicationContext())){
                 sincronizar();
             }
+            editOcorrencia.setText("");
+            listaocorrencias.setAdapter(listaOcorrencias());
         } else {
             Toast.makeText(getApplicationContext(), "Selecione: "+validacoes+" para ocorrência", Toast.LENGTH_LONG).show();
         }
     }
 
     private void sincronizar() {
-        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(this, db);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(OcorrenciaActivity.this, db, false, null, usuarioGlobal.servidor);
         sincronizarAsyncTask.execute();
     }
 

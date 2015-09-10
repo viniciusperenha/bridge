@@ -159,7 +159,7 @@ public class Sisusuario implements Serializable {
 
     @Override
     public String toString() {
-        return "teste.entidades.Sisusuario[ id=" + id + " ]";
+        return login;
     }
 
 

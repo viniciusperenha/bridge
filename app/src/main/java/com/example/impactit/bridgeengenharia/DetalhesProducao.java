@@ -2,6 +2,7 @@ package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 
@@ -84,7 +85,6 @@ public class DetalhesProducao extends ActionBarActivity {
         setContentView(com.example.impactit.bridgeengenharia.R.layout.activity_detalhes_producao);
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
-
 
         //carrega campos
         setor = (EditText) findViewById(R.id.setor);
@@ -501,7 +501,8 @@ public class DetalhesProducao extends ActionBarActivity {
     }
 
     private void sincronizar() {
-        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(this, db);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(DetalhesProducao.this, db, false, null, usuarioGlobal.servidor);
         sincronizarAsyncTask.execute();
     }
 

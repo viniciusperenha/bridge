@@ -1,6 +1,7 @@
 package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +25,7 @@ public class SistemaActivity extends PrincipalActivity {
     private int estilos[]={R.style.AppTheme1, R.style.AppTheme2, R.style.AppTheme3, R.style.AppTheme4, R.style.AppTheme5};
     private int posicao=0;
     private Button bntSincronizar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,7 @@ public class SistemaActivity extends PrincipalActivity {
         bntSincronizar = (Button) findViewById(R.id.buttontransmitir);
         //conexao com banco de dados
         db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
+
         carregaDadosView();
     }
 
@@ -70,7 +73,8 @@ public class SistemaActivity extends PrincipalActivity {
     }
 
     private void sincronizar() {
-        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(this, db);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(SistemaActivity.this, db, true, null, usuarioGlobal.servidor);
         sincronizarAsyncTask.execute();
     }
 

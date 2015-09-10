@@ -1,13 +1,15 @@
 package com.example.impactit.bridgeengenharia.controle;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.impactit.bridgeengenharia.LoginActivity;
 import com.example.impactit.bridgeengenharia.entidades.EngOcorrenciaNaoPlanejada;
 import com.example.impactit.bridgeengenharia.entidades.EngVerificacaoQualidadeServico;
 import com.example.impactit.bridgeengenharia.entidades.Engproducao;
@@ -23,28 +25,32 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by vinicius on 09/09/15.
+ * Created by vinicius on 09/07/15.
  */
 public class SincronizarAsyncTask extends AsyncTask<String, String, String> {
 
     private Context context;
     private SQLiteDatabase db;
+    private Boolean criarBanco;
+    public ProgressDialog mDialog;
+    public Spinner sp;
+    public final String servidor;
 
-
-    public SincronizarAsyncTask(Context context, SQLiteDatabase db) {
+    public SincronizarAsyncTask(Context context, SQLiteDatabase db, Boolean criarBanco, Spinner sp, String servidor) {
         this.context = context;
         this.db = db;
+        this.criarBanco = criarBanco;
+        this.sp = sp;
+        this.servidor = servidor;
+        System.out.println("--------------------------"+this.servidor);
     }
 
     @Override
     protected String doInBackground(String... params) {
         try {
-            publishProgress("Conectando...");
-            //conexao com banco de dados
-            //db = openOrCreateDatabase("bridge", Activity.MODE_PRIVATE, null);
 
+            publishProgress("Conectando...");
             String s = "Select * from Engproducao where transmitir != '' and transmitir is not null";
-            //conexao com banco de dados
 
             Cursor c = db.rawQuery(s,null);
             if(c.moveToFirst()){
@@ -66,38 +72,44 @@ public class SincronizarAsyncTask extends AsyncTask<String, String, String> {
             }
 
             publishProgress("Sincronizado com sucesso!");
+
         } catch (Exception e) {
             System.out.println(e.toString());
             publishProgress(e.toString());
         }
-
         return null;
     }
 
     @Override
     protected void onPreExecute() {
-        return;
+        super.onPreExecute();
+        mDialog = new ProgressDialog(context);
+        mDialog.setMessage("Aguarde...");
+        mDialog.show();
     }
 
     @Override
     protected void onPostExecute(String s) {
-        return;
+        mDialog.dismiss();
+        if(criarBanco) {
+            SincronizarInicialAsyncTask sincronizarInicialAsyncTask = new SincronizarInicialAsyncTask(context, db, sp, servidor);
+            sincronizarInicialAsyncTask.execute();
+        }
     }
 
     @Override
     protected void onProgressUpdate(String... values) {
-        Toast.makeText(context, values[0], Toast.LENGTH_LONG).show();
+        return;
     }
 
     public void enviaGenerico(Class classe, Cursor c) {
-
         try {
             if(c.moveToFirst()) {
                 int qt = 0;
                 for(int j=0;j<c.getCount();j++) {
                     HttpResponse response;
                     HttpClient client = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("http://192.168.25.2:8080/" + classe.getSimpleName().toLowerCase());
+                    HttpPost httpPost = new HttpPost(servidor + classe.getSimpleName().toLowerCase());
                     httpPost.setHeader("Content-Type", "application/json");
                     String json = "{";
                     //carrega os dados no json
@@ -174,11 +186,11 @@ public class SincronizarAsyncTask extends AsyncTask<String, String, String> {
                     }
                     json = json.substring(0, json.length() - 1);
                     json += "}";
-                    System.out.println("-----------------------------------"+json);
+
                     httpPost.setEntity(new StringEntity(json));
                     //verificar status se enviado editar
                     response = client.execute(httpPost);
-                    System.out.println(response.getStatusLine().getStatusCode());
+
                     if(response.getStatusLine().getStatusCode()==201){
                         ContentValues cv = new ContentValues();
                         cv.put("transmitir", "");

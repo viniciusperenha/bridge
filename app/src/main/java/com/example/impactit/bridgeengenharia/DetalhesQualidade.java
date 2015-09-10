@@ -2,6 +2,7 @@ package com.example.impactit.bridgeengenharia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -67,6 +68,7 @@ public class DetalhesQualidade extends ActionBarActivity {
     private Orcservico ser;
     private Orcunidademedida um;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +95,8 @@ public class DetalhesQualidade extends ActionBarActivity {
         totalproduzido = (EditText) findViewById(R.id.totalproduzido);
 
         listaApontamentosProducao = (ListView) findViewById(R.id.listaApontamentosProducao);
+
+
 
 
         emp = ultimaProducaoEmpreiteira(usuarioGlobal.getElementoproducaoselecionado());
@@ -495,7 +499,8 @@ public class DetalhesQualidade extends ActionBarActivity {
     }
 
     private void sincronizar() {
-        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(this, db);
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        SincronizarAsyncTask sincronizarAsyncTask = new SincronizarAsyncTask(DetalhesQualidade.this, db, false, null, usuarioGlobal.servidor);
         sincronizarAsyncTask.execute();
     }
 
