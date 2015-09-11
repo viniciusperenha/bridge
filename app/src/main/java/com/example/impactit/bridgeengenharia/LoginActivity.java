@@ -71,7 +71,10 @@ public class LoginActivity extends Activity {
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        sincronizar();
+        final GlobalClass usuarioGlobal = (GlobalClass) getApplicationContext();
+        if(usuarioGlobal.checkConexaoInternet(getApplicationContext())) {
+            sincronizar();
+        }
     }
 
     @Override
