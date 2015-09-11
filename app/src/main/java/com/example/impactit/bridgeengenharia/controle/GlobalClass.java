@@ -48,7 +48,7 @@ public class GlobalClass extends Application {
     public Engproducao producaoselecionadamostrar;
     public Plasubprojetosetorprojeto plasubprojetosetorprojetoselecionado;
     public int estiloSelecionado;
-    public static String servidor = "http://192.168.25.221:8080/";
+    public static String servidor = "http://192.168.25.2:8080/";
 
 
     public Sisusuario getUsuarioLogado() {

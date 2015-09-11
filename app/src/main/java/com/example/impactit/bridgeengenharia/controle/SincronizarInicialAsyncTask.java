@@ -422,6 +422,7 @@ public class SincronizarInicialAsyncTask extends AsyncTask<String, String, Strin
     protected void onPreExecute() {
         mDialog = new ProgressDialog(context);
         mDialog.setMessage("Aguarde...");
+        mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
     }
 

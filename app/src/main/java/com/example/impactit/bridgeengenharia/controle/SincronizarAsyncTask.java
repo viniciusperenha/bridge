@@ -42,7 +42,7 @@ public class SincronizarAsyncTask extends AsyncTask<String, String, String> {
         this.criarBanco = criarBanco;
         this.sp = sp;
         this.servidor = servidor;
-        System.out.println("--------------------------"+this.servidor);
+
     }
 
     @Override
@@ -85,6 +85,7 @@ public class SincronizarAsyncTask extends AsyncTask<String, String, String> {
         super.onPreExecute();
         mDialog = new ProgressDialog(context);
         mDialog.setMessage("Aguarde...");
+        mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
     }
 
